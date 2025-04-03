@@ -1,1 +1,33 @@
+# Build and output
+bin/
+obj/
+out/
+
+# User-specific files
 .vs/
+*.user
+*.suo
+*.vscode/
+
+# NuGet packages
+packages/
+.nuget/
+*.nupkg
+
+# Logs and debugging
+logs/
+*.log
+*.tlog
+*.cache
+
+# Secrets and configurations
+appsettings.Development.json
+secrets.json
+.env
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+
+# JetBrains Rider
+.idea/

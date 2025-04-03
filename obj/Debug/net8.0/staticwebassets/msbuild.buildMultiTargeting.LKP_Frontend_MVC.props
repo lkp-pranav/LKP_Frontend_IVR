@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\LKP_Frontend_MVC.props" />
-</Project>
