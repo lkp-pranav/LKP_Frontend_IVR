@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LKP_Frontend_MVC", "LKP_Frontend_MVC.csproj", "{E87954CD-B81D-4336-BDE9-0314B9B88299}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E87954CD-B81D-4336-BDE9-0314B9B88299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E87954CD-B81D-4336-BDE9-0314B9B88299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E87954CD-B81D-4336-BDE9-0314B9B88299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E87954CD-B81D-4336-BDE9-0314B9B88299}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22D798DA-95F2-4DFE-BF5F-F3E3CE2F029F}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "o+LSK2qPzfo=",
+  "success": true,
+  "projectFilePath": "D:\\Pranav\\LKP_Frontend_MVC\\LKP_Frontend_MVC.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

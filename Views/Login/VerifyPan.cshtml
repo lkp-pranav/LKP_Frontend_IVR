@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Verify PAN";
+}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 350px;">
+        <h3 class="text-center mb-3">Enter PAN Number</h3>
+        <form method="post" action="/Login/AuthenticatePan">
+            <div class="mb-3">
+                <label class="form-label">PAN Number</label>
+                <input type="text" class="form-control" name="pan" required />
+            </div>
+            <button type="submit" class="btn btn-success w-100">Verify</button>
+        </form>
+    </div>
+</div>
