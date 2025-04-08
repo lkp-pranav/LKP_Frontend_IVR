@@ -1,0 +1,145 @@
+﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Branch CNT Mapping";
+    var branchCNTList = Model.data as List<LKP_Frontend_MVC.Models.Response.BranchCNT.BranchCNTResponse>;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Branch Mapping</h2>
+        <button class="btn btn-primary" style="background-color: #11395C !important; color: white !important;" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead style="background-color: #11395C !important; color: white !important;">
+            <tr>
+                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
+                <th style="background-color: #11395C !important; color: white !important;">Dealer ID</th>
+                <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
+                <th style="background-color: #11395C !important; color: white !important;">CTCL Login</th>
+                <th style="background-color: #11395C !important; color: white !important;">HO CNT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row, replace with dynamic data later -->
+            @foreach (var item in branchCNTList)
+            {
+                <tr>
+                    <td>@item.Zone</td>
+                    <td>@item.DealerID</td>
+                    <td>@item.DealerName</td>
+                    <td>@item.CTCLLoginID</td>
+                    <td>@item.isHOCNT</td>
+       
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="#">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBranchModalLabel">Add Branch Mapping</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Zone</label>
+                        <select id="zoneDropdown" class="form-select" name="Zone" required>
+                            <option value="">Select Zone</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dealer</label>
+                        <select id="dealerDropdown" class="form-select" name="Dealer" required>
+                            <option value="">Select Dealer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">CTCL Login</label>
+                        <input type="text" class="form-control" name="CTCLLogin" value="-" readonly />
+                    </div>
+                    @*<div class="mb-3">
+                        <label class="form-label">HO CNT</label>
+                        <select class="form-select" name="HOCNT" required>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div> *@
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" style="background-color: #11395C !important; color: white !important;">Save Mapping</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const zoneDropdown = document.getElementById("zoneDropdown");
+            const modal = document.getElementById("addBranchModal");
+
+            // Correct event: 'shown.bs.modal'
+            modal.addEventListener("shown.bs.modal", function () {
+                fetch('/BranchMapping/GetZones')
+                    .then(res => res.json())
+                    .then(response => {
+                        if (response.isSuccess && response.data) {
+                            zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
+                            response.data.forEach(zone => {
+                                const opt = document.createElement("option");
+                                opt.value = zone;
+                                opt.textContent = zone;
+                                zoneDropdown.appendChild(opt);
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Error fetching zones:", error));
+            });
+            // Fetch dealers based on selected zone
+            zoneDropdown.addEventListener("change", function () {
+                const selectedZone = this.value;
+
+                if (!selectedZone) {
+                    dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
+                    return;
+                }
+
+                fetch(`/BranchMapping/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`)
+                    .then(res => res.json())
+                    .then(response => {
+                        if (response.isSuccess && response.data) {
+                            dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
+                            response.data.forEach(dealerObj => {
+                                const opt = document.createElement("option");
+                                opt.value = dealerObj.ctclLoginid;
+                                opt.textContent = dealerObj.dealer;
+                                opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
+                                dealerDropdown.appendChild(opt);
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Error fetching dealers:", error));
+            });
+
+            dealerDropdown.addEventListener("change", function () {
+            const selectedOption = dealerDropdown.options[dealerDropdown.selectedIndex];
+            const ctcl = selectedOption.getAttribute("data-ctcl");
+            document.querySelector('input[name="CTCLLogin"]').value = ctcl || "";
+        });
+
+        });
+
+
+    </script>
+}

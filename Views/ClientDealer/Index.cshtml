@@ -1,0 +1,54 @@
+﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Client Dealer Mapping";
+    var clientDealerList = Model.data as List<LKP_Frontend_MVC.Models.Response.ClientDealer.ClientDealerResponse>;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Client Dealer Mapping</h2>
+    </div>
+
+    <table class="table table-bordered table-striped" style="background: #11395C;">
+        <thead style="background: #11395C; color: white;">
+            <tr>
+                <th style="background-color: #11395C !important; color: white !important;">Client Code</th>
+                <th style="background-color: #11395C !important; color: white !important;">Client Name</th>
+                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
+                <th style="background-color: #11395C !important; color: white !important;">Branch</th>
+                <th style="background-color: #11395C !important; color: white !important;">Dealer Code</th>
+                <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row, replace with dynamic data later -->
+            @foreach (var item in clientDealerList)
+            {
+                <tr>
+                    <td>@item.ClientCode</td>
+                    <td>@item.ClientName</td>
+                    <td>@item.Zone</td>
+                    <td>@item.Branch</td>
+                    <td>@item.DealerID</td>
+                    <td>@item.DealerName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between mt-4">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <a class="btn btn-secondary"
+               href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">
+                &laquo; Previous
+            </a>
+        }
+
+        <a class="btn btn-primary"
+           href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">
+            Next &raquo;
+        </a>
+    </div>
+</div>

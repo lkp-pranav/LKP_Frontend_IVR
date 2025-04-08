@@ -166,12 +166,15 @@ namespace LKP_Frontend_MVC.Controllers
 }
 */
 
+// Chandan called Haresh. Something about Anand Middleware portal
+
 // Optimized Logic
 using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Models.Request.Login;
 using LKP_Frontend_MVC.Models.Response.Common;
 using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.MSIdentity.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
@@ -220,6 +223,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             var requestData = new EncryptedDataInput { Data = encryptedData };
 
             ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/Login/Login", requestData, "Basic", base64Credentials);
+            Console.WriteLine("Response after login", responsePayload);
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
@@ -237,7 +241,16 @@ namespace LKP_Frontend_MVC.Controllers.Login
         #region 2FA-PAN
         // Render 2FA - PAN Page
         [HttpGet]
-        public IActionResult VerifyPan() => View();
+        public IActionResult VerifyPan()
+        {
+            if (HttpContext.Session.GetString("encryptedData") == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+
+            return View();
+        }
 
         // Verify 2FA - PAN and redirect to Home Page
         [HttpPost]
@@ -276,6 +289,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
             var requestData = new EncryptedDataInput { Data = encrypted2FAData };
+            HttpContext.Session.SetString("encrypted2FAData", encrypted2FAData);
 
             ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", bearerKey);
 
@@ -284,8 +298,18 @@ namespace LKP_Frontend_MVC.Controllers.Login
                 return RedirectToAction("VerifyPan");
             }
             Console.WriteLine(responsePayload.data);
+            JObject jsonData = JObject.FromObject(responsePayload.data);
+            string username = jsonData?["name"]?.ToString();
+            HttpContext.Session.SetString("username", username);
             return RedirectToAction("Index", "Home");
         }
         #endregion
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            // Redirect to login page
+            return RedirectToAction("Index");
+        }
     }
 }

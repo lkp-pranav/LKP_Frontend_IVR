@@ -28,14 +28,36 @@ namespace LKP_Frontend_MVC.Utils
             }
             catch (Exception ex)
             {
+
                 Console.WriteLine($"HTTP Request Failed: {ex.Message}");
                 return null;
             }
         }
 
-        /// <summary>
-        /// Reusable method to decrypt and deserialize data.
-        /// </summary>
+        public static async Task<ResponsePayLoad?> SendHttpRequest(HttpClient _httpClient, string url, string authType, string authToken)
+        {
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authType, authToken);
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                string responseJson = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ResponsePayLoad>(responseJson);
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine($"HTTP Request Failed: {ex.Message}");
+                return null;
+            }
+            
+        }
+
+
         public static T? DeserializeEncryptedData<T>(string encryptedData, string _encKey) where T : class
         {
             try

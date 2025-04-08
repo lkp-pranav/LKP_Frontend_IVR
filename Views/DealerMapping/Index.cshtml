@@ -1,0 +1,111 @@
+﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dealer Mapping";
+    var dealerCNTList= Model.data as List<LKP_Frontend_MVC.Models.Response.DealerCNT.DealerCNTResponse>;
+}
+
+<!-- Page Content -->
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Dealer Mapping</h2>
+        <button class="btn btn-primary" style="background-color: #11395C !important; color: white !important;" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
+                <th style="background-color: #11395C !important; color: white !important;">Primary CTCL Login</th>
+                <th style="background-color: #11395C !important; color: white !important;">Primary Dealer</th>
+                <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
+                <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer</th>
+                <th style="background-color: #11395C !important; color: white !important;">Segment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row, replace with dynamic data later -->
+            @foreach (var item in dealerCNTList)
+            {
+                <tr>
+                    <td>@item.Zone</td>
+                    <td>@item.PrimaryDealerCTCLLogin</td>
+                    <td>@item.PrimaryDealer</td>
+                    <td>@item.SecondaryDealer</td>
+                    <td>@item.SecondaryDealerCTCLLogin</td>
+                    <td>@item.Segment</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addDealerModal" tabindex="-1" aria-labelledby="addDealerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="#">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDealerModalLabel">Add Dealer Mapping</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Zone (full-width) -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Zone</label>
+                            <select class="form-select" name="Zone">
+                                <option value="">Select Zone</option>
+                                <option>North</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Primary (Left) and Secondary (Right) -->
+                    <div class="row g-3">
+                        <!-- Primary Side -->
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Dealer</label>
+                            <select class="form-select" name="PrimaryDealer">
+                                <option value="">Select Dealer</option>
+                                <option>Dealer One</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Dealer</label>
+                            <select class="form-select" name="SecondaryDealer">
+                                <option value="">Select Dealer</option>
+                                <option>Dealer Three</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Primary CTCL Login</label>
+                            <input type="text" class="form-control" name="PrimaryCTCL" value="ctcl123" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary CTCL Login</label>
+                            <input type="text" class="form-control" name="SecondaryCTCL" value="ctcl456" readonly />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Segment</label>
+                            <input type="text" class="form-control" name="PrimarySegment" value="Retail" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Segment</label>
+                            <input type="text" class="form-control" name="SecondarySegment" value="Institutional" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Mapping</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

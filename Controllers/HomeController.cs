@@ -15,6 +15,10 @@ namespace LKP_Frontend_MVC.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("encrypted2FAData") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             return View();
         }
 

@@ -1,26 +1,38 @@
 @using LKP_Frontend_MVC.Models.Request.Login
-@model LoginInputModel; 
+@model LoginInputModel
 @{
+    Layout = null;
     ViewData["Title"] = "Login";
 }
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
-<div class="card shadow-lg p-4" style="width: 350px;">
-    <h3 class="text-center mb-3">Login</h3>
-    <form method="post" action="/Login/Login">
-        <div class="mb-3">
-            <label class="form-label">User Type</label>
-                <input type="text" class="form-control" name="User_type" required />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg p-4" style="width: 350px;">
+            <h3 class="text-center mb-3">Login</h3>
+            <form method="post" action="/Login/Login">
+                <div class="mb-3">
+                    <label class="form-label">User Type</label>
+                    <input type="text" class="form-control" name="User_type" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">User Id</label>
+                    <input type="text" class="form-control" name="User_id" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="User_password" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label class="form-label">User Id</label>
-                <input type="text" class="form-control" name="User_id" required />
-        </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" name="User_password" required />
-            </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
-    </form>
-</div>
-</div>
+    </div>
+</body>
+</html>
