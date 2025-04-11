@@ -42,7 +42,7 @@
 <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form method="post" action="#">
+            <form method="post" action="/BranchMapping/CreateMapping">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addBranchModalLabel">Add Branch Mapping</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">CTCL Login</label>
-                        <input type="text" class="form-control" name="CTCLLogin" value="-" readonly />
+                        <input type="text" class="form-control" name="CtclLoginId" value="-" readonly />
                     </div>
                     @*<div class="mb-3">
                         <label class="form-label">HO CNT</label>
@@ -84,62 +84,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const zoneDropdown = document.getElementById("zoneDropdown");
-            const modal = document.getElementById("addBranchModal");
-
-            // Correct event: 'shown.bs.modal'
-            modal.addEventListener("shown.bs.modal", function () {
-                fetch('/BranchMapping/GetZones')
-                    .then(res => res.json())
-                    .then(response => {
-                        if (response.isSuccess && response.data) {
-                            zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
-                            response.data.forEach(zone => {
-                                const opt = document.createElement("option");
-                                opt.value = zone;
-                                opt.textContent = zone;
-                                zoneDropdown.appendChild(opt);
-                            });
-                        }
-                    })
-                    .catch(error => console.error("Error fetching zones:", error));
-            });
-            // Fetch dealers based on selected zone
-            zoneDropdown.addEventListener("change", function () {
-                const selectedZone = this.value;
-
-                if (!selectedZone) {
-                    dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
-                    return;
-                }
-
-                fetch(`/BranchMapping/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`)
-                    .then(res => res.json())
-                    .then(response => {
-                        if (response.isSuccess && response.data) {
-                            dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
-                            response.data.forEach(dealerObj => {
-                                const opt = document.createElement("option");
-                                opt.value = dealerObj.ctclLoginid;
-                                opt.textContent = dealerObj.dealer;
-                                opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
-                                dealerDropdown.appendChild(opt);
-                            });
-                        }
-                    })
-                    .catch(error => console.error("Error fetching dealers:", error));
-            });
-
-            dealerDropdown.addEventListener("change", function () {
-            const selectedOption = dealerDropdown.options[dealerDropdown.selectedIndex];
-            const ctcl = selectedOption.getAttribute("data-ctcl");
-            document.querySelector('input[name="CTCLLogin"]').value = ctcl || "";
-        });
-
-        });
-
-
-    </script>
+    <script src="~/js/branch-mapping.js"></script>
 }

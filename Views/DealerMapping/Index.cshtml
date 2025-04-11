@@ -24,15 +24,14 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Example row, replace with dynamic data later -->
             @foreach (var item in dealerCNTList)
             {
                 <tr>
                     <td>@item.Zone</td>
                     <td>@item.PrimaryDealerCTCLLogin</td>
                     <td>@item.PrimaryDealer</td>
-                    <td>@item.SecondaryDealer</td>
                     <td>@item.SecondaryDealerCTCLLogin</td>
+                    <td>@item.SecondaryDealer</td>
                     <td>@item.Segment</td>
                 </tr>
             }
@@ -44,7 +43,7 @@
 <div class="modal fade" id="addDealerModal" tabindex="-1" aria-labelledby="addDealerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <form method="post" action="#">
+            <form method="post" action="/DealerMapping/CreateMapping">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addDealerModalLabel">Add Dealer Mapping</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -55,47 +54,43 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Zone</label>
-                            <select class="form-select" name="Zone">
+                            <select id="zoneDropdown" class="form-select" name="Zone" required>
                                 <option value="">Select Zone</option>
-                                <option>North</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Primary (Left) and Secondary (Right) -->
                     <div class="row g-3">
                         <!-- Primary Side -->
                         <div class="col-md-6">
                             <label class="form-label">Primary Dealer</label>
-                            <select class="form-select" name="PrimaryDealer">
+                            <select id="primaryDealerDropdown" class="form-select" name="PrimaryDealer">
                                 <option value="">Select Dealer</option>
-                                <option>Dealer One</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary Dealer</label>
-                            <select class="form-select" name="SecondaryDealer">
+                            <select id="secondaryDealerDropdown" class="form-select" name="SecondaryDealer" disabled>
                                 <option value="">Select Dealer</option>
-                                <option>Dealer Three</option>
                             </select>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Primary CTCL Login</label>
-                            <input type="text" class="form-control" name="PrimaryCTCL" value="ctcl123" readonly />
+                            <input type="text" class="form-control" id="primaryCTCL" name="PrimaryCTCL" value="-" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary CTCL Login</label>
-                            <input type="text" class="form-control" name="SecondaryCTCL" value="ctcl456" readonly />
+                            <input type="text" class="form-control" id="secondaryCTCL" name="SecondaryCTCL" value="-" readonly />
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Primary Segment</label>
-                            <input type="text" class="form-control" name="PrimarySegment" value="Retail" readonly />
+                            <input type="text" id="primarySegment" name="PrimarySegment" class="form-control" value="-" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary Segment</label>
-                            <input type="text" class="form-control" name="SecondarySegment" value="Institutional" readonly />
+                            <input type="text" id="secondarySegment" name="SecondarySegment" class="form-control" value="-" readonly />
                         </div>
                     </div>
                 </div>
@@ -108,4 +103,9 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/dealer-mapping.js"></script>
+    <script src="~/js/fetch-segment.js"></script>
+}
 

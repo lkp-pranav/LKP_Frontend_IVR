@@ -172,6 +172,7 @@ namespace LKP_Frontend_MVC.Controllers
 using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Models.Request.Login;
 using LKP_Frontend_MVC.Models.Response.Common;
+using LKP_Frontend_MVC.Models.Response.User;
 using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.MSIdentity.Shared;
@@ -259,6 +260,10 @@ namespace LKP_Frontend_MVC.Controllers.Login
             string bearerKey = HttpContext.Session.GetString("bearerKey");
             string encryptedData = HttpContext.Session.GetString("encryptedData");
 
+            // Remove base64 token after storing
+            HttpContext.Session.Remove("bearerKey");
+            HttpContext.Session.Remove("encryptedData");
+
             if (string.IsNullOrEmpty(bearerKey) || string.IsNullOrEmpty(encryptedData))
             {
                 Console.WriteLine("Missing Bearer Key or Encrypted Data");
@@ -289,7 +294,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
             var requestData = new EncryptedDataInput { Data = encrypted2FAData };
-            HttpContext.Session.SetString("encrypted2FAData", encrypted2FAData);
+            //HttpContext.Session.SetString("encrypted2FAData", encrypted2FAData);
 
             ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", bearerKey);
 
@@ -300,7 +305,16 @@ namespace LKP_Frontend_MVC.Controllers.Login
             Console.WriteLine(responsePayload.data);
             JObject jsonData = JObject.FromObject(responsePayload.data);
             string username = jsonData?["name"]?.ToString();
+
+            var sessionUser = new SessionUser
+            {
+                User_id = jsonData?["user_id"]?.ToString(),
+                User_type = jsonData?["user_type"]?.ToString(),
+                accessToken = jsonData?["accessToken"]?.ToString()
+            };
+            string sessionUserJson = JsonConvert.SerializeObject(sessionUser);
             HttpContext.Session.SetString("username", username);
+            HttpContext.Session.SetString("sessionUser", sessionUserJson);
             return RedirectToAction("Index", "Home");
         }
         #endregion

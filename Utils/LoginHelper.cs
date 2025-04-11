@@ -4,12 +4,16 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using LKP_Frontend_MVC.Models.Response.User;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LKP_Frontend_MVC.Utils
 {
     public class LoginHelper
     {
-        public static async Task<ResponsePayLoad?> SendHttpRequest(HttpClient _httpClient, string url, EncryptedDataInput data, string authType, string authToken)
+        [HttpPost]
+        public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient _httpClient, string url, T data, string authType, string authToken)
         {
             try
             {
@@ -34,6 +38,7 @@ namespace LKP_Frontend_MVC.Utils
             }
         }
 
+        [HttpGet]
         public static async Task<ResponsePayLoad?> SendHttpRequest(HttpClient _httpClient, string url, string authType, string authToken)
         {
             try
