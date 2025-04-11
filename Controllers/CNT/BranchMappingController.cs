@@ -52,7 +52,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMapping(BranchCNTModel branchCNTInput)
+        public async Task<IActionResult> CreateMapping(BranchCNTInputModel branchCNTInput)
         {
             
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -61,24 +61,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return RedirectToAction("Index", "Login");
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
-            string[] parts = branchCNTInput.Dealer.Split("--");
-            string dealerCode = parts[0].Trim();
-            string dealerName = parts[1].Trim();
 
             int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
-            var payload = new BranchCNTInputModel
-            {
-                User_id = sessionUser.User_id,
-                User_type = sessionUser.User_type,
-                Zone = branchCNTInput.Zone,
-                DealerID = dealerCode,
-                DealerName = dealerName,    
-                CtclLoginId = branchCNTInput.CtclLoginId,
-                IsHOCNT = IsHOCNT
-            };
+            branchCNTInput.User_id = sessionUser.User_id;
+            branchCNTInput.User_type = sessionUser.User_type;
+            branchCNTInput.IsHOCNT = IsHOCNT;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient,"https://localhost:7121/api/BranchCNT/CreateBranchCNTMapping", payload, "Bearer", sessionUser.accessToken);
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient,"https://localhost:7121/api/BranchCNT/CreateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
 
             if (response == null || !response.isSuccess)
             {
@@ -88,6 +78,29 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMapping(int rowId)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
+
+            var responsePayload = await _httpClient.DeleteFromJsonAsync<ResponsePayLoad>(
+                $"https://localhost:7121/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}"
+            );
+
+            if (responsePayload == null || !responsePayload.isSuccess)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("Index");
+        }
 
     }
 }

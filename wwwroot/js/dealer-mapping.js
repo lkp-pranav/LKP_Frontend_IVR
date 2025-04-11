@@ -5,6 +5,9 @@
     const primaryDealerDropdown = document.getElementById("primaryDealerDropdown");
     const secondaryDealerDropdown = document.getElementById("secondaryDealerDropdown");
 
+    const primaryDealerId = document.getElementById("primaryDealerId");
+    const secondaryDealerId = document.getElementById("secondaryDealerId");
+
     const primaryCTCL = document.getElementById("primaryCTCL");
     const secondaryCTCL = document.getElementById("secondaryCTCL");
 
@@ -29,9 +32,7 @@
     });
 
     modal.addEventListener("hidden.bs.modal", function () {
-        // Reset all input/select fields inside the modal
         const inputs = modal.querySelectorAll("input, select");
-
         inputs.forEach(input => {
             if (input.tagName === "SELECT") {
                 input.selectedIndex = 0;
@@ -40,8 +41,6 @@
             }
         });
 
-        // Disable secondary dealer dropdown again
-        const secondaryDealerDropdown = document.getElementById("secondaryDealerDropdown");
         if (secondaryDealerDropdown) {
             secondaryDealerDropdown.disabled = true;
         }
@@ -50,16 +49,15 @@
     zoneDropdown.addEventListener("change", function () {
         const selectedZone = this.value;
 
-        // Clear dealer dropdowns and CTCL fields
         primaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
         secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
         primaryCTCL.value = "-";
         secondaryCTCL.value = "-";
+        primaryDealerId.value = "-";
+        secondaryDealerId.value = "-";
         secondaryDealerDropdown.disabled = true;
 
-        if (!selectedZone) {
-            return;
-        }
+        if (!selectedZone) return;
 
         fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`)
             .then(res => res.json())
@@ -67,9 +65,10 @@
                 if (response.isSuccess && response.data) {
                     const dealerOptions = response.data.map(dealerObj => {
                         const opt = document.createElement("option");
-                        opt.value = dealerObj.dealer;
-                        opt.textContent = dealerObj.dealer;
+                        opt.value = dealerObj.dealerName;
+                        opt.textContent = dealerObj.dealerName;
                         opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
+                        opt.setAttribute("data-dealerid", dealerObj.dealerID);
                         return opt;
                     });
 
@@ -83,27 +82,18 @@
     });
 
     primaryDealerDropdown.addEventListener("change", function () {
-        const ctcl = this.options[this.selectedIndex].getAttribute("data-ctcl");
-        primaryCTCL.value = ctcl || "-";
-    });
-
-    secondaryDealerDropdown.addEventListener("change", function () {
-        const ctcl = this.options[this.selectedIndex].getAttribute("data-ctcl");
-        secondaryCTCL.value = ctcl || "-";
-    });
-
-    primaryDealerDropdown.addEventListener("change", function () {
-        const selectedPrimaryValue = this.value;
         const selectedPrimaryOption = this.options[this.selectedIndex];
         const ctcl = selectedPrimaryOption.getAttribute("data-ctcl");
-        primaryCTCL.value = ctcl || "-";
+        const dealerId = selectedPrimaryOption.getAttribute("data-dealerid");
 
-        // Enable or disable secondary dropdown
-        if (selectedPrimaryValue) {
+        primaryCTCL.value = ctcl || "-";
+        primaryDealerId.value = dealerId || "-";
+
+        if (this.value) {
             secondaryDealerDropdown.disabled = false;
 
-            // Re-populate secondary dropdown excluding the selected primary dealer
-            const allPrimaryOptions = Array.from(primaryDealerDropdown.options).filter(opt => opt.value && opt.value !== selectedPrimaryValue);
+            // Re-populate secondary dealer dropdown excluding selected primary
+            const allPrimaryOptions = Array.from(primaryDealerDropdown.options).filter(opt => opt.value && opt.value !== this.value);
 
             secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
             allPrimaryOptions.forEach(opt => {
@@ -111,18 +101,26 @@
                 newOpt.value = opt.value;
                 newOpt.textContent = opt.textContent;
                 newOpt.setAttribute("data-ctcl", opt.getAttribute("data-ctcl"));
+                newOpt.setAttribute("data-dealerId", opt.getAttribute("data-dealerid"));
                 secondaryDealerDropdown.appendChild(newOpt);
             });
 
-            // Clear previously selected secondary
             secondaryCTCL.value = "-";
+            secondaryDealerId.value = "-";
         } else {
             secondaryDealerDropdown.disabled = true;
             secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
             secondaryCTCL.value = "-";
+            secondaryDealerId.value = "-";
         }
     });
+
+    secondaryDealerDropdown.addEventListener("change", function () {
+        const selectedSecondaryOption = this.options[this.selectedIndex];
+        const ctcl = selectedSecondaryOption.getAttribute("data-ctcl");
+        const dealerId = selectedSecondaryOption.getAttribute("data-dealerid");
+
+        secondaryCTCL.value = ctcl || "-";
+        secondaryDealerId.value = dealerId || "-";
+    });
 });
-
-
-

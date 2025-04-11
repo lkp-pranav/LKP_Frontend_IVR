@@ -2,6 +2,7 @@
 {
     public class BranchCNTResponse
     {
+        public int RowId { get; set; }
         public string Zone { get; set; }
 
         public string DealerID { get; set; }

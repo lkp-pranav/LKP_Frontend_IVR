@@ -5,16 +5,16 @@
     const primarySegment = document.getElementById("primarySegment");
     const secondarySegment = document.getElementById("secondarySegment");
 
-    function fetchSegment(dealerValue, targetInput, label) {
-        if (!dealerValue) {
+    function fetchSegment(dealerId, targetInput, label) {
+        if (!dealerId) {
             targetInput.value = "-";
             console.log(`[INFO] No ${label} dealer selected`);
             return;
         }
 
-        console.log(`[DEBUG] Fetching segment for ${label} dealer: ${dealerValue}`);
+        console.log(`[DEBUG] Fetching segment for ${label} dealer ID: ${dealerId}`);
 
-        fetch(`/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerValue)}`)
+        fetch(`/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`)
             .then(res => res.json())
             .then(response => {
                 console.log(`[DEBUG] Response for ${label} dealer:`, response);
@@ -31,10 +31,15 @@
     }
 
     primaryDealerDropdown?.addEventListener("change", function () {
-        fetchSegment(this.value, primarySegment, "primary");
+        const selectedOption = this.options[this.selectedIndex];
+        const dealerId = selectedOption.getAttribute("data-dealerId");
+        console.log("this is the primary dealer id: ", dealerId);
+        fetchSegment(dealerId, primarySegment, "primary");
     });
 
     secondaryDealerDropdown?.addEventListener("change", function () {
-        fetchSegment(this.value, secondarySegment, "secondary");
+        const selectedOption = this.options[this.selectedIndex];
+        const dealerId = selectedOption.getAttribute("data-dealerId");
+        fetchSegment(dealerId, secondarySegment, "secondary");
     });
 });

@@ -15,24 +15,31 @@
     <table class="table table-bordered table-striped">
         <thead style="background-color: #11395C !important; color: white !important;">
             <tr>
-                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
-                <th style="background-color: #11395C !important; color: white !important;">Dealer ID</th>
-                <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
-                <th style="background-color: #11395C !important; color: white !important;">CTCL Login</th>
-                <th style="background-color: #11395C !important; color: white !important;">HO CNT</th>
+                <th>Zone</th>
+                <th>Dealer ID</th>
+                <th>Dealer Name</th>
+                <th>CTCL Login</th>
+                <th>HO CNT</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Example row, replace with dynamic data later -->
             @foreach (var item in branchCNTList)
             {
-                <tr>
+                <tr data-rowid="@item.RowId">
                     <td>@item.Zone</td>
                     <td>@item.DealerID</td>
                     <td>@item.DealerName</td>
                     <td>@item.CTCLLoginID</td>
                     <td>@item.isHOCNT</td>
-       
+                    <td>
+                        <button id="updateBranchBtn" class="btn btn-sm btn-outline-warning me-2 update-btn" data-id="@item.RowId" title="Update">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -42,7 +49,8 @@
 <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form method="post" action="/BranchMapping/CreateMapping">
+            <form id="branchForm" method="post" action="/BranchMapping/CreateMapping">
+                <input type="hidden" name="RowId" id="rowIdInput" />
                 <div class="modal-header">
                     <h5 class="modal-title" id="addBranchModalLabel">Add Branch Mapping</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -57,21 +65,18 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Dealer</label>
-                        <select id="dealerDropdown" class="form-select" name="Dealer" required>
+                        <select id="dealerDropdown" class="form-select" name="DealerName" required>
                             <option value="">Select Dealer</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dealer ID</label>
+                        <input type="text" class="form-control" name="DealerID" value="-" readonly />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">CTCL Login</label>
                         <input type="text" class="form-control" name="CtclLoginId" value="-" readonly />
                     </div>
-                    @*<div class="mb-3">
-                        <label class="form-label">HO CNT</label>
-                        <select class="form-select" name="HOCNT" required>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div> *@
                 </div>
 
                 <div class="modal-footer">
@@ -84,5 +89,6 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/branch-actions.js"></script>
     <script src="~/js/branch-mapping.js"></script>
 }

@@ -16,11 +16,12 @@
         <thead>
             <tr>
                 <th style="background-color: #11395C !important; color: white !important;">Zone</th>
-                <th style="background-color: #11395C !important; color: white !important;">Primary CTCL Login</th>
                 <th style="background-color: #11395C !important; color: white !important;">Primary Dealer</th>
-                <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
+                <th style="background-color: #11395C !important; color: white !important;">Primary Dealer Name</th>
+                <th style="background-color: #11395C !important; color: white !important;">Primary CTCL Login</th>
                 <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer</th>
-                <th style="background-color: #11395C !important; color: white !important;">Segment</th>
+                <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer Name</th>
+                <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
             </tr>
         </thead>
         <tbody>
@@ -28,17 +29,19 @@
             {
                 <tr>
                     <td>@item.Zone</td>
-                    <td>@item.PrimaryDealerCTCLLogin</td>
                     <td>@item.PrimaryDealer</td>
-                    <td>@item.SecondaryDealerCTCLLogin</td>
+                    <td>@item.PrimaryDealerName</td>
+                    <td>@item.PrimaryDealerCTCLLogin</td>
                     <td>@item.SecondaryDealer</td>
-                    <td>@item.Segment</td>
+                    <td>@item.SecondaryDealerName</td>
+                    <td>@item.SecondaryDealerCTCLLogin</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
+<!-- Modal -->
 <!-- Modal -->
 <div class="modal fade" id="addDealerModal" tabindex="-1" aria-labelledby="addDealerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -50,7 +53,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <!-- Zone (full-width) -->
+                    <!-- Zone -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Zone</label>
@@ -60,30 +63,42 @@
                         </div>
                     </div>
 
+                    <!-- Dealer dropdowns -->
                     <div class="row g-3">
-                        <!-- Primary Side -->
                         <div class="col-md-6">
                             <label class="form-label">Primary Dealer</label>
-                            <select id="primaryDealerDropdown" class="form-select" name="PrimaryDealer">
+                            <select id="primaryDealerDropdown" class="form-select" name="PrimaryDealerName">
                                 <option value="">Select Dealer</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary Dealer</label>
-                            <select id="secondaryDealerDropdown" class="form-select" name="SecondaryDealer" disabled>
+                            <select id="secondaryDealerDropdown" class="form-select" name="SecondaryDealerName" disabled>
                                 <option value="">Select Dealer</option>
                             </select>
                         </div>
 
+                        <!-- Dealer IDs -->
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Dealer ID</label>
+                            <input type="text" class="form-control" id="primaryDealerId" name="PrimaryDealer" value="-" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Dealer ID</label>
+                            <input type="text" class="form-control" id="secondaryDealerId" name="SecondaryDealer" value="-" readonly />
+                        </div>
+
+                        <!-- CTCL Logins -->
                         <div class="col-md-6">
                             <label class="form-label">Primary CTCL Login</label>
-                            <input type="text" class="form-control" id="primaryCTCL" name="PrimaryCTCL" value="-" readonly />
+                            <input type="text" class="form-control" id="primaryCTCL" name="PrimaryDealerCTCLLogin" value="-" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary CTCL Login</label>
-                            <input type="text" class="form-control" id="secondaryCTCL" name="SecondaryCTCL" value="-" readonly />
+                            <input type="text" class="form-control" id="secondaryCTCL" name="SecondaryDealerCTCLLogin" value="-" readonly />
                         </div>
 
+                        <!-- Segments -->
                         <div class="col-md-6">
                             <label class="form-label">Primary Segment</label>
                             <input type="text" id="primarySegment" name="PrimarySegment" class="form-control" value="-" readonly />
@@ -104,8 +119,10 @@
     </div>
 </div>
 
+
 @section Scripts {
     <script src="~/js/dealer-mapping.js"></script>
     <script src="~/js/fetch-segment.js"></script>
+   
 }
 

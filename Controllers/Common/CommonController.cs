@@ -52,11 +52,9 @@ namespace LKP_Frontend_MVC.Controllers.Common
                 return RedirectToAction("Index", "Login");
             }
 
-            string[] parts = dealer.Split("--");
-            string dealerCode = parts[0];
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.GetFromJsonAsync<ResponsePayLoad>($"https://localhost:7121/api/DealerCNT/GetDealerSegment?dealer={dealerCode}");
+            var response = await _httpClient.GetFromJsonAsync<ResponsePayLoad>($"https://localhost:7121/api/DealerCNT/GetDealerSegment?dealer={dealer}");
             return Json(response);
         }
     }

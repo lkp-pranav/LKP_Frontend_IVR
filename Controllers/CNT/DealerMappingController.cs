@@ -50,7 +50,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return View(responsePayLoad);
         }
 
-        public async Task<IActionResult> CreateMapping(DealerCNTModel dealerCNTModel)
+        public async Task<IActionResult> CreateMapping(DealerCNTInputModel dealerCNTModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson == null)
@@ -59,26 +59,10 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
 
-            //string[] primary = dealerCNTModel.PrimaryDealer.Split("--");
-            //string[] secondary = dealerCNTModel.SecondaryDealer.Split("--");
-            //string primaryDealerID = primary[0].Trim();
-            //string primaryDealerName = primary[1].Trim();
-            //string secondaryDealerID = primary[0].Trim();
-            //string secondaryDealerName = primary[1].Trim();
-
-            var payload = new DealerCNTInputModel
-            {
-                User_id = sessionUser.User_id,
-                User_type = sessionUser.User_type,
-                Zone = dealerCNTModel.Zone,
-                PrimaryDealer = dealerCNTModel.PrimaryDealer,
-                PrimaryDealerCTCLLogin = dealerCNTModel.PrimaryCTCL,
-                SecondaryDealer = dealerCNTModel.SecondaryDealer,
-                SecondaryDealerCTCLLogin = dealerCNTModel.SecondaryCTCL
-            };
-
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", payload, "Bearer", sessionUser.accessToken);
-            Console.WriteLine(payload);
+            dealerCNTModel.User_id = sessionUser.User_id;
+            dealerCNTModel.User_type = sessionUser.User_type;   
+            
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
             return RedirectToAction("Index");
         }
     }
