@@ -33,7 +33,8 @@
                     <td>@item.CTCLLoginID</td>
                     <td>@item.isHOCNT</td>
                     <td>
-                        <button id="updateBranchBtn" class="btn btn-sm btn-outline-warning me-2 update-btn" data-id="@item.RowId" title="Update">
+                        <button class="btn btn-sm btn-outline-warning me-2 update-btn" data-id="@item.RowId" title="Update"
+                                data-bs-toggle="modal" data-bs-target="#updateBranchModal">
                             <i class="fas fa-pen"></i>
                         </button>
                         <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
@@ -46,6 +47,7 @@
     </table>
 </div>
 
+@*Create Branch Modal*@
 <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -87,6 +89,47 @@
         </div>
     </div>
 </div>
+
+@*Update Branch Modal*@
+<div class="modal fade" id="updateBranchModal" tabindex="-1" aria-labelledby="updateBranchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="updateBranchForm" method="post" action="/BranchMapping/UpdateMapping">
+                <input type="hidden" name="RowId" id="rowIdInputUpdate" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Branch Mapping</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Zone</label>
+                        <select id="zoneDropdownUpdate" class="form-select" name="Zone" readonly required>
+                            <!-- Only one zone value should appear here, and it will be disabled -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Dealer</label>
+                        <select id="dealerDropdownUpdate" class="form-select" name="DealerName" required>
+                            <option value="">Select Dealer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Dealer ID</label>
+                        <input type="text" class="form-control" name="DealerID" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>CTCL Login</label>
+                        <input type="text" class="form-control" name="CtclLoginId" readonly />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Update Mapping</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <script src="~/js/branch-actions.js"></script>

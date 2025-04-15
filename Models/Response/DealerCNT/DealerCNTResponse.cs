@@ -2,6 +2,7 @@
 {
     public class DealerCNTResponse
     {
+        public int RowId { get; set; }
         public string Zone { get; set; }
         public string PrimaryDealer { get; set; }
         public string PrimaryDealerName { get; set; }

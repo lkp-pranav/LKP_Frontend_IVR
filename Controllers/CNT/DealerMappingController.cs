@@ -8,6 +8,7 @@ using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace LKP_Frontend_MVC.Controllers.CNT
 {
@@ -63,6 +64,46 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.User_type = sessionUser.User_type;   
             
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+            return RedirectToAction("Index");
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMapping(int rowId)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
+
+            var responsePayload = await _httpClient.DeleteFromJsonAsync<ResponsePayLoad>(
+                $"https://localhost:7121/api/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}"
+            );
+
+            if (responsePayload == null || !responsePayload.isSuccess)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async  Task<IActionResult> UpdateMapping(DealerCNTInputModel dealerCNTModel)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            dealerCNTModel.User_id = sessionUser.User_id;
+            dealerCNTModel.User_type = sessionUser.User_type;
+
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/UpdateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
             return RedirectToAction("Index");
         }
     }

@@ -102,5 +102,31 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> UpdateMapping(BranchCNTInputModel branchCNTInput)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+
+            int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
+
+            branchCNTInput.User_id = sessionUser.User_id;
+            branchCNTInput.User_type = sessionUser.User_type;
+            branchCNTInput.IsHOCNT = IsHOCNT;
+
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/BranchCNT/UpdateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
+
+            if (response == null || !response.isSuccess)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
     }
 }

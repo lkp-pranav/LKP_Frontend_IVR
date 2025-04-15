@@ -22,12 +22,13 @@
                 <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer</th>
                 <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer Name</th>
                 <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
+                <th style ="background-color: #11395C !important; color: white !important;">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in dealerCNTList)
             {
-                <tr>
+                <tr data-rowid="@item.RowId">
                     <td>@item.Zone</td>
                     <td>@item.PrimaryDealer</td>
                     <td>@item.PrimaryDealerName</td>
@@ -35,18 +36,30 @@
                     <td>@item.SecondaryDealer</td>
                     <td>@item.SecondaryDealerName</td>
                     <td>@item.SecondaryDealerCTCLLogin</td>
+                    <td>
+                        <button 
+                            id="updateBranchBtn" 
+                            class="btn btn-sm btn-outline-warning update-btn" 
+                            data-id="@item.RowId" 
+                            title="Update"
+                                data-bs-toggle="modal" data-bs-target="#updateDealerModal">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<!-- Modal -->
-<!-- Modal -->
+<!-- Creation Modal -->
 <div class="modal fade" id="addDealerModal" tabindex="-1" aria-labelledby="addDealerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <form method="post" action="/DealerMapping/CreateMapping">
+            <form id="addDealerForm" method="post" action="/DealerMapping/CreateMapping">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addDealerModalLabel">Add Dealer Mapping</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -57,7 +70,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Zone</label>
-                            <select id="zoneDropdown" class="form-select" name="Zone" required>
+                            <select id="zoneDropdownCreate" class="form-select" name="Zone" required>
                                 <option value="">Select Zone</option>
                             </select>
                         </div>
@@ -67,13 +80,13 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Primary Dealer</label>
-                            <select id="primaryDealerDropdown" class="form-select" name="PrimaryDealerName">
+                            <select id="primaryDealerDropdownCreate" class="form-select" name="PrimaryDealerName">
                                 <option value="">Select Dealer</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary Dealer</label>
-                            <select id="secondaryDealerDropdown" class="form-select" name="SecondaryDealerName" disabled>
+                            <select id="secondaryDealerDropdownCreate" class="form-select" name="SecondaryDealerName" disabled>
                                 <option value="">Select Dealer</option>
                             </select>
                         </div>
@@ -81,31 +94,31 @@
                         <!-- Dealer IDs -->
                         <div class="col-md-6">
                             <label class="form-label">Primary Dealer ID</label>
-                            <input type="text" class="form-control" id="primaryDealerId" name="PrimaryDealer" value="-" readonly />
+                            <input type="text" class="form-control" id="primaryDealerIdCreate" name="PrimaryDealer" value="-" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary Dealer ID</label>
-                            <input type="text" class="form-control" id="secondaryDealerId" name="SecondaryDealer" value="-" readonly />
+                            <input type="text" class="form-control" id="secondaryDealerIdCreate" name="SecondaryDealer" value="-" readonly />
                         </div>
 
                         <!-- CTCL Logins -->
                         <div class="col-md-6">
                             <label class="form-label">Primary CTCL Login</label>
-                            <input type="text" class="form-control" id="primaryCTCL" name="PrimaryDealerCTCLLogin" value="-" readonly />
+                            <input type="text" class="form-control" id="primaryCTCLCreate" name="PrimaryDealerCTCLLogin" value="-" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary CTCL Login</label>
-                            <input type="text" class="form-control" id="secondaryCTCL" name="SecondaryDealerCTCLLogin" value="-" readonly />
+                            <input type="text" class="form-control" id="secondaryCTCLCreate" name="SecondaryDealerCTCLLogin" value="-" readonly />
                         </div>
 
                         <!-- Segments -->
                         <div class="col-md-6">
                             <label class="form-label">Primary Segment</label>
-                            <input type="text" id="primarySegment" name="PrimarySegment" class="form-control" value="-" readonly />
+                            <input type="text" id="primarySegmentCreate" name="PrimarySegment" class="form-control" value="-" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Secondary Segment</label>
-                            <input type="text" id="secondarySegment" name="SecondarySegment" class="form-control" value="-" readonly />
+                            <input type="text" id="secondarySegmentCreate" name="SecondarySegment" class="form-control" value="-" readonly />
                         </div>
                     </div>
                 </div>
@@ -119,10 +132,89 @@
     </div>
 </div>
 
+@* Update Modal *@
+<div class="modal fade" id="updateDealerModal" tabindex="-1" aria-labelledby="updateDealerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <form id="updateDealerForm" method="post" action="/DealerMapping/UpdateMapping">
+                <input type="hidden" name="RowId" id="rowIdInputUpdate" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateDealerModalLabel">Update Dealer Mapping</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Zone -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Zone</label>
+                            <select id="zoneDropdownUpdate" class="form-select" name="Zone" readonly required>
+                                <option value="">Select Zone</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dealer dropdowns -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Dealer</label>
+                            <select id="primaryDealerDropdownUpdate" class="form-select" name="PrimaryDealerName">
+                                <option value="">Select Dealer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Dealer</label>
+                            <select id="secondaryDealerDropdownUpdate" class="form-select" name="SecondaryDealerName">
+                                <option value="">Select Dealer</option>
+                            </select>
+                        </div>
+
+                        <!-- Dealer IDs -->
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Dealer ID</label>
+                            <input type="text" class="form-control" id="primaryDealerIdUpdate" name="PrimaryDealer" value="-" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Dealer ID</label>
+                            <input type="text" class="form-control" id="secondaryDealerIdUpdate" name="SecondaryDealer" value="-" readonly />
+                        </div>
+
+                        <!-- CTCL Logins -->
+                        <div class="col-md-6">
+                            <label class="form-label">Primary CTCL Login</label>
+                            <input type="text" class="form-control" id="primaryCTCLUpdate" name="PrimaryDealerCTCLLogin" value="-" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary CTCL Login</label>
+                            <input type="text" class="form-control" id="secondaryCTCLUpdate" name="SecondaryDealerCTCLLogin" value="-" readonly />
+                        </div>
+
+                        <!-- Segments -->
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Segment</label>
+                            <input type="text" id="primarySegmentUpdate" name="PrimarySegment" class="form-control" value="-" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Segment</label>
+                            <input type="text" id="secondarySegmentUpdate" name="SecondarySegment" class="form-control" value="-" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Update Mapping</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <script src="~/js/dealer-mapping.js"></script>
     <script src="~/js/fetch-segment.js"></script>
+    <script src="~/js/dealer-actions.js"></script>
    
 }
 
