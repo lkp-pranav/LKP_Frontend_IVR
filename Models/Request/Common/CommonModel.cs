@@ -2,7 +2,7 @@
 {
     public class CommonModel
     {
-        public string User_id { get; set; }
-        public string? User_type { get; set; }
+        public string user_id { get; set; }
+        public string? user_type { get; set; }
     }
 }

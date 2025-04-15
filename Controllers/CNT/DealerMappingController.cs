@@ -60,8 +60,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
 
-            dealerCNTModel.User_id = sessionUser.User_id;
-            dealerCNTModel.User_type = sessionUser.User_type;   
+            dealerCNTModel.user_id = sessionUser.user_id;
+            dealerCNTModel.user_type = sessionUser.user_type;   
             
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
             return RedirectToAction("Index");
@@ -100,8 +100,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return RedirectToAction("Index", "Login");
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
-            dealerCNTModel.User_id = sessionUser.User_id;
-            dealerCNTModel.User_type = sessionUser.User_type;
+            dealerCNTModel.user_id = sessionUser.user_id;
+            dealerCNTModel.user_type = sessionUser.user_type;
 
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/UpdateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
             return RedirectToAction("Index");

@@ -308,8 +308,8 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             var sessionUser = new SessionUser
             {
-                User_id = jsonData?["user_id"]?.ToString(),
-                User_type = jsonData?["user_type"]?.ToString(),
+                user_id = jsonData?["user_id"]?.ToString(),
+                user_type = jsonData?["user_type"]?.ToString(),
                 accessToken = jsonData?["accessToken"]?.ToString()
             };
             string sessionUserJson = JsonConvert.SerializeObject(sessionUser);

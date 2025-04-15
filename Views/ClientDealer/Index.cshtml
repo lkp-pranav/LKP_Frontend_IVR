@@ -41,13 +41,13 @@
         @if (ViewBag.CurrentPage > 1)
         {
             <a class="btn btn-secondary"
-               href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">
+               href="@Url.Action("Index", new { start = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">
                 &laquo; Previous
             </a>
         }
 
         <a class="btn btn-primary"
-           href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">
+           href="@Url.Action("Index", new { start = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">
             Next &raquo;
         </a>
     </div>

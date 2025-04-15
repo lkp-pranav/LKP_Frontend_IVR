@@ -64,8 +64,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
-            branchCNTInput.User_id = sessionUser.User_id;
-            branchCNTInput.User_type = sessionUser.User_type;
+            branchCNTInput.user_id = sessionUser.user_id;
+            branchCNTInput.user_type = sessionUser.user_type;
             branchCNTInput.IsHOCNT = IsHOCNT;
 
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient,"https://localhost:7121/api/BranchCNT/CreateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
@@ -113,8 +113,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
-            branchCNTInput.User_id = sessionUser.User_id;
-            branchCNTInput.User_type = sessionUser.User_type;
+            branchCNTInput.user_id = sessionUser.user_id;
+            branchCNTInput.user_type = sessionUser.user_type;
             branchCNTInput.IsHOCNT = IsHOCNT;
 
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/BranchCNT/UpdateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
