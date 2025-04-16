@@ -60,20 +60,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(`[DEBUG] Fetching segment for ${label} dealer ID: ${dealerId}`);
 
-        fetch(`/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`)
-            .then(res => res.json())
-            .then(response => {
-                console.log(`[DEBUG] Response for ${label} dealer:`, response);
-                if (response.isSuccess && response.data) {
-                    targetInput.value = response.data;
-                } else {
-                    targetInput.value = "-";
-                }
-            })
-            .catch(err => {
-                console.error(`[ERROR] Failed to fetch ${label} dealer segment:`, err);
+        fetch(`/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            console.log(`[DEBUG] Response for ${label} dealer:`, response);
+            if (response.isSuccess && response.data) {
+                targetInput.value = response.data;
+            } else {
                 targetInput.value = "-";
-            });
+            }
+        })
+        .catch(err => {
+            console.error(`[ERROR] Failed to fetch ${label} dealer segment:`, err);
+            targetInput.value = "-";
+        });
     }
 
     primaryDealerDropdown?.addEventListener("change", function () {
