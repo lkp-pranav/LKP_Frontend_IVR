@@ -143,7 +143,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const secondarySegment = document.getElementById("secondarySegmentCreate");
 
     modal.addEventListener("shown.bs.modal", function () {
-        fetch('/Common/GetZones')
+        fetch('/Common/GetZones', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(res => res.json())
             .then(response => {
                 if (response.isSuccess && response.data) {
@@ -187,26 +192,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!selectedZone) return;
 
-        fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`)
-            .then(res => res.json())
-            .then(response => {
-                if (response.isSuccess && response.data) {
-                    const dealerOptions = response.data.map(dealerObj => {
-                        const opt = document.createElement("option");
-                        opt.value = dealerObj.dealerName;
-                        opt.textContent = dealerObj.dealerName;
-                        opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
-                        opt.setAttribute("data-dealerid", dealerObj.dealerID);
-                        return opt;
-                    });
+        fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.isSuccess && response.data) {
+                const dealerOptions = response.data.map(dealerObj => {
+                    const opt = document.createElement("option");
+                    opt.value = dealerObj.dealerName;
+                    opt.textContent = dealerObj.dealerName;
+                    opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
+                    opt.setAttribute("data-dealerid", dealerObj.dealerID);
+                    return opt;
+                });
 
-                    dealerOptions.forEach(opt => {
-                        primaryDealerDropdown.appendChild(opt.cloneNode(true));
-                        secondaryDealerDropdown.appendChild(opt.cloneNode(true));
-                    });
-                }
-            })
-            .catch(error => console.error("Error fetching dealers:", error));
+                dealerOptions.forEach(opt => {
+                    primaryDealerDropdown.appendChild(opt.cloneNode(true));
+                    secondaryDealerDropdown.appendChild(opt.cloneNode(true));
+                });
+            }
+        })
+        .catch(error => console.error("Error fetching dealers:", error));
     });
 
     primaryDealerDropdown.addEventListener("change", function () {
