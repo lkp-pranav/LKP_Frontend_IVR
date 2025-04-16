@@ -6,6 +6,14 @@
     var branchCNTList = Model.data as List<LKP_Frontend_MVC.Models.Response.BranchCNT.BranchCNTResponse>;
 }
 
+<style>
+    .readonly-select {
+        pointer-events: none;
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+</style>
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Branch Mapping</h2>
@@ -103,7 +111,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label>Zone</label>
-                        <select id="zoneDropdownUpdate" class="form-select" name="Zone" readonly required>
+                        <select id="zoneDropdownUpdate" class="form-select readonly-select" name="Zone" readonly required>
                             <!-- Only one zone value should appear here, and it will be disabled -->
                         </select>
                     </div>
@@ -122,8 +130,11 @@
                         <input type="text" class="form-control" name="CtclLoginId" readonly />
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-warning">Update Mapping</button>
+
+                <div class="modal-footer" >
+                    <button type="submit" class="btn btn-warning" style="background-color: #11395C !important; color: white !important;">
+                        Update Mapping
+                    </button>
                 </div>
             </form>
         </div>
