@@ -24,7 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _httpClient = httpClient;
         }
 
-        [HttpPost]
+       
         public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");

@@ -24,7 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _encKey = _Configuration.GetSection("encKey").Value;
         }
 
-        [HttpPost]
+        
         public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
