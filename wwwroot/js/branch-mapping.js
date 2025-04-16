@@ -11,21 +11,27 @@
 
     // Populate zones when modal is shown
     modal.addEventListener("shown.bs.modal", function () {
-        fetch('/Common/GetZones')
-            .then(res => res.json())
-            .then(response => {
-                console.log(response)
-                if (response.isSuccess && response.data) {
-                    zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
-                    response.data.forEach(zone => {
-                        const opt = document.createElement("option");
-                        opt.value = zone;
-                        opt.textContent = zone;
-                        zoneDropdown.appendChild(opt);
-                    });
-                }
-            })
-            .catch(error => console.error("Error fetching zones:", error));
+        fetch('/Common/GetZones', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            console.log(response.data)
+            if (response.isSuccess && response.data) {
+                zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
+                response.data.forEach(zone => {
+                    const opt = document.createElement("option");
+                    opt.value = zone;
+                    opt.textContent = zone;
+                    zoneDropdown.appendChild(opt);
+                });
+            }
+            console.log(zoneDropdown)
+        })
+        .catch(error => console.error("Error fetching zones:", error));
     });
 
     // Clear form when modal is hidden
