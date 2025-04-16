@@ -53,22 +53,27 @@
 
         if (!selectedZone) return;
 
-        fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`)
-            .then(res => res.json())
-            .then(response => {
-                console.log(response);
-                if (response.isSuccess && response.data) {
-                    response.data.forEach(dealerObj => {
-                        const opt = document.createElement("option");
-                        opt.value = dealerObj.dealerName;
-                        opt.textContent = dealerObj.dealerName;
-                        opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
-                        opt.setAttribute("data-dealerId", dealerObj.dealerID);
-                        dealerDropdown.appendChild(opt);
-                    });
-                }
-            })
-            .catch(error => console.error("Error fetching dealers:", error));
+        fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            console.log(response);
+            if (response.isSuccess && response.data) {
+                response.data.forEach(dealerObj => {
+                    const opt = document.createElement("option");
+                    opt.value = dealerObj.dealerName;
+                    opt.textContent = dealerObj.dealerName;
+                    opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
+                    opt.setAttribute("data-dealerId", dealerObj.dealerID);
+                    dealerDropdown.appendChild(opt);
+                });
+            }
+        })
+        .catch(error => console.error("Error fetching dealers:", error));
     });
 
     // Set CTCL on dealer change

@@ -80,9 +80,21 @@ namespace LKP_Frontend_MVC.Controllers.Common
                 return RedirectToAction("Index", "Login");
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.GetFromJsonAsync<ResponsePayLoad>($"https://localhost:7121/api/BranchCNT/GetDealerBasisZone?Zone={Zone}");
+            var user = new CommonModel{ user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+            var response = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/BranchCNT/GetDealerBasisZone?Zone={Zone}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
+            );
+            var dealerList = (response.data as JArray)?.ToObject<List<DealerResponse>>();
+            Console.WriteLine(dealerList);
+            response.data = dealerList;
+            
             return Json(response);
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
+            //var response = await _httpClient.GetFromJsonAsync<ResponsePayLoad>($"https://localhost:7121/api/BranchCNT/GetDealerBasisZone?Zone={Zone}");
         }
 
         public async Task<IActionResult> GetDealerSegment(string dealer)
