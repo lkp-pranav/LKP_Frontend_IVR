@@ -24,6 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _httpClient = httpClient;
         }
 
+        [HttpPost]
         public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -59,6 +60,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return View(responsePayLoad);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateMapping(DealerCNTInputModel dealerCNTModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -75,7 +77,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteMapping(int rowId)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -83,12 +85,16 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             {
                 return RedirectToAction("Index", "Login");
             }
-
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
 
-            var responsePayload = await _httpClient.DeleteFromJsonAsync<ResponsePayLoad>(
-                $"https://localhost:7121/api/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}"
+            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+
+            var responsePayload = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
             );
 
             if (responsePayload == null || !responsePayload.isSuccess)

@@ -24,7 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _encKey = _Configuration.GetSection("encKey").Value;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -87,7 +87,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteMapping(int rowId)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -99,8 +99,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
 
-            var responsePayload = await _httpClient.DeleteFromJsonAsync<ResponsePayLoad>(
-                $"https://localhost:7121/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}"
+            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+
+            var responsePayload = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
             );
 
             if (responsePayload == null || !responsePayload.isSuccess)
@@ -111,6 +117,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public async Task<IActionResult> UpdateMapping(BranchCNTInputModel branchCNTInput)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");

@@ -6,7 +6,10 @@
             const rowId = button.getAttribute("data-id");
 
             fetch(`/BranchMapping/DeleteMapping?rowId=${rowId}`, {
-                method: "DELETE"
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
                 .then(response => {
                     if (response.redirected) {
@@ -41,30 +44,35 @@
             zoneDropdownUpdate.innerHTML = `<option value="${zone}" selected>${zone}</option>`; // Only the selected zone is shown
 
             // Fetch dealers for the selected zone
-            fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`)
-                .then(res => res.json())
-                .then(response => {
-                    if (response.isSuccess && response.data) {
-                        dealerDropdownUpdate.innerHTML = '<option value="">Select Dealer</option>';
-                        response.data.forEach(d => {
-                            const opt = document.createElement("option");
-                            opt.value = d.dealerName;
-                            opt.textContent = d.dealerName;
-                            opt.setAttribute("data-dealerId", d.dealerID);
-                            opt.setAttribute("data-ctcl", d.ctclLoginid);
-                            if (d.dealerName === dealerName) opt.selected = true;  // Pre-select the dealer
-                            dealerDropdownUpdate.appendChild(opt);
-                        });
+            fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.isSuccess && response.data) {
+                    dealerDropdownUpdate.innerHTML = '<option value="">Select Dealer</option>';
+                    response.data.forEach(d => {
+                        const opt = document.createElement("option");
+                        opt.value = d.dealerName;
+                        opt.textContent = d.dealerName;
+                        opt.setAttribute("data-dealerId", d.dealerID);
+                        opt.setAttribute("data-ctcl", d.ctclLoginid);
+                        if (d.dealerName === dealerName) opt.selected = true;  // Pre-select the dealer
+                        dealerDropdownUpdate.appendChild(opt);
+                    });
 
-                        // Set the Dealer ID and CTCL Login values
-                        document.querySelector("#updateBranchForm input[name='DealerID']").value = dealerId;
-                        document.querySelector("#updateBranchForm input[name='CtclLoginId']").value = ctclLogin;
+                    // Set the Dealer ID and CTCL Login values
+                    document.querySelector("#updateBranchForm input[name='DealerID']").value = dealerId;
+                    document.querySelector("#updateBranchForm input[name='CtclLoginId']").value = ctclLogin;
 
-                        // Show the modal
-                        updateModal.show();
-                    }
-                })
-                .catch(err => console.error("Error fetching dealers:", err));
+                    // Show the modal
+                    updateModal.show();
+                }
+            })
+            .catch(err => console.error("Error fetching dealers:", err));
         });
     });
 

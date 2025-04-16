@@ -87,8 +87,6 @@ namespace LKP_Frontend_MVC.Controllers.Common
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            //var response = await _httpClient.GetFromJsonAsync<ResponsePayLoad>($"https://localhost:7121/api/DealerCNT/GetDealerSegment?dealer={dealer}");
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
                 $"https://localhost:7121/api/DealerCNT/GetDealerSegment?dealer={dealer}",
