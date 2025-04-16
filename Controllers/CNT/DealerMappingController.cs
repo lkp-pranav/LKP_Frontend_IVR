@@ -1,4 +1,5 @@
 ﻿using LKP_Frontend_MVC.Models.Request.BranchCNT;
+using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Models.Request.DealerCNT;
 using LKP_Frontend_MVC.Models.Response.BranchCNT;
 using LKP_Frontend_MVC.Models.Response.Common;
@@ -23,7 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
+        public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson== null)
@@ -32,17 +33,24 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
 
-            int start = ((page - 1) * pageSize) + 1;
+            inputModel.user_id = sessionUser.user_id;
+            inputModel.user_type = sessionUser.user_type;
 
-           
+            int start = ((inputModel.Start - 1) * inputModel.PageSize) + 1;
+
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<DealerCNTResponse> model = new List<DealerCNTResponse>();
 
-            string url = $"https://localhost:7121/api/DealerCNT/GetAllDealerCNTMapping?start={start}&pageSize={pageSize}";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, "Bearer", sessionUser.accessToken);
+            string url = $"https://localhost:7121/api/DealerCNT/GetAllDealerCNTMapping";
+            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
 
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
+            if (responsePayLoad == null || !responsePayLoad.isSuccess)
+            {
+                return View("Error");
+            }
+
+            ViewBag.CurrentPage = inputModel.Start;
+            ViewBag.PageSize = inputModel.PageSize;
 
             model = JsonConvert.DeserializeObject<List<DealerCNTResponse>>(responsePayLoad.data.ToString());
 
