@@ -14,6 +14,7 @@
         fetch('/Common/GetZones')
             .then(res => res.json())
             .then(response => {
+                console.log(response)
                 if (response.isSuccess && response.data) {
                     zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
                     response.data.forEach(zone => {

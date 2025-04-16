@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using LKP_Frontend_MVC.Models.Response.User;
+using LKP_Frontend_MVC.Models.Request.Common;
 
 namespace LKP_Frontend_MVC.Controllers.CNT
 {
@@ -24,7 +25,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
+        public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson == null)
@@ -33,16 +34,24 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
 
-            int start = ((page - 1) * pageSize) + 1;
+            inputModel.user_id = sessionUser.user_id;
+            inputModel.user_type = sessionUser.user_type;
+
+            int start = ((inputModel.Start - 1) * inputModel.PageSize) + 1;
 
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<BranchCNTResponse> model = new List<BranchCNTResponse>();
 
-            string url = $"https://localhost:7121/api/BranchCNT/GetAllBranchCNTMapping?start={start}&pageSize={pageSize}";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, "Bearer", sessionUser.accessToken);
+            string url = $"https://localhost:7121/api/BranchCNT/GetAllBranchCNTMapping";
+            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel,"Bearer", sessionUser.accessToken);
 
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
+            if(responsePayLoad == null || !responsePayLoad.isSuccess)
+            {
+                return View("Error");
+            }
+
+            ViewBag.CurrentPage = inputModel.Start;
+            ViewBag.PageSize = inputModel.PageSize;
 
             model = JsonConvert.DeserializeObject<List<BranchCNTResponse>>(responsePayLoad.data.ToString());
 
