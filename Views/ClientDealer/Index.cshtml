@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Client Dealer Mapping";
     var clientDealerList = Model.data as List<LKP_Frontend_MVC.Models.Response.ClientDealer.ClientDealerResponse>;
+    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
 }
 
 <div class="container mt-4">
@@ -14,91 +15,105 @@
                 <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
                     Clear
                 </a>
+
                 <div>
-                    <label for="filter" class="form-label">Filter</label>
-                    <select id="filter" class="form-select" name="filterField" required style="width: 150px;">
-                        <option value="Zone">Zone</option>
-                        <option value="ClientCode">Client Code</option>
-                        <option value="ClientName">Client Name</option>
-                        <option value="branch">Branch</option>
-                        <option value="DealerID">Dealer Code</option>
-                        <option value="DealerName">Dealer Name</option>
+                    <label for="filterField" class="form-label">Filter</label>
+                    <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
+                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
+                        <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
+                        <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option>
+                        <option value="branch" selected="@(inputModel?.branch != "" ? "selected" : null)">Branch</option>
+                        <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
+                        <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
                     </select>
                 </div>
+
                 <div>
                     <label for="filterValue" class="form-label">Value</label>
-                    <input type="text" class="form-control" id="filterValue" style="width: 15em;" />
+                    <input type="text" id="filterValue" class="form-control" value="@(
+                        inputModel?.Zone != "" ? inputModel.Zone :
+                        inputModel?.ClientCode != "" ? inputModel.ClientCode :
+                        inputModel?.ClientName != "" ? inputModel.ClientName :
+                        inputModel?.branch != "" ? inputModel.branch :
+                        inputModel?.DealerID != "" ? inputModel.DealerID :
+                        inputModel?.DealerName
+                    )" style="width: 15em;" />
                 </div>
-                <div class="d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </div>
 
-            <!-- The single dynamic input -->
-            <input type="hidden" id="dynamicInput" />
+                <!-- Dynamic Input: Empty initially, filled via JS -->
+                <input type="hidden" id="dynamicInput" name="" value="" />
+
+                <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </form>
 
-    </div>
 
-    <table class="table table-bordered table-striped" style="background: #11395C;">
-        <thead style="background: #11395C; color: white;">
-            <tr>
-                <th style="background-color: #11395C !important; color: white !important;">Client Code</th>
-                <th style="background-color: #11395C !important; color: white !important;">Client Name</th>
-                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
-                <th style="background-color: #11395C !important; color: white !important;">Branch</th>
-                <th style="background-color: #11395C !important; color: white !important;">Dealer Code</th>
-                <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Example row, replace with dynamic data later -->
-            @foreach (var item in clientDealerList)
-            {
+    </div>
+    @if(clientDealerList.Count >= 1) {
+        <table class="table table-bordered table-striped" style="background: #11395C;">
+            <thead style="background: #11395C; color: white;">
                 <tr>
-                    <td>@item.ClientCode</td>
-                    <td>@item.ClientName</td>
-                    <td>@item.Zone</td>
-                    <td>@item.Branch</td>
-                    <td>@item.DealerID</td>
-                    <td>@item.DealerName</td>
+                    <th style="background-color: #11395C !important; color: white !important;">Client Code</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Client Name</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Zone</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Branch</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Dealer Code</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <!-- Example row, replace with dynamic data later -->
+                @foreach (var item in clientDealerList)
+                {
+                    <tr>
+                        <td>@item.ClientCode</td>
+                        <td>@item.ClientName</td>
+                        <td>@item.Zone</td>
+                        <td>@item.Branch</td>
+                        <td>@item.DealerID</td>
+                        <td>@item.DealerName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else
+    {
+        <h2>No Records Found!</h2>
+    }
     <div class="d-flex justify-content-between mt-4">
-        @if (ViewBag.CurrentPage > 1)
+        @if (inputModel?.Start > 1)
         {
             <a class="btn btn-secondary"
-            href="@Url.Action("Index", new {
-               start = ViewBag.CurrentPage - 1,
-               pageSize = ViewBag.PageSize,
-               Zone = ViewBag.Zone,
-               ClientCode = ViewBag.ClientCode,
-               ClientName = ViewBag.ClientName,
-               branch = ViewBag.branch,
-               DealerID = ViewBag.DealerID,
-               DealerName = ViewBag.DealerName
-           })">
+               href="@Url.Action("Index", new {
+                   Start = inputModel.Start - 1,
+                   PageSize = inputModel.PageSize,
+                   Zone = inputModel.Zone,
+                   ClientCode = inputModel.ClientCode,
+                   ClientName = inputModel.ClientName,
+                   branch = inputModel.branch,
+                   DealerID = inputModel.DealerID,
+                   DealerName = inputModel.DealerName
+       })">
                 &laquo; Previous
             </a>
         }
-        @if (ViewBag.ShowNext) {
+        @if (clientDealerList?.Count >= 50)
+        {
             <a class="btn btn-primary"
-            href="@Url.Action("Index", new {
-           start = ViewBag.CurrentPage + 1,
-           pageSize = ViewBag.PageSize,
-           Zone = ViewBag.Zone,
-           ClientCode = ViewBag.ClientCode,
-           ClientName = ViewBag.ClientName,
-           branch = ViewBag.branch,
-           DealerID = ViewBag.DealerID,
-           DealerName = ViewBag.DealerName
+               href="@Url.Action("Index", new {
+               Start = inputModel.Start + 1,
+               PageSize = inputModel.PageSize,
+               Zone = inputModel.Zone,
+               ClientCode = inputModel.ClientCode,
+               ClientName = inputModel.ClientName,
+               branch = inputModel.branch,
+               DealerID = inputModel.DealerID,
+               DealerName = inputModel.DealerName
        })">
-            Next &raquo;
-        </a>
+                Next &raquo;
+            </a>
         }
     </div>
 </div>

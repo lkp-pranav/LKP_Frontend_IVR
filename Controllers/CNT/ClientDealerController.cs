@@ -5,6 +5,7 @@ using LKP_Frontend_MVC.Models.Response.User;
 using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace LKP_Frontend_MVC.Controllers.CNT
 {
@@ -41,25 +42,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {
-                return View("Error");
+               
+                return View(new List<ClientDealerResponse>());
             }
             model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
-
-            ViewBag.ShowNext = model.Count >= 50;
-            ViewBag.CurrentPage = inputModel.Start;
-            ViewBag.PageSize = inputModel.PageSize;
-            ViewBag.Zone = inputModel.Zone;
-            ViewBag.ClientCode = inputModel.ClientCode;
-            ViewBag.ClientName = inputModel.ClientName;
-            ViewBag.branch = inputModel.branch;
-            ViewBag.DealerID = inputModel.DealerID;
-            ViewBag.DealerName = inputModel.DealerName;
-            
-
-            
-
-
+            responsePayLoad.message = inputModel;
 
             return View(responsePayLoad);
         }
