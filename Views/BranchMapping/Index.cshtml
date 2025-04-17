@@ -8,21 +8,21 @@
 
 <style>
     .readonly-select {
-        pointer-events: none;
-        background-color: #e9ecef;
-        opacity: 1;
+    pointer-events: none;
+    background-color: #e9ecef;
+    opacity: 1;
     }
 
     #messageToast {
-        min-width: 300px;
+    min-width: 300px;
     }
 
     .toast-header.bg-success, .toast-header.bg-danger {
-        color: #000; /* Change to black or any color you prefer */
+    color: #000; /* Change to black or any color you prefer */
     }
 
     .toast-body {
-        color: #000; /* Ensure the body text is readable */
+    color: #000; /* Ensure the body text is readable */
     }
 </style>
 
@@ -32,39 +32,44 @@
         <button class="btn btn-primary" style="background-color: #11395C !important; color: white !important;" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
-                <th style="background-color: #11395C !important; color: white !important;">Dealer ID</th>
-                <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
-                <th style="background-color: #11395C !important; color: white !important;">CTCL Login</th>
-                <th style="background-color: #11395C !important; color: white !important;">HO CNT</th>
-                <th style="background-color: #11395C !important; color: white !important;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in branchCNTList)
-            {
-                <tr data-rowid="@item.RowId">
-                    <td>@item.Zone</td>
-                    <td>@item.DealerID</td>
-                    <td>@item.DealerName</td>
-                    <td>@item.CTCLLoginID</td>
-                    <td>@item.isHOCNT</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-warning me-2 update-btn" data-id="@item.RowId" title="Update"
-                                data-bs-toggle="modal" data-bs-target="#updateBranchModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
+    @if(branchCNTList.Count > 0) {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th style="background-color: #11395C !important; color: white !important;">Zone</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Dealer ID</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
+                    <th style="background-color: #11395C !important; color: white !important;">CTCL Login</th>
+                    <th style="background-color: #11395C !important; color: white !important;">HO CNT</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in branchCNTList)
+                {
+                    <tr data-rowid="@item.RowId">
+                        <td>@item.Zone</td>
+                        <td>@item.DealerID</td>
+                        <td>@item.DealerName</td>
+                        <td>@item.CTCLLoginID</td>
+                        <td>@item.isHOCNT</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-warning me-2 update-btn" data-id="@item.RowId" title="Update"
+                            data-bs-toggle="modal" data-bs-target="#updateBranchModal">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else
+    {
+        <h2>No Records Fount!!</h2>
+    }
 </div>
 
 @*Create Branch Modal*@
@@ -191,6 +196,29 @@
         <div id="toastBody" class="toast-body">
         </div>
     </div>
+</div>
+
+<div class="d-flex justify-content-between mt-4">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <a class="btn btn-secondary"
+           href="@Url.Action("Index", new {
+           start = ViewBag.CurrentPage - 1,
+           pageSize = ViewBag.PageSize
+       })">
+            &laquo; Previous
+        </a>
+    }
+    @if (branchCNTList.Count >= 50)
+    {
+        <a class="btn btn-primary"
+           href="@Url.Action("Index", new {
+           start = ViewBag.CurrentPage + 1,
+           pageSize = ViewBag.PageSize
+       })">
+            Next &raquo;
+        </a>
+    }
 </div>
 
 @section Scripts {

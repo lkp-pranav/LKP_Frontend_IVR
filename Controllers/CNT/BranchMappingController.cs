@@ -54,7 +54,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ViewBag.PageSize = inputModel.PageSize;
 
             model = JsonConvert.DeserializeObject<List<BranchCNTResponse>>(responsePayLoad.data.ToString());
-
             responsePayLoad.data = model;
             
             return View(responsePayLoad);

@@ -7,17 +7,17 @@
 
 <style>
     .readonly-select {
-        pointer-events: none;
-        background-color: #e9ecef;
-        opacity: 1;
+    pointer-events: none;
+    background-color: #e9ecef;
+    opacity: 1;
     }
 
     .toast-header.bg-success, .toast-header.bg-danger {
-        color: #000; /* Change to black or any color you prefer */
+    color: #000; /* Change to black or any color you prefer */
     }
 
     .toast-body {
-        color: #000; /* Ensure the body text is readable */
+    color: #000; /* Ensure the body text is readable */
     }
 </style>
 
@@ -27,48 +27,52 @@
         <h2>Dealer Mapping</h2>
         <button class="btn btn-primary" style="background-color: #11395C !important; color: white !important;" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
     </div>
-
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th style="background-color: #11395C !important; color: white !important;">Zone</th>
-                <th style="background-color: #11395C !important; color: white !important;">Primary Dealer</th>
-                <th style="background-color: #11395C !important; color: white !important;">Primary Dealer Name</th>
-                <th style="background-color: #11395C !important; color: white !important;">Primary CTCL Login</th>
-                <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer</th>
-                <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer Name</th>
-                <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
-                <th style ="background-color: #11395C !important; color: white !important;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in dealerCNTList)
-            {
-                <tr data-rowid="@item.RowId">
-                    <td>@item.Zone</td>
-                    <td>@item.PrimaryDealer</td>
-                    <td>@item.PrimaryDealerName</td>
-                    <td>@item.PrimaryDealerCTCLLogin</td>
-                    <td>@item.SecondaryDealer</td>
-                    <td>@item.SecondaryDealerName</td>
-                    <td>@item.SecondaryDealerCTCLLogin</td>
-                    <td>
-                        <button 
+    @if(dealerCNTList.Count > 0) {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th style="background-color: #11395C !important; color: white !important;">Zone</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Primary Dealer</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Primary Dealer Name</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Primary CTCL Login</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer Name</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
+                    <th style ="background-color: #11395C !important; color: white !important;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in dealerCNTList)
+                {
+                    <tr data-rowid="@item.RowId">
+                        <td>@item.Zone</td>
+                        <td>@item.PrimaryDealer</td>
+                        <td>@item.PrimaryDealerName</td>
+                        <td>@item.PrimaryDealerCTCLLogin</td>
+                        <td>@item.SecondaryDealer</td>
+                        <td>@item.SecondaryDealerName</td>
+                        <td>@item.SecondaryDealerCTCLLogin</td>
+                        <td>
+                            <button 
                             id="updateBranchBtn" 
                             class="btn btn-sm btn-outline-warning update-btn" 
                             data-id="@item.RowId" 
                             title="Update"
-                                data-bs-toggle="modal" data-bs-target="#updateDealerModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                            data-bs-toggle="modal" data-bs-target="#updateDealerModal">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else
+    {
+        <h2>No Records Found!!</h2>
+    }
 </div>
 
 <!-- Creation Modal -->
@@ -269,7 +273,28 @@
         </div>
     </div>
 </div>
-
+<div class="d-flex justify-content-between mt-4">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <a class="btn btn-secondary"
+           href="@Url.Action("Index", new {
+           start = ViewBag.CurrentPage - 1,
+           pageSize = ViewBag.PageSize
+       })">
+            &laquo; Previous
+        </a>
+    }
+    @if (dealerCNTList.Count >= 50)
+    {
+        <a class="btn btn-primary"
+           href="@Url.Action("Index", new {
+           start = ViewBag.CurrentPage + 1,
+           pageSize = ViewBag.PageSize
+       })">
+            Next &raquo;
+        </a>
+    }
+</div>
 @section Scripts {
     <script src="~/js/dealer-mapping.js"></script>
     <script src="~/js/fetch-segment.js"></script>
