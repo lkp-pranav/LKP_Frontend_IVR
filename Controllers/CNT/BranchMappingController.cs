@@ -81,9 +81,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
-                return View("Error");
+                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ShowToast"] = true;
+                return RedirectToAction("Index");
             }
-
+            TempData["SuccessMessage"] = "Mapping created successfully.";
+            TempData["ShowToast"] = true;
             return RedirectToAction("Index");
         }
 
@@ -137,8 +140,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
-                return View("Error");
+                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ShowToast"] = true;
+                return RedirectToAction("Index");
             }
+            TempData["SuccessMessage"] = response.message ?? "Mapping updated successfully";
+            TempData["ShowToast"] = true;
 
             return RedirectToAction("Index");
 

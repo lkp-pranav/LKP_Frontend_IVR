@@ -74,6 +74,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.user_type = sessionUser.user_type;   
             
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+            if (response == null || !response.isSuccess)
+            {
+                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ShowToast"] = true;
+                return RedirectToAction("Index");
+            }
+            TempData["SuccessMessage"] = "Mapping created successfully.";
+            TempData["ShowToast"] = true;
             return RedirectToAction("Index");
         }
 
@@ -118,6 +126,15 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.user_type = sessionUser.user_type;
 
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/UpdateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+
+            if (response == null || !response.isSuccess)
+            {
+                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ShowToast"] = true;
+                return RedirectToAction("Index");
+            }
+            TempData["SuccessMessage"] = "Mapping created successfully.";
+            TempData["ShowToast"] = true;
             return RedirectToAction("Index");
         }
     }
