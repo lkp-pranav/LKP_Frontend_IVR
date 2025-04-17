@@ -43,13 +43,22 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             {
                 return View("Error");
             }
-
-            ViewBag.CurrentPage = inputModel.Start;
-            ViewBag.PageSize = inputModel.PageSize;
-
             model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
-            Console.WriteLine(responsePayLoad.data.ToString());
+
+            ViewBag.ShowNext = model.Count >= 50;
+            ViewBag.CurrentPage = inputModel.Start;
+            ViewBag.PageSize = inputModel.PageSize;
+            ViewBag.Zone = inputModel.Zone;
+            ViewBag.ClientCode = inputModel.ClientCode;
+            ViewBag.ClientName = inputModel.ClientName;
+            ViewBag.branch = inputModel.branch;
+            ViewBag.DealerID = inputModel.DealerID;
+            ViewBag.DealerName = inputModel.DealerName;
+            
+
+            
+
 
 
             return View(responsePayLoad);

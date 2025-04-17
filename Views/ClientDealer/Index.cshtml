@@ -72,15 +72,34 @@
         @if (ViewBag.CurrentPage > 1)
         {
             <a class="btn btn-secondary"
-               href="@Url.Action("Index", new { start = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">
+            href="@Url.Action("Index", new {
+               start = ViewBag.CurrentPage - 1,
+               pageSize = ViewBag.PageSize,
+               Zone = ViewBag.Zone,
+               ClientCode = ViewBag.ClientCode,
+               ClientName = ViewBag.ClientName,
+               branch = ViewBag.branch,
+               DealerID = ViewBag.DealerID,
+               DealerName = ViewBag.DealerName
+           })">
                 &laquo; Previous
             </a>
         }
-
-        <a class="btn btn-primary"
-           href="@Url.Action("Index", new { start = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">
+        @if (ViewBag.ShowNext) {
+            <a class="btn btn-primary"
+            href="@Url.Action("Index", new {
+           start = ViewBag.CurrentPage + 1,
+           pageSize = ViewBag.PageSize,
+           Zone = ViewBag.Zone,
+           ClientCode = ViewBag.ClientCode,
+           ClientName = ViewBag.ClientName,
+           branch = ViewBag.branch,
+           DealerID = ViewBag.DealerID,
+           DealerName = ViewBag.DealerName
+       })">
             Next &raquo;
         </a>
+        }
     </div>
 </div>
 @section Scripts {
