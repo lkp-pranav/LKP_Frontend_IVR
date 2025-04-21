@@ -10,14 +10,15 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Client Dealer Mapping</h2>
-        <form method="post" action="/Excel/ExportExcel">
-            <button type="submit" class="btn btn-success p-2" style="height: 40px;">
-                <i class="bi bi-file-earmark-excel"></i> Export to Excel
-            </button>
-        </form>
         <form id="filterForm" method="post" action="/ClientDealer/Index">
             <div class="d-flex align-items-end gap-2">
-                
+                <button type="submit"
+                        class="btn btn-success p-2 d-flex align-items-center gap-1"
+                        formaction="/Excel/ExportExcel"
+                        formmethod="post"
+                        style="height: 40px;">
+                    <i class="bi bi-file-earmark-excel"></i> Export to Excel
+                </button>
                 <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
                     Clear
                 </a>
