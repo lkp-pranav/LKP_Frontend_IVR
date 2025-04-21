@@ -7,3 +7,7 @@
     dynamicInput.name = selectedField;
     dynamicInput.value = inputValue;
 });
+
+document.getElementById("filterField").addEventListener("change", () => {
+    const inputValue = document.getElementById("filterValue").value = "";
+})
