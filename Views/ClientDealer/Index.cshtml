@@ -19,6 +19,7 @@
                 <div>
                     <label for="filterField" class="form-label">Filter</label>
                     <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
+                        <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option>
                         <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                         <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
                         <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option>
@@ -31,13 +32,15 @@
                 <div>
                     <label for="filterValue" class="form-label">Value</label>
                     <input type="text" id="filterValue" class="form-control" value="@(
-                        inputModel?.Zone != "" ? inputModel.Zone :
-                        inputModel?.ClientCode != "" ? inputModel.ClientCode :
-                        inputModel?.ClientName != "" ? inputModel.ClientName :
-                        inputModel?.branch != "" ? inputModel.branch :
-                        inputModel?.DealerID != "" ? inputModel.DealerID :
-                        inputModel?.DealerName
-                    )" style="width: 15em;" />
+                        !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone :
+                        !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode :
+                        !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName :
+                        !string.IsNullOrEmpty(inputModel?.branch) ? inputModel.branch :
+                        !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID :
+                        !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName :
+                        inputModel?.Category)
+                        "style="width: 15em;"
+                    />
                 </div>
 
                 <!-- Dynamic Input: Empty initially, filled via JS -->
@@ -61,6 +64,7 @@
                     <th style="background-color: #11395C !important; color: white !important;">Branch</th>
                     <th style="background-color: #11395C !important; color: white !important;">Dealer Code</th>
                     <th style="background-color: #11395C !important; color: white !important;">Dealer Name</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Category</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,6 +78,7 @@
                         <td>@item.Branch</td>
                         <td>@item.DealerID</td>
                         <td>@item.DealerName</td>
+                        <td>@item.Category</td>
                     </tr>
                 }
             </tbody>

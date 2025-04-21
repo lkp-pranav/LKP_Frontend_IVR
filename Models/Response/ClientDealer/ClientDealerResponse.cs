@@ -16,6 +16,8 @@
         public string Branch { get; set; } = string.Empty;
 
         public string CTCLLoginId { get; set; } = string.Empty;
+
+        public string Category { get; set; } = string.Empty;
     }
 
 }

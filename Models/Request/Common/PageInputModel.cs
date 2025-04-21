@@ -11,6 +11,7 @@
         public string? DealerID { get; set; } = "";
         public string? DealerName { get; set; } = "";
         public string? branch { get; set; } = "";
+        public string? Category { get; set; } = "ALL";
         public string GroupCode { get; set; } = "";
     }
 }
