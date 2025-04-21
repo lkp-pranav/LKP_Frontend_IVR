@@ -37,8 +37,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
-            int start = ((inputModel.Start - 1) * inputModel.PageSize) + 1;
-
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<DealerCNTResponse> model = new List<DealerCNTResponse>();
 

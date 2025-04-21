@@ -29,11 +29,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return RedirectToAction("Index", "Login");
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
-            int start = ((inputModel.Start - 1) * inputModel.PageSize) + 1;
-
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
-            inputModel.Start = start;
 
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<ClientDealerResponse> model = new List<ClientDealerResponse>();
