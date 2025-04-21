@@ -1,26 +1,27 @@
 ﻿using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Models.Response.ClientDealer;
 using LKP_Frontend_MVC.Models.Response.Common;
+using LKP_Frontend_MVC.Models.Response.GroupCNT;
 using LKP_Frontend_MVC.Models.Response.User;
 using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
+using System.Security.Policy;
 
 namespace LKP_Frontend_MVC.Controllers.CNT
 {
-    public class ClientDealerController : Controller
+    public class GroupMappingController : Controller
     {
 
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
 
-        public ClientDealerController(IConfiguration configuration, HttpClient httpClient)
+        public GroupMappingController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
         }
-   
+
         public async Task<IActionResult> Index(PageInputModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
@@ -33,20 +34,19 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
-            inputModel.Start = start;
 
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
-            List<ClientDealerResponse> model = new List<ClientDealerResponse>();
+            List<GroupCNTResponse> model = new List<GroupCNTResponse>();
 
-            string url = $"https://localhost:7121/api/ClientDealer/GetAllMapping";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel,"Bearer", sessionUser.accessToken);
+            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient,"https://localhost:7121/api/GroupCNT/GetAllMapping",inputModel,"Bearer",sessionUser.accessToken);
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {
-               
-                return View(new List<ClientDealerResponse>());
+
+                return View(new List<GroupCNTResponse>());
             }
-            model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());
+
+            model = JsonConvert.DeserializeObject<List<GroupCNTResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
 

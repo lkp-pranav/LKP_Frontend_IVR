@@ -1,0 +1,100 @@
+﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Group Mapping";
+    var groupingList = Model.data as List<LKP_Frontend_MVC.Models.Response.GroupCNT.GroupCNTResponse>;
+    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Client Dealer Mapping</h2>
+        <form id="filterForm" method="post" action="/GroupMapping/Index">
+            <div class="d-flex align-items-end gap-2">
+                <a href="@Url.Action("Index", "GroupMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
+                    Clear
+                </a>
+
+                <div>
+                    <label for="filterField" class="form-label">Filter</label>
+                    <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
+                        <option value="GroupCode">GroupCode</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filterValue" class="form-label">Value</label>
+                    <input type="text" id="filterValue" class="form-control" value="@(
+                        inputModel?.Zone != "" ? inputModel.Zone : "")" 
+                        style="width: 15em;" />
+                </div>
+
+                <!-- Dynamic Input: Empty initially, filled via JS -->
+                <input type="hidden" id="dynamicInput" name="" value="" />
+
+                <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+    @if (groupingList.Count >= 1)
+    {
+        <table class="table table-bordered table-striped" style="background: #11395C;">
+            <thead style="background: #11395C; color: white;">
+                <tr>
+                    <th style="background-color: #11395C !important; color: white !important;">Category</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Group Code</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Code</th>
+                    <th style="background-color: #11395C !important; color: white !important;">Name</th>
+                    <th style="background-color: #11395C !important; color: white !important;">CTCL Login ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in groupingList)
+                {
+                    <tr>
+                        <td>@item.Category</td>
+                        <td>@item.GroupCode</td>
+                        <td>@item.Code</td>
+                        <td>@item.Name</td>
+                        <td>@item.CTCLLoginID</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2>No Records Found!</h2>
+    }
+    <div class="d-flex justify-content-between mt-4">
+        @if (inputModel?.Start > 1)
+        {
+            <a class="btn btn-secondary"
+               href="@Url.Action("Index", new {
+                   Start = inputModel.Start - 1,
+                   PageSize = inputModel.PageSize,
+                   GroupCode = inputModel.GroupCode
+       })">
+                &laquo; Previous
+            </a>
+        }
+        @if (groupingList?.Count >= 50)
+        {
+            <a class="btn btn-primary"
+               href="@Url.Action("Index", new {
+               Start = inputModel.Start + 1,
+               PageSize = inputModel.PageSize,
+               GroupCode = inputModel.GroupCode
+       })">
+                Next &raquo;
+            </a>
+        }
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/filter.js"></script>
+}
