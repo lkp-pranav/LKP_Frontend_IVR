@@ -52,7 +52,14 @@
                         <td>@item.DealerID</td>
                         <td>@item.DealerName</td>
                         <td>@item.CTCLLoginID</td>
-                        <td>@item.isHOCNT</td>
+                        @if(item.isHOCNT == 1)
+                        {
+                            <td>Yes</td>
+                        } else
+                        {
+                            <td>No</td>
+                        }
+
                         <td>
                             <button class="btn btn-sm btn-outline-warning me-2 update-btn" data-id="@item.RowId" title="Update"
                             data-bs-toggle="modal" data-bs-target="#updateBranchModal">
