@@ -7,10 +7,11 @@
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-end mb-3" style="height: 50px;">
         <h2>Group Mapping</h2>
-        <form id="filterForm" method="post" action="/GroupMapping/Index">
-            <div class="d-flex align-items-end gap-2">
+
+        <div class="d-flex align-items-end gap-2">
+            <form>
                 <button type="submit"
                         class="btn btn-success p-2 d-flex align-items-center gap-1"
                         formaction="/Excel/ExportGroupMappingExcel"
@@ -18,34 +19,40 @@
                         style="height: 40px;">
                     <i class="bi bi-file-earmark-excel"></i> Export to Excel
                 </button>
-                <a href="@Url.Action("Index", "GroupMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
-                    Clear
-                </a>
+            </form>
 
-                <div>
-                    <label for="filterField" class="form-label">Filter</label>
-                    <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
-                        <option value="GroupCode">GroupCode</option>
-                    </select>
-                </div>
+            <a href="@Url.Action("Index", "GroupMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
+                Clear
+            </a>
 
-                <div>
-                    <label for="filterValue" class="form-label">Value</label>
-                    <input type="text" id="filterValue" class="form-control" value="@(
-                        inputModel?.Zone != "" ? inputModel.Zone : "")" 
-                        style="width: 15em;" />
-                </div>
+            <!-- Form inside a div to align inputs on the same row -->
+            <div class="d-flex gap-2 align-items-end">
+                <form id="filterForm" method="post" action="/GroupMapping/Index">
+                    <div class="d-flex gap-2 align-items-end">
+                        <div>
+                            <label for="filterField" class="form-label">Filter</label>
+                            <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
+                                <option value="GroupCode">GroupCode</option>
+                            </select>
+                        </div>
 
-                <!-- Dynamic Input: Empty initially, filled via JS -->
-                <input type="hidden" id="dynamicInput" name="" value="" />
+                        <div>
+                            <label for="filterValue" class="form-label">Value</label>
+                            <input type="text" id="filterValue" class="form-control" value="@(
+                        inputModel?.Zone != "" ? inputModel.Zone : "")"
+                                   style="width: 15em;" />
+                        </div>
 
-                <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
-                    <i class="bi bi-search"></i>
-                </button>
+                        <!-- Dynamic Input: Empty initially, filled via JS -->
+                        <input type="hidden" id="dynamicInput" name="" value="" />
+
+                        <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
-
-
+        </div>
     </div>
     @if (groupingList.Count >= 1)
     {
