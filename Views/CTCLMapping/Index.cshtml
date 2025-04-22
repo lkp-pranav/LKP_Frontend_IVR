@@ -1,0 +1,165 @@
+﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "CTCL Mapping";
+    var ctclMappingList = Model.data as List<LKP_Frontend_MVC.Models.Response.CTCLMapping.CTCLMappingResponse>;
+    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
+}
+
+<style>
+    .table-wrapper {
+        overflow-x: auto;
+        overflow-y: auto;
+        max-width: 100%;
+        max-height: calc(100vh - 180px); /* Adjust for header + padding */
+        /* border: 1px solid #dee2e6; */
+    }
+
+    table th, table td {
+        white-space: nowrap;
+    }
+
+    th {
+        background-color: #11395C !important;
+        color: white !important;
+    }
+
+    .ctcl-header {
+        position: sticky;
+        top: 60px; 
+        background-color: white;
+        z-index: 1040;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="ctcl-header mb-2">
+        <div class="d-flex justify-content-between align-items-end">
+            <h2 class="m-0">CTCL Mapping</h2>
+
+            <div class="d-flex align-items-end gap-2">
+                <a href="@Url.Action("Index", "CTCLMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
+                    Clear
+                </a>
+
+                <form id="filterForm" method="post" action="/CTCLMapping/Index" class="d-flex gap-2 align-items-end">
+                    <div>
+                        <label for="filterField" class="form-label">Filter</label>
+                        <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
+                            <option value="ClientCode">Client Code</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="filterValue" class="form-label">Value</label>
+                        <input type="text"
+                               id="filterValue"
+                               class="form-control"
+                               value="@(inputModel?.ClientCode != "" ? inputModel.ClientCode : "")"
+                               style="width: 15em;" />
+                    </div>
+
+                    <input type="hidden" id="dynamicInput" name="" value="" />
+
+                    <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrollable Table Section -->
+    @if (ctclMappingList.Count >= 1)
+    {
+        <div class="table-wrapper bg-white rounded shadow-sm p-1">
+            <table class="table table-bordered table-striped" style="min-width: max-content;">
+                <thead class="text-white" style="background: #11395C;">
+                    <tr>
+                        <th>Client Code</th>
+                        <th>Primary Dealer</th>
+                        <th>Primary Dealer Name</th>
+                        <th>Primary Dealer CTCL Login</th>
+                        <th>Primary Dealer Work Status</th>
+                        <th>Secondary Dealer</th>
+                        <th>Secondary Dealer Name</th>
+                        <th>Secondary Dealer CTCL Login</th>
+                        <th>Secondary Dealer Work Status</th>
+                        <th>Zone</th>
+                        <th>Zone Dealer ID</th>
+                        <th>Zone Dealer Name</th>
+                        <th>Zone CTCL Login ID</th>
+                        <th>Zone Work Status</th>
+                        <th>Is HO CNT</th>
+                        <th>HO Dealer ID</th>
+                        <th>HO Dealer Name</th>
+                        <th>HO CTCL Login</th>
+                        <th>HO Work Status</th>
+                        <th>Category</th>
+                        <th>Flag</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ctclMappingList)
+                    {
+                        <tr>
+                            <td>@item.Clientcode</td>
+                            <td>@item.PrimaryDealer</td>
+                            <td>@item.PrimaryDealerName</td>
+                            <td>@item.PrimaryDealerCTCLLogin</td>
+                            <td>@item.PrimaryDealerWorkStatus</td>
+                            <td>@item.SecondaryDealer</td>
+                            <td>@item.SecondaryDealerName</td>
+                            <td>@item.SecondaryDealerCTCLLogin</td>
+                            <td>@item.SecondaryDealerWorkStatus</td>
+                            <td>@item.Zone</td>
+                            <td>@item.ZoneDealerID</td>
+                            <td>@item.ZoneDealerName</td>
+                            <td>@item.ZoneCtclLoginID</td>
+                            <td>@item.ZoneWorkStatus</td>
+                            <td>@item.IsHOCNT</td>
+                            <td>@item.HO_DealerID</td>
+                            <td>@item.HO_DealerName</td>
+                            <td>@item.HO_CTCLLogin</td>
+                            <td>@item.HO_WorkStatus</td>
+                            <td>@item.Category</td>
+                            <td>@item.Flag</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between mt-4">
+                @if (inputModel?.Start > 1)
+                {
+                    <a class="btn btn-secondary"
+                       href="@Url.Action("Index", new {
+                   Start = inputModel.Start - 1,
+                   PageSize = inputModel.PageSize,
+                   ClientCode = inputModel.ClientCode
+               })">
+                        &laquo; Previous
+                    </a>
+                }
+                @if (ctclMappingList?.Count >= 50)
+                {
+                    <a class="btn btn-primary"
+                       href="@Url.Action("Index", new {
+                   Start = inputModel.Start + 1,
+                   PageSize = inputModel.PageSize,
+                   ClientCode = inputModel.ClientCode
+               })">
+                        Next &raquo;
+                    </a>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <h2>No Records Found!</h2>
+    }    
+</div>
+
+@section Scripts {
+    <script src="~/js/filter.js"></script>
+}
