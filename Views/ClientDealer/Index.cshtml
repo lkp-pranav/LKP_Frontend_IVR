@@ -46,16 +46,16 @@
                         <div>
                             <label for="filterValue" class="form-label">Value</label>
                             <input type="text" id="filterValue" class="form-control" value="@(
-                            !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone :
-                            !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode :
-                            !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName :
-                            !string.IsNullOrEmpty(inputModel?.branch) ? inputModel.branch :
-                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID :
-                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName :
-                            inputModel?.Category)
-                            " style="width: 15em;" />
+                            !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.branch) ? inputModel.branch.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
+                            inputModel?.Category.Trim())" 
+                            style="width: 15em;" />
                         </div>
-                        <!-- Dynamic Input: Empty initially, filled via JS -->
+                        
                         <input type="hidden" id="dynamicInput" name="" value="" />
                         <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
                             <i class="bi bi-search"></i>

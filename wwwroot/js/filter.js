@@ -5,9 +5,9 @@
 
     // Dynamically set the name and value for dynamicInput
     dynamicInput.name = selectedField;
-    dynamicInput.value = inputValue;
+    dynamicInput.value = inputValue.trim();
 });
 
 document.getElementById("filterField").addEventListener("change", () => {
-    const inputValue = document.getElementById("filterValue").value = "";
+    const inputValue = document.getElementById("filterValue").value = null;
 })
