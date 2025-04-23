@@ -30,6 +30,22 @@
         background-color: white;
         /* z-index: 1040; */
     }
+
+    .no-records {
+        background-color: #f8f9fa;
+        border: 1px dashed #dee2e6;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        color: #6c757d;
+    }
+
+    .no-records .icon {
+        font-size: 3rem;
+        color: #11395C;
+        margin-bottom: 1rem;
+    }
 </style>
 
 <div class="container-fluid">
@@ -164,7 +180,12 @@
     }
     else
     {
-        <h2>No Records Found!</h2>
+
+        <div class="no-records">
+            <i class="bi bi-folder-x icon"></i>
+            <h5>No Records Found</h5>
+            <p>Try adjusting your filters or check back later.</p>
+        </div>
     }    
 </div>
 
