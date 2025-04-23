@@ -38,18 +38,23 @@
                         <td>@item.SecondaryDealer</td>
                         <td>@item.SecondaryDealerName</td>
                         <td>@item.SecondaryDealerCTCLLogin</td>
-                        <td>
-                            <button 
-                            id="updateBranchBtn" 
-                            class="btn btn-sm btn-outline-warning update-btn" 
-                            data-id="@item.RowId" 
-                            title="Update"
-                            data-bs-toggle="modal" data-bs-target="#updateDealerModal">
-                                <i class="fas fa-pen"></i>
-                            </button>
-                            <button id="deleteBranchBtn" class="btn btn-sm btn-outline-danger delete-btn" data-id="@item.RowId" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                        <td class="align-middle">
+                            <div class="d-flex justify-content-center">
+                                <button id="updateBranchBtn"
+                                        class="btn btn-sm btn-outline-warning me-2 update-btn"
+                                        data-id="@item.RowId"
+                                        title="Update"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#updateDealerModal">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button id="deleteBranchBtn"
+                                        class="btn btn-sm btn-outline-danger delete-btn"
+                                        data-id="@item.RowId"
+                                        title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 }
