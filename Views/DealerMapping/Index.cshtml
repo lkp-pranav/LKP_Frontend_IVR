@@ -19,6 +19,17 @@
     .toast-body {
     color: #000;
     }
+
+    th, .modal-btn {
+        background-color: #11395C !important; 
+        color: white !important;
+    }
+
+    .modal-btn{
+        border: none !important;
+    }
+
+
 </style>
 
 <!-- Page Content -->
@@ -31,14 +42,14 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th style="background-color: #11395C !important; color: white !important;">Zone</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Primary Dealer</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Primary Dealer Name</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Primary CTCL Login</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Secondary Dealer Name</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Secondary CTCL Login</th>
-                    <th style ="background-color: #11395C !important; color: white !important;">Actions</th>
+                    <th>Zone</th>
+                    <th>Primary Dealer</th>
+                    <th>Primary Dealer Name</th>
+                    <th>Primary CTCL Login</th>
+                    <th>Secondary Dealer</th>
+                    <th>Secondary Dealer Name</th>
+                    <th>Secondary CTCL Login</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,7 +156,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Save Mapping</button>
+                    <button type="submit" class="btn btn-success modal-btn">Save Mapping</button>
                 </div>
             </form>
         </div>
@@ -223,7 +234,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success" style="background-color: #11395C !important; color: white !important;">
+                    <button type="submit" class="btn btn-success modal-btn">
                         Update Mapping
                     </button>
                 </div>
@@ -286,7 +297,7 @@
     }
     @if (dealerCNTList.Count >= 50)
     {
-        <a class="btn btn-primary"
+        <a class="btn btn-primary modal-btn"
            href="@Url.Action("Index", new {
            start = ViewBag.CurrentPage + 1,
            pageSize = ViewBag.PageSize

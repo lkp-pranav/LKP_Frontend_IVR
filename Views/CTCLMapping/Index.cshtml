@@ -19,7 +19,7 @@
         white-space: nowrap;
     }
 
-    th {
+    th, .modal-btn{
         background-color: #11395C !important;
         color: white !important;
     }
@@ -61,7 +61,7 @@
 
                     <input type="hidden" id="dynamicInput" name="" value="" />
 
-                    <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
+                    <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
                         <i class="bi bi-search"></i>
                     </button>
                 </form>
@@ -133,21 +133,21 @@
                 {
                     <a class="btn btn-secondary"
                        href="@Url.Action("Index", new {
-                   Start = inputModel.Start - 1,
-                   PageSize = inputModel.PageSize,
-                   ClientCode = inputModel.ClientCode
-               })">
+                       Start = inputModel.Start - 1,
+                       PageSize = inputModel.PageSize,
+                       ClientCode = inputModel.ClientCode
+                    })">
                         &laquo; Previous
                     </a>
                 }
                 @if (ctclMappingList?.Count >= 50)
                 {
-                    <a class="btn btn-primary"
+                    <a class="btn btn-primary modal-btn"
                        href="@Url.Action("Index", new {
-                   Start = inputModel.Start + 1,
-                   PageSize = inputModel.PageSize,
-                   ClientCode = inputModel.ClientCode
-               })">
+                       Start = inputModel.Start + 1,
+                       PageSize = inputModel.PageSize,
+                       ClientCode = inputModel.ClientCode
+                    })">
                         Next &raquo;
                     </a>
                 }

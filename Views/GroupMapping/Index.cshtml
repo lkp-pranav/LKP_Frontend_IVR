@@ -5,7 +5,16 @@
     var groupingList = Model.data as List<LKP_Frontend_MVC.Models.Response.GroupCNT.GroupCNTResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
 }
+<style>
+    th, .modal-btn {
+        background-color: #11395C !important;
+        color: white !important;
+    }
 
+    .modal-btn {
+        border: none !important;
+    }
+</style>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-end mb-3" style="height: 50px;">
         <h2>Group Mapping</h2>
@@ -37,15 +46,19 @@
 
                         <div>
                             <label for="filterValue" class="form-label">Value</label>
-                            <input type="text" id="filterValue" class="form-control" value="@(
-                        inputModel?.Zone != "" ? inputModel.Zone : "")"
-                                   style="width: 15em;" />
+                            <input 
+                                type="text" 
+                                id="filterValue" 
+                                class="form-control" 
+                                value="@(inputModel?.Zone != "" ? inputModel.Zone : "")"
+                                style="width: 15em;" 
+                            />
                         </div>
 
-                        <!-- Dynamic Input: Empty initially, filled via JS -->
+                        <!-- Dynamic Input -->
                         <input type="hidden" id="dynamicInput" name="" value="" />
 
-                        <button type="submit" class="btn btn-primary p-2" style="width: 40px; height: 40px;">
+                        <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
@@ -58,11 +71,11 @@
         <table class="table table-bordered table-striped" style="background: #11395C;">
             <thead style="background: #11395C; color: white;">
                 <tr>
-                    <th style="background-color: #11395C !important; color: white !important;">Category</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Group Code</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Code</th>
-                    <th style="background-color: #11395C !important; color: white !important;">Name</th>
-                    <th style="background-color: #11395C !important; color: white !important;">CTCL Login ID</th>
+                    <th>Category</th>
+                    <th>Group Code</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>CTCL Login ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,7 +110,7 @@
         }
         @if (groupingList?.Count >= 50)
         {
-            <a class="btn btn-primary"
+            <a class="btn btn-primary modal-btn"
                href="@Url.Action("Index", new {
                Start = inputModel.Start + 1,
                PageSize = inputModel.PageSize,
