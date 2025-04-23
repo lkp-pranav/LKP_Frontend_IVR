@@ -1,0 +1,38 @@
+﻿.readonly-select {
+    pointer-events: none;
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.toast-header.bg-success, .toast-header.bg-danger {
+    color: #000;
+}
+
+.toast-body {
+    color: #000;
+}
+
+th, .modal-btn {
+    background-color: #11395C !important;
+    color: white !important;
+}
+
+.modal-btn {
+    border: none !important;
+}
+
+.no-records {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    color: #6c757d;
+}
+
+.no-records .icon {
+    font-size: 3rem;
+    color: #11395C;
+    margin-bottom: 1rem;
+}

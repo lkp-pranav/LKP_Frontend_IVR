@@ -5,33 +5,9 @@
     var groupingList = Model.data as List<LKP_Frontend_MVC.Models.Response.GroupCNT.GroupCNTResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
 }
-<style>
-    th, .modal-btn {
-        background-color: #11395C !important;
-        color: white !important;
-    }
-
-    .modal-btn {
-        border: none !important;
-    }
-
-    .no-records {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        padding: 2rem;
-        border-radius: 0.5rem;
-        text-align: center;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        color: #6c757d;
-    }
-
-    .no-records .icon {
-        font-size: 3rem;
-        color: #11395C;
-        margin-bottom: 1rem;
-    }
-
-</style>
+<head>
+    <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
+</head>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-end mb-3" style="height: 50px;">
         <h2>Group Mapping</h2>
@@ -85,8 +61,8 @@
     </div>
     @if (groupingList.Count >= 1)
     {
-        <table class="table table-bordered table-striped" style="background: #11395C;">
-            <thead style="background: #11395C; color: white;">
+        <table class="table table-bordered table-striped">
+            <thead>
                 <tr>
                     <th>Category</th>
                     <th>Group Code</th>
@@ -126,7 +102,7 @@
                    Start = inputModel.Start - 1,
                    PageSize = inputModel.PageSize,
                    GroupCode = inputModel.GroupCode
-       })">
+            })">
                 &laquo; Previous
             </a>
         }
@@ -137,7 +113,7 @@
                Start = inputModel.Start + 1,
                PageSize = inputModel.PageSize,
                GroupCode = inputModel.GroupCode
-       })">
+            })">
                 Next &raquo;
             </a>
         }

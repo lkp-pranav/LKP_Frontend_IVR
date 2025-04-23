@@ -4,55 +4,14 @@
     ViewData["Title"] = "Dealer Mapping";
     var dealerCNTList= Model.data as List<LKP_Frontend_MVC.Models.Response.DealerCNT.DealerCNTResponse>;
 }
-
-<style>
-    .readonly-select {
-    pointer-events: none;
-    background-color: #e9ecef;
-    opacity: 1;
-    }
-
-    .toast-header.bg-success, .toast-header.bg-danger {
-    color: #000;
-    }
-
-    .toast-body {
-    color: #000;
-    }
-
-    th, .modal-btn {
-        background-color: #11395C !important; 
-        color: white !important;
-    }
-
-    .modal-btn{
-        border: none !important;
-    }
-
-    .no-records {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        padding: 2rem;
-        border-radius: 0.5rem;
-        text-align: center;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        color: #6c757d;
-    }
-
-    .no-records .icon {
-        font-size: 3rem;
-        color: #11395C;
-        margin-bottom: 1rem;
-    }
-
-
-</style>
-
+<head>
+    <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
+</head>
 <!-- Page Content -->
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Dealer Mapping</h2>
-        <button class="btn btn-primary" style="background-color: #11395C !important; color: white !important;" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
+        <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
     </div>
     @if(dealerCNTList.Count > 0) {
         <table class="table table-bordered table-striped">
@@ -312,7 +271,7 @@
            href="@Url.Action("Index", new {
            start = ViewBag.CurrentPage - 1,
            pageSize = ViewBag.PageSize
-       })">
+        })">
             &laquo; Previous
         </a>
     }
@@ -322,7 +281,7 @@
            href="@Url.Action("Index", new {
            start = ViewBag.CurrentPage + 1,
            pageSize = ViewBag.PageSize
-       })">
+        })">
             Next &raquo;
         </a>
     }
@@ -331,8 +290,6 @@
     <script src="~/js/dealer-mapping.js"></script>
     <script src="~/js/fetch-segment.js"></script>
     <script src="~/js/dealer-actions.js"></script>
-    <script src="~/js/toast-message.js"></script>
-    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script> *@
-   
+    <script src="~/js/toast-message.js"></script> 
 }
 

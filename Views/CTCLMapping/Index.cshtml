@@ -5,46 +5,19 @@
     var ctclMappingList = Model.data as List<LKP_Frontend_MVC.Models.Response.CTCLMapping.CTCLMappingResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
 }
-
+<head>
+    <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
+</head>
 <style>
     .table-wrapper {
         overflow-x: auto;
         overflow-y: auto;
         max-width: 100%;
-        max-height: calc(100vh - 180px); /* Adjust for header + padding */
-        /* border: 1px solid #dee2e6; */
+        max-height: calc(100vh - 180px); 
     }
 
     table th, table td {
         white-space: nowrap;
-    }
-
-    th, .modal-btn{
-        background-color: #11395C !important;
-        color: white !important;
-    }
-
-    .ctcl-header {
-        position: sticky;
-        top: 60px; 
-        background-color: white;
-        /* z-index: 1040; */
-    }
-
-    .no-records {
-        background-color: #f8f9fa;
-        border: 1px dashed #dee2e6;
-        padding: 2rem;
-        border-radius: 0.5rem;
-        text-align: center;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        color: #6c757d;
-    }
-
-    .no-records .icon {
-        font-size: 3rem;
-        color: #11395C;
-        margin-bottom: 1rem;
     }
 </style>
 
@@ -98,7 +71,7 @@
     {
         <div class="table-wrapper bg-white rounded shadow-sm p-1">
             <table class="table table-bordered table-striped" style="min-width: max-content;">
-                <thead class="text-white" style="background: #11395C;">
+                <thead class="text-white">
                     <tr>
                         <th>Client Code</th>
                         <th>Primary Dealer</th>
