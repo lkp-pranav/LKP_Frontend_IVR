@@ -3,7 +3,7 @@
     const successMessage = toastData.dataset.success;
     const errorMessage = toastData.dataset.error;
     const showToast = toastData.dataset.showtoast === "True";
-
+    console.log("Inside toast js")
     if (showToast) {
         if (errorMessage) {
             showToastMessage(errorMessage, 'danger');
@@ -32,7 +32,7 @@
         // Manually initialize the toast with autohide
         const toast = new bootstrap.Toast(toastEl, {
             autohide: true,
-            delay: 1000
+            delay: 1500
         });
         toast.show();
     }

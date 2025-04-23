@@ -57,6 +57,9 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
+                TempData["ErrorMessage"] = responsePayload?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ShowToast"] = true;
+                ViewBag.IsSuccess = false;
                 return RedirectToAction("Index");
             }
 

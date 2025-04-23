@@ -22,6 +22,16 @@ namespace LKP_Frontend_MVC.Utils
                 var requestBody = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(url, requestBody);
 
+                if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    return new ResponsePayLoad
+                    {
+                        isSuccess = false,
+                        message = "Login Failed",
+                        errorMessages = "Please enter the correct crendentials"
+                    };
+                }
+
                 if (!response.IsSuccessStatusCode)
                 {
                     return null;
