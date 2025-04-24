@@ -8,6 +8,8 @@ using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Utils;
 using Newtonsoft.Json.Linq;
 using System.Security.Policy;
+using LKP_Frontend_MVC.Models.Response.ClientDealer;
+using System.Reflection;
 
 namespace LKP_Frontend_MVC.Controllers.Common
 {
@@ -87,6 +89,8 @@ namespace LKP_Frontend_MVC.Controllers.Common
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
+            ResponsePayLoad payLoad = new ResponsePayLoad();
+
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
                 $"https://localhost:7121/api/DealerCNT/GetDealerSegment?dealer={dealer}",
@@ -94,6 +98,10 @@ namespace LKP_Frontend_MVC.Controllers.Common
                 "Bearer",
                 sessionUser.accessToken
             );
+            var list = (response.data as JArray)?.ToObject<List<DealerSegmentResponse>>();
+            response.data = list;
+
+
             return Json(response);
         }
     }

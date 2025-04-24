@@ -2,12 +2,12 @@
     const primaryDealerDropdown = document.getElementById("primaryDealerDropdownCreate");
     const secondaryDealerDropdown = document.getElementById("secondaryDealerDropdownCreate");
 
-    const primarySegment = document.getElementById("primarySegmentCreate");
-    const secondarySegment = document.getElementById("secondarySegmentCreate");
+    const primarySegment = document.getElementById("primarySegmentList");
+    const secondarySegment = document.getElementById("secondarySegmentList");
 
     function fetchSegment(dealerId, targetInput, label) {
         if (!dealerId) {
-            targetInput.value = "-";
+            targetInput.textContent = "-";
             console.log(`[INFO] No ${label} dealer selected`);
             return;
         }
@@ -20,19 +20,27 @@
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => res.json())
-        .then(response => {
-            console.log(`[DEBUG] Response for ${label} dealer:`, response);
-            if (response.isSuccess && response.data) {
-                targetInput.value = response.data;
-            } else {
-                targetInput.value = "-";
-            }
-        })
-        .catch(err => {
-            console.error(`[ERROR] Failed to fetch ${label} dealer segment:`, err);
-            targetInput.value = "-";
-        });
+            .then(res => res.json()) // ✅ Correctly parse JSON here
+            .then(response => {
+                console.log(`[DEBUG] Parsed response:`, response);
+
+                // Clear any existing content
+                targetInput.innerHTML = "";
+
+                if (response.isSuccess && Array.isArray(response.data)) {
+                    response.data.forEach(item => {
+                        const li = document.createElement("li");
+                        li.textContent = item.segment;
+                        targetInput.appendChild(li);
+                    });
+                } else {
+                    targetInput.textContent = "No segment assigned";
+                }
+            })
+            .catch(err => {
+                console.error(`[ERROR] Failed to fetch ${label} dealer segment:`, err);
+                targetInput.textContent = "-";
+            });
     }
 
     primaryDealerDropdown?.addEventListener("change", function () {
@@ -40,6 +48,7 @@
         const dealerId = selectedOption.getAttribute("data-dealerId");
         console.log("this is the primary dealer id: ", dealerId);
         fetchSegment(dealerId, primarySegment, "primary");
+        secondarySegment.innerHTML = "-"
     });
 
     secondaryDealerDropdown?.addEventListener("change", function () {

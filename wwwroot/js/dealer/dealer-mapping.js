@@ -11,8 +11,8 @@
     const primaryCTCL = document.getElementById("primaryCTCLCreate");
     const secondaryCTCL = document.getElementById("secondaryCTCLCreate");
 
-    const primarySegment = document.getElementById("primarySegmentCreate");
-    const secondarySegment = document.getElementById("secondarySegmentCreate");
+    const primarySegment = document.getElementById("primarySegmentList");
+    const secondarySegment = document.getElementById("secondarySegmentList");
 
     modal.addEventListener("shown.bs.modal", function () {
         fetch('/Common/GetZones', {
@@ -49,6 +49,8 @@
         if (secondaryDealerDropdown) {
             secondaryDealerDropdown.disabled = true;
         }
+        primarySegment.innerHTML = "-";
+        secondarySegment.innerHTML = "-";
     });
 
     zoneDropdown.addEventListener("change", function () {
@@ -61,6 +63,8 @@
         primaryDealerId.value = "-";
         secondaryDealerId.value = "-";
         secondaryDealerDropdown.disabled = true;
+        primarySegment.innerHTML = "-";
+        secondarySegment.innerHTML = "-";
 
         if (!selectedZone) return;
 
@@ -116,11 +120,13 @@
 
             secondaryCTCL.value = "-";
             secondaryDealerId.value = "-";
+            secondarySegment.value = "-"
         } else {
             secondaryDealerDropdown.disabled = true;
             secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
             secondaryCTCL.value = "-";
             secondaryDealerId.value = "-";
+            secondarySegment.value = "-"
         }
     });
 
