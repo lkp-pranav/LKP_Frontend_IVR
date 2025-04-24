@@ -50,9 +50,9 @@
     const secondarySegmentField = document.getElementById("secondarySegmentUpdate");
 
     // Helper to fetch and set segment
-    function fetchSegment(dealerId, segmentField) {
+    function fetchSegment(dealerId, targetInput) {
         if (!dealerId || dealerId === "-") {
-            segmentField.value = "-";
+            targetInput.value = "-";
             return;
         }
 
@@ -62,18 +62,27 @@
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => res.json())
-        .then(response => {
-            if (response.isSuccess && response.data) {
-                segmentField.value = response.data;
-            } else {
-                segmentField.value = "-";
-            }
-        })
-        .catch(err => {
-            console.error("Error fetching segment:", err);
-            segmentField.value = "-";
-        });
+            .then(res => res.json()) // ✅ Correctly parse JSON here
+            .then(response => {
+                console.log(`[DEBUG] Parsed response:`, response);
+
+                // Clear any existing content
+                targetInput.innerHTML = "";
+
+                if (response.isSuccess && Array.isArray(response.data)) {
+                    response.data.forEach(item => {
+                        const li = document.createElement("li");
+                        li.textContent = item.segment;
+                        targetInput.appendChild(li);
+                    });
+                } else {
+                    targetInput.textContent = "No segment assigned";
+                }
+            })
+            .catch(err => {
+                //console.error(`[ERROR] Failed to fetch ${label} dealer segment:`, err);
+                targetInput.textContent = "-";
+            });
     }
 
     document.querySelectorAll(".update-btn").forEach(button => {
