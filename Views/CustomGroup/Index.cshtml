@@ -9,12 +9,10 @@
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
 </head>
 <style>
-    /* #dealerList { */
-    /*     background-color: #f8f9fa !important; */
-    /*     padding: 10px; */
-    /*     border: 1px; */
-    /*     border-radius: 5px; */
-    /* } */
+    .info-btn {
+        border: none;
+        background: none;
+    }
 </style>   
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -30,9 +28,6 @@
                     <th>Group Code</th>
                     <th>Zone</th>
                     <th>Branch</th>
-                    <th>Dealer ID</th>
-                    <th>Dealer Name</th>
-                    <th>CTCL Login ID</th>
                     <th>Active</th>
                     <th>Actions</th>
                 </tr>
@@ -41,12 +36,17 @@
                 @foreach (var item in groupList)
                 {
                     <tr data-rowid="@item.RowId">
-                        <td>@item.GroupCode</td>
+                        <td>
+                            @item.GroupCode
+                            <button class="info-btn"
+                                    data-bs-target="#groupInfoModal"
+                                    data-bs-toggle="modal"
+                                    data-id="@item.GroupCode">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </button>
+                        </td>
                         <td>@item.Zone</td>
                         <td>@item.Branch</td>
-                        <td>@item.DealerId</td>
-                        <td>@item.Dealername</td>
-                        <td>@item.CtclLoginId</td>
                         <td>@item.Active</td>
                         
 
@@ -128,6 +128,23 @@
                     <button type="submit" class="btn btn-success modal-btn">Create Group</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="groupInfoModal" tabindex="-1" aria-labelledby="groupInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="groupInfoModalLabel">Group Info: <span id="groupCodeSpan"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
