@@ -49,5 +49,31 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             return View(responsePayLoad);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetClientGroups(string clientCode)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var user = new CommonModel
+            {
+                user_id = sessionUser.user_id,
+                user_type = sessionUser.user_type
+            };
+
+            ClientGroupResponse groupList = new ClientGroupResponse();
+
+            string url = $"https://localhost:7121/api/ClientDealer/GetClientGroups?clientCode={clientCode}";
+            var responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, user, "Bearer", sessionUser.accessToken);
+
+            groupList = JsonConvert.DeserializeObject<ClientGroupResponse>(responsePayLoad.data.ToString());
+            responsePayLoad.data = groupList;
+
+            return Json(responsePayLoad);
+        }
     }
 }
