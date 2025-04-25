@@ -78,6 +78,54 @@ namespace LKP_Frontend_MVC.Controllers.Common
             return Json(response);
         }
 
+        public async Task<IActionResult> FetchBranch(string Zone)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+
+            var response = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/CustomGroup/FetchBranch?zone={Zone}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
+            );
+
+            var branchList = (response.data as JArray)?.ToObject<List<string>>();
+            response.data = branchList;
+
+            return Json(response);
+        }
+
+        public async Task<IActionResult> FetchDealerByBranch(string branchCode)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+
+            var response = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/CustomGroup/FetchDealerByBranch?branchCode={branchCode}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
+            );
+
+            var dealerList = (response.data as JArray)?.ToObject<List<DealerResponse>>();
+            response.data = dealerList;
+
+            return Json(response);
+        }
+
         public async Task<IActionResult> GetDealerSegment(string dealer)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");

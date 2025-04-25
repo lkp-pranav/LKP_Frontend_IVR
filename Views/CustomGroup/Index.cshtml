@@ -10,7 +10,7 @@
 </head>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>CNT Terminal Mapping</h2>
+        <h2>Custom Group</h2>
         <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addCustomGroup">Add New</button>
     </div>
 
@@ -79,17 +79,17 @@
 <div class="modal fade" id="addCustomGroup" tabindex="-1" aria-labelledby="addCustomGroup" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form id="branchForm" method="post" action="/BranchMapping/CreateMapping">
+            <form id="customGroupForm" method="post" action="/BranchMapping/CreateMapping">
                 <input type="hidden" name="RowId" id="rowIdInput" />
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addBranchModalLabel">Add Branch Mapping</h5>
+                    <h5 class="modal-title" id="addBranchModalLabel">Create Custom Group</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Group Code</label>
-                        <input type="text" class="form-control" name="GroupCode" value="" placeholder="Enter Group Code" required />
+                        <input id="groupCode" type="text" class="form-control" name="GroupCode" value="" placeholder="Enter Group Code" required />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Zone</label>
@@ -100,23 +100,15 @@
                     <div class="mb-3">
                         <label class="form-label">Zone</label>
                         <select id="branchDropdown" class="form-select" name="Branch" required>
-                            <option value="">Select Zone</option>
+                            <option value="">Select Branch</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Dealer</label>
-                        <select id="dealerDropdown" class="form-select" name="DealerName" required>
+                        <select id="dealerDropdown" class="form-select" name="DealerName" required multiple>
                             <option value="">Select Dealer</option>
                         </select>
                     </div>
-                    @* <div class="mb-3"> *@
-                    @*     <label class="form-label">Dealer ID</label> *@
-                    @*     <input type="text" class="form-control" name="DealerID" value="-" readonly /> *@
-                    @* </div> *@
-                    @* <div class="mb-3"> *@
-                    @*     <label class="form-label">CTCL Login</label> *@
-                    @*     <input type="text" class="form-control" name="CtclLoginId" value="-" readonly /> *@
-                    @* </div> *@
                 </div>
 
                 <div class="modal-footer">
@@ -128,3 +120,6 @@
     </div>
 </div>
 
+@section Scripts {
+    <script src="~/js/custom-group/fetchData.js"></script>
+}

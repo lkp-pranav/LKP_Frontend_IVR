@@ -23,7 +23,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         }
 
         public async Task<IActionResult> Index(PageInputModel inputModel)
-        
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson == null)
