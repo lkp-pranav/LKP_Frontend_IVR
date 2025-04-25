@@ -11,6 +11,6 @@ namespace LKP_Frontend_MVC.Models.Request.CustomGroup
         public string DealerID { get; set; }
         public string DealerName { get; set; }
         public string CTCLLoginId { get; set; }
-        public string Active { get; set; } = "Y";
+        public string Active { get; set; }
     }
 }

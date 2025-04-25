@@ -148,14 +148,16 @@
         event.preventDefault();
 
         const selectedDealers = getSelectedDealers();
+        const activeCheckbox = document.getElementById("activeCheckbox");
 
         const payload = {
             GroupCode: groupCodeInput.value,
             Zone: zoneDropdown.value,
             Branch: branchDropdown.value,
-            DealerID: selectedDealers.dealerIds,        // Already a string
-            DealerName: selectedDealers.dealerNames,    // Already a string
-            ctclLoginId: selectedDealers.ctclLoginids   // Already a string
+            DealerID: selectedDealers.dealerIds,        
+            DealerName: selectedDealers.dealerNames,    
+            ctclLoginId: selectedDealers.ctclLoginids,
+            Active: activeCheckbox.checked ? "Y" : "N"
         };
 
         console.log("Payload to send:", payload);
