@@ -1,9 +1,9 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("addCustomGroup");
-    const groupCode = document.getElementById("groupCode");
+    const groupCodeInput = document.getElementById("groupCode");
     const zoneDropdown = document.getElementById("zoneDropdown");
     const branchDropdown = document.getElementById("branchDropdown");
-    const dealerDropdown = document.getElementById("dealerDropdown");
+    const dealerContainer = document.getElementById("dealerContainer");
     const form = document.getElementById("customGroupForm");
 
     // Populate zones when modal is shown
@@ -16,7 +16,7 @@
         })
             .then(res => res.json())
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 if (response.isSuccess && response.data) {
                     zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
                     response.data.forEach(zone => {
@@ -31,33 +31,22 @@
             .catch(error => console.error("Error fetching zones:", error));
     });
 
-    //zoneDropdown.addEventListener("change", () => {
-    //    const selectedZone = this.value;
-    //    branchDropdown.innerHTML = '<option value="">Select Branch</option>';
-
-    //    if (!selectedZone) return;
-
-    //    fetch(`/Common/FetchBranch?Zone=${encodeURIComponent(selectedZone)}`, {
-    //        method: 'POST',
-    //        headers: {
-    //            'Content-Type': 'application/json'
-    //        }
-    //    })
-    //        .then(res => res.json())
-    //        .then(response => {
-    //            console.log(response);
-    //        })
-    //        .catch(error => console.error("Error fetching branch list:", error));
-    //})
     modal.addEventListener("hidden.bs.modal", function () {
         form.reset();
-        dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
-
+        dealerContainer.innerHTML = `
+        <label class="form-label">Dealer List</label>
+        <div id="dealerList" class="form-check"></div>
+    `;
     });
+
 
     zoneDropdown.addEventListener("change", (event) => {
         const selectedZone = event.target.value;
         branchDropdown.innerHTML = '<option value="">Select Branch</option>';
+        dealerContainer.innerHTML = `
+        <label class="form-label">Dealer List</label>
+        <div id="dealerList" class="form-check"></div>
+    `;
 
         if (!selectedZone) return;
 
@@ -70,7 +59,7 @@
             .then(res => res.json())
             .then(response => {
                 if (response.isSuccess && response.data) {
-                    console.log(response.data)
+                    //console.log(response.data)
                     response.data.forEach(branch => {
                         const opt = document.createElement("option");
                         opt.value = branch;
@@ -84,7 +73,13 @@
 
     branchDropdown.addEventListener("change", (event) => {
         const selectedBranch = event.target.value;
-        dealerDropdown.innerHTML = '<option value="">Select Dealers</option>';
+
+        dealerContainer.innerHTML = `
+        <label class="form-label">Dealer List</label>
+        <div id="dealerList" class="form-check"></div>
+    `
+
+        const dealerList = document.getElementById("dealerList");
 
         if (!selectedBranch) return;
 
@@ -98,14 +93,96 @@
             .then(response => {
                 if (response.isSuccess && response.data) {
                     console.log(response);
-                    response.data.forEach(item => {
-                        const opt = document.createElement("option");
-                        opt.value = item.dealerName;
-                        opt.textContent = item.dealerName;
-                        dealerDropdown.appendChild(opt);
-                    })
+                    response.data.forEach((item, index) => {
+                        // Creating container div for each checkbox
+                        const checkboxContainer = document.createElement('div');
+                        checkboxContainer.classList.add('form-check');
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'form-check-input';
+                        checkbox.id = `dealer_${index}`;
+                        checkbox.dataset.dealerId = item.dealerID;
+                        checkbox.dataset.dealerName = item.dealerName;
+                        checkbox.dataset.ctclLoginid = item.ctclLoginid;
+
+                        const label = document.createElement('label');
+                        label.className = 'form-check-label';
+                        label.htmlFor = `dealer_${index}`;
+                        label.textContent = item.dealerName;
+
+                        // Append checkbox and label to the container div
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(label);
+
+                        // Append the container div to the dealer list
+                        dealerList.appendChild(checkboxContainer);
+                    });
                 }
             })
             .catch(error => console.error("Error fetching dealer list:", error));
-    })
+    });
+
+    // Function to make comma separated list;
+    function getSelectedDealers() {
+        const dealerIds = [];
+        const dealerNames = [];
+        const ctclLoginids = [];
+
+        const checkboxes = dealerList.querySelectorAll('input[type="checkbox"]:checked');
+
+        checkboxes.forEach(checkbox => {
+            dealerIds.push(checkbox.dataset.dealerId);
+            dealerNames.push(checkbox.dataset.dealerName);
+            ctclLoginids.push(checkbox.dataset.ctclLoginid);
+        });
+
+        return {
+            dealerIds: dealerIds.join(','),         
+            dealerNames: dealerNames.join(','),     
+            ctclLoginids: ctclLoginids.join(',')    
+        };
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const selectedDealers = getSelectedDealers();
+
+        const payload = {
+            GroupCode: groupCodeInput.value,
+            Zone: zoneDropdown.value,
+            Branch: branchDropdown.value,
+            DealerID: selectedDealers.dealerIds,        // Already a string
+            DealerName: selectedDealers.dealerNames,    // Already a string
+            ctclLoginId: selectedDealers.ctclLoginids   // Already a string
+        };
+
+        console.log("Payload to send:", payload);
+
+        fetch('/CustomGroup/CreateCustomGroup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Success:", data.message);
+                    bootstrap.Modal.getInstance(modal)?.hide();
+                    window.location.href = "/CustomGroup/Index"; // manually reload/redirect
+                } else {
+                    console.error("Server Error:", data.message);
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Fetch Error:", error);
+            });
+
+    });
+
+
 });

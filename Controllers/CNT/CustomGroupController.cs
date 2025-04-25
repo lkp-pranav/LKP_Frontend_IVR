@@ -1,4 +1,5 @@
 ﻿using LKP_Frontend_MVC.Models.Request.Common;
+using LKP_Frontend_MVC.Models.Request.CustomGroup;
 using LKP_Frontend_MVC.Models.Response.BranchCNT;
 using LKP_Frontend_MVC.Models.Response.Common;
 using LKP_Frontend_MVC.Models.Response.CustomGroup;
@@ -51,6 +52,32 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             responsePayLoad.data = model;
 
             return View(responsePayLoad);
+        }
+
+        public async Task<IActionResult> CreateCustomGroup([FromBody] CustomGroupInputModel inputModel)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+
+            inputModel.user_id = sessionUser.user_id;
+            inputModel.user_type = sessionUser.user_type;
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                "https://localhost:7121/api/CustomGroup/CreateCustomGroup", 
+                inputModel, "Bearer", 
+                sessionUser.accessToken
+            );
+
+            if (response == null || !response.isSuccess)
+            {
+                return Json(new { success = false, message = response?.errorMessages ?? "An unexpected error occurred." });
+            }
+
+            return Json(new { success = true, message = "Mapping created successfully." });
         }
     }
 }
