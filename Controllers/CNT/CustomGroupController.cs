@@ -7,6 +7,7 @@ using LKP_Frontend_MVC.Models.Response.User;
 using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace LKP_Frontend_MVC.Controllers.CNT
 {
@@ -78,6 +79,34 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             }
 
             return Json(new { success = true, message = "Mapping created successfully." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCustomGroup(string groupCode)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+
+            var responsePayload = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/CustomGroup/DeleteCustomGroup?groupCode={groupCode}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
+            );
+
+            if (responsePayload == null || !responsePayload.isSuccess)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
