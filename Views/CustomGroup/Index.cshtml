@@ -35,7 +35,7 @@
             <tbody>
                 @foreach (var item in groupList)
                 {
-                    <tr data-rowid="@item.RowId">
+                    <tr data-rowid="@item.GroupCode">
                         <td>
                             @item.GroupCode
                             <button class="info-btn"
@@ -57,10 +57,10 @@
                         <td>
                             <div class="d-flex justify-content-evenly">
                                 <button class="btn btn-sm btn-outline-warning update-btn"
-                                        data-id="@item.RowId"
+                                        data-id="@item.GroupCode"
                                         title="Update"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#updateGroupModal">
+                                        data-bs-target="#updateCustomGroup">
                                     <i class="fas fa-pen"></i>
                                 </button>
                                 <button id="deleteCustomGroupBtn"
@@ -156,6 +156,53 @@
     </div>
 </div>
 
+@* Update Custom Group Modal*@
+<div class="modal fade" id="updateCustomGroup" tabindex="-1" aria-labelledby="updateCustomGroup" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="customGroupFormUpdate" method="post" action="">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBranchModalLabel">Update Custom Group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Group Code</label>
+                        <input id="groupCodeUpdate" type="text" class="form-control" name="GroupCode" value="" placeholder="Enter Group Code" required  readonly/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Zone</label>
+                        <select id="zoneDropdownUpdate" class="form-select" name="Zone" required>
+                            <option value="">Select Zone</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Branch</label>
+                        <select id="branchDropdownUpdate" class="form-select" name="Branch" required>
+                            <option value="">Select Branch</option>
+                        </select>
+                    </div>
+                    <div id="dealerContainerUpdate" class="form-check-group mb-3 overflow-auto" style="max-height: 150px;">
+                        <label class="form-label">Dealer List</label>
+                        <div id="dealerListUpdate" class="form-check">
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="activeCheckboxUpdate" name="Active">
+                        <label class="form-check-label" for="activeCheckboxUpdate">Active</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success modal-btn">Update Group</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="groupInfoModal" tabindex="-1" aria-labelledby="groupInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered ">
         <div class="modal-content">
@@ -177,4 +224,5 @@
     <script src="~/js/custom-group/fetchData.js"></script>
     <script src="~/js/custom-group/groupInfo.js"></script>
     <script src="~/js/custom-group/delete-group.js"></script>
+    <script src="~/js/custom-group/update-group.js"></script>
 }
