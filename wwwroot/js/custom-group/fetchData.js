@@ -176,8 +176,8 @@
                     bootstrap.Modal.getInstance(modal)?.hide();
                     window.location.href = "/CustomGroup/Index"; // manually reload/redirect
                 } else {
+                    alert(data.message)
                     console.error("Server Error:", data.message);
-                    alert(data.message);
                 }
             })
             .catch(error => {

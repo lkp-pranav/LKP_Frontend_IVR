@@ -75,6 +75,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
+                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ShowToast"] = true;
                 return Json(new { success = false, message = response?.errorMessages ?? "An unexpected error occurred." });
             }
 
