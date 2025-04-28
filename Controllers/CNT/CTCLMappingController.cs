@@ -32,7 +32,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<CTCLMappingResponse> model = new List<CTCLMappingResponse>();
-
+            inputModel.Category = inputModel.Category ?? "ALL";
             string url = "https://localhost:7121/api/CTCLMapping/GetAllMapping";
             responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
 

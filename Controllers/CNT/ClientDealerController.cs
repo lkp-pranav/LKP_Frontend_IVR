@@ -44,6 +44,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return View(new List<ClientDealerResponse>());
             }
             model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());
+            inputModel.Category = inputModel.Category ?? "ALL";
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
 
