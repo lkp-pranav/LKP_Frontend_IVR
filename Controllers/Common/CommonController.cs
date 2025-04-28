@@ -126,6 +126,30 @@ namespace LKP_Frontend_MVC.Controllers.Common
             return Json(response);
         }
 
+        public async Task<IActionResult> FetchDealerByGroup(string groupCode)
+        {
+            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
+            if (sessionUserJson == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
+
+            var response = await LoginHelper.SendHttpRequest(
+                _httpClient,
+                $"https://localhost:7121/api/CustomGroup/FetchDealerByGroup?groupCode={groupCode}",
+                user,
+                "Bearer",
+                sessionUser.accessToken
+            );
+
+            var dealerList = (response.data as JArray)?.ToObject<List<GroupDealerInfo>>();
+            response.data = dealerList;
+
+            return Json(response);
+        }
+
         public async Task<IActionResult> GetDealerSegment(string dealer)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");

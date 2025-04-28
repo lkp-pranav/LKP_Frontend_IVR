@@ -41,7 +41,11 @@
                             <button class="info-btn"
                                     data-bs-target="#groupInfoModal"
                                     data-bs-toggle="modal"
-                                    data-id="@item.GroupCode">
+                                    data-id="@item.GroupCode"
+                                    data-zone="@item.Zone"
+                                    data-branch="@item.Branch"
+                                    data-active="@item.Active"
+                            >
                                 <i class="bi bi-info-circle-fill"></i>
                             </button>
                         </td>
@@ -151,4 +155,5 @@
 
 @section Scripts {
     <script src="~/js/custom-group/fetchData.js"></script>
+    <script src="~/js/custom-group/groupInfo.js"></script>
 }
