@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Branch CNT Mapping";
     var branchCNTList = Model.data as List<LKP_Frontend_MVC.Models.Response.BranchCNT.BranchCNTResponse>;
+    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
 }
 <head>
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
@@ -11,7 +12,43 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>CNT Terminal Mapping</h2>
-        <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
+        <div class="d-flex align-items-end gap-2">
+            <a href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
+                Clear
+            </a>
+            <div class="d-flex gap-2 align-items-end">
+                <form id="filterForm" method="post" action="/BranchMapping/Index">
+                    <div class="d-flex gap-2 align-items-end">
+                        <div>
+                            <label for="filterField" class="form-label">Filter</label>
+                            <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
+                                <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
+                                <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
+                                <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="filterValue" class="form-label">Value</label>
+                            <input type="text" id="filterValue" class="form-control" value="@(
+                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
+                            inputModel?.Zone.Trim())"
+                                   style="width: 15em;" />
+                        </div>
+
+                        <input type="hidden" id="dynamicInput" name="" value="" />
+                        <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal" >Add New</button>
+            </div>
+        </div>
+
+       
+        
     </div>
 
     @if(branchCNTList.Count > 0) {
@@ -224,7 +261,11 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/branch/branch-actions.js"></script>
+    
+   
     <script src="~/js/branch/branch-mapping.js"></script>
+    <script src="~/js/branch/branch-actions.js"></script>
+    <script src="~/js/common/filter.js"></script>
     <script src="~/js/common/toast-message.js"></script>
+
 }
