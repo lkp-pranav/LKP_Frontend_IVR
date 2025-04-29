@@ -51,6 +51,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             model = JsonConvert.DeserializeObject<List<CustomGroupResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
+            responsePayLoad.message = inputModel;
 
             return View(responsePayLoad);
         }

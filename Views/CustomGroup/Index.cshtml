@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Custom Groups";
     var groupList = Model.data as List<LKP_Frontend_MVC.Models.Response.CustomGroup.CustomGroupResponse>;
+    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
 }
 <head>
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
@@ -85,7 +86,31 @@
         </div>
 
     }
+    <div class="d-flex justify-content-between mt-4">
+        @if (inputModel?.Start > 1)
+        {
+            <a class="btn btn-secondary"
+               href="@Url.Action("Index", new {
+                   Start = inputModel.Start - 1,
+                   PageSize = inputModel.PageSize
+            })">
+                &laquo; Previous
+            </a>
+        }
+        @if (groupList?.Count >= 50)
+        {
+            <a class="btn btn-primary modal-btn"
+               href="@Url.Action("Index", new {
+               Start = inputModel.Start + 1,
+               PageSize = inputModel.PageSize
+            })">
+                Next &raquo;
+            </a>
+        }
+    </div>
 </div>
+
+
 
 @* Confrim Delete Modal *@
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
