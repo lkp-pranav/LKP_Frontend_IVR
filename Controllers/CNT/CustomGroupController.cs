@@ -33,6 +33,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
 
+            inputModel.Zone = inputModel.Zone?.Trim() ?? "";
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 

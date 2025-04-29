@@ -132,9 +132,13 @@
                 {
                     <a class="btn btn-secondary"
                        href="@Url.Action("Index", new {
-                       Start = inputModel.Start - 1,
-                       PageSize = inputModel.PageSize,
-                       ClientCode = inputModel.ClientCode
+                        Start = inputModel.Start - 1,
+                        PageSize = inputModel.PageSize,
+                        ClientCode = inputModel.ClientCode,
+                        Category = inputModel.Category,
+                        PrimaryDealer = inputModel.PrimaryDealer,
+                        SecondaryDealer = inputModel.SecondaryDealer,
+                        Zone = inputModel.Zone
                     })">
                         &laquo; Previous
                     </a>
@@ -143,9 +147,13 @@
                 {
                     <a class="btn btn-primary modal-btn"
                        href="@Url.Action("Index", new {
-                       Start = inputModel.Start + 1,
-                       PageSize = inputModel.PageSize,
-                       ClientCode = inputModel.ClientCode
+                        Start = inputModel.Start + 1,
+                        PageSize = inputModel.PageSize,
+                        ClientCode = inputModel.ClientCode,
+                        Category = inputModel.Category,
+                        PrimaryDealer = inputModel.PrimaryDealer,
+                        SecondaryDealer = inputModel.SecondaryDealer,
+                        Zone = inputModel.Zone
                     })">
                         Next &raquo;
                     </a>
