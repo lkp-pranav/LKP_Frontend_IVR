@@ -238,12 +238,15 @@
 </div>
 
 <div class="d-flex justify-content-between mt-4">
-    @if (ViewBag.CurrentPage > 1)
+    @if (inputModel?.Start > 1)
     {
         <a class="btn btn-secondary modal-btn"
            href="@Url.Action("Index", new {
-           start = ViewBag.CurrentPage - 1,
-           pageSize = ViewBag.PageSize
+            Start = inputModel.Start - 1,
+            PageSize = inputModel.PageSize,
+            Zone = inputModel.Zone,
+            DealerID = inputModel.DealerID,
+            DealerName = inputModel.DealerName
         })">
             &laquo; Previous
         </a>
@@ -252,8 +255,11 @@
     {
         <a class="btn btn-primary modal-btn"
            href="@Url.Action("Index", new {
-           start = ViewBag.CurrentPage + 1,
-           pageSize = ViewBag.PageSize
+            Start = inputModel.Start + 1,
+            PageSize = inputModel.PageSize,
+            Zone = inputModel.Zone,
+            DealerID = inputModel.DealerID,
+            DealerName = inputModel.DealerName
         })">
             Next &raquo;
         </a>

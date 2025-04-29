@@ -13,6 +13,10 @@
         public string? Category { get; set; } = "ALL";
         public string? GroupCode { get; set; } = "";
         public string? PrimaryDealer { get; set; } = "";
+        public string? PrimaryCTCL { get; set; } = "";
         public string? SecondaryDealer { get; set; } = "";
+        public string? SecondaryCTCL { get; set; } = "";
+        public string? Active { get; set; } = "";
+        public string? CTCLLoginId { get; set; } = "";
     }
 }

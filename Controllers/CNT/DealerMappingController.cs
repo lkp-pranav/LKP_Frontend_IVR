@@ -33,7 +33,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return RedirectToAction("Index", "Login");
             }
             var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
-
+            inputModel.Zone = inputModel.Zone?.Trim() ?? "";
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
@@ -54,6 +54,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             model = JsonConvert.DeserializeObject<List<DealerCNTResponse>>(responsePayLoad.data.ToString());
 
             responsePayLoad.data = model;
+            responsePayLoad.message = inputModel;
 
             return View(responsePayLoad);
         }
