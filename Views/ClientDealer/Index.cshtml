@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Client Dealer Mapping";
     var clientDealerList = Model.data as List<LKP_Frontend_MVC.Models.Response.ClientDealer.ClientDealerResponse>;
-    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.Common.PageInputModel;
+    var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.ClientDealer.ClientDealerFilterModel;
 }
 
 <head>
@@ -46,7 +46,7 @@
                                 <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                                 <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
                                 <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option>
-                                <option value="branch" selected="@(inputModel?.branch != "" ? "selected" : null)">Branch</option>
+                                <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option>
                                 <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
                                 <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
                             </select>
@@ -58,7 +58,7 @@
                             !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
                             !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
                             !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.branch) ? inputModel.branch.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim() :
                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
                             inputModel?.Category.Trim())" 
@@ -197,7 +197,7 @@
                    Zone = inputModel.Zone,
                    ClientCode = inputModel.ClientCode,
                    ClientName = inputModel.ClientName,
-                   branch = inputModel.branch,
+                   branch = inputModel.Branch,
                    DealerID = inputModel.DealerID,
                    DealerName = inputModel.DealerName,
                    Category = inputModel.Category
@@ -214,7 +214,7 @@
                Zone = inputModel.Zone,
                ClientCode = inputModel.ClientCode,
                ClientName = inputModel.ClientName,
-               branch = inputModel.branch,
+               branch = inputModel.Branch,
                DealerID = inputModel.DealerID,
                DealerName = inputModel.DealerName,
                Category = inputModel.Category

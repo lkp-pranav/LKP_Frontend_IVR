@@ -25,7 +25,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         }
 
         
-        public async Task<IActionResult> Index(PageInputModel inputModel)
+        public async Task<IActionResult> Index(BranchCNTFilterModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson == null)

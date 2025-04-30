@@ -1,4 +1,5 @@
-﻿using LKP_Frontend_MVC.Models.Request.Common;
+﻿using LKP_Frontend_MVC.Models.Request.ClientDealer;
+using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Models.Response.ClientDealer;
 using LKP_Frontend_MVC.Models.Response.Common;
 using LKP_Frontend_MVC.Models.Response.User;
@@ -21,7 +22,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _httpClient = httpClient;
         }
    
-        public async Task<IActionResult> Index(PageInputModel inputModel)
+        public async Task<IActionResult> Index(ClientDealerFilterModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson == null)

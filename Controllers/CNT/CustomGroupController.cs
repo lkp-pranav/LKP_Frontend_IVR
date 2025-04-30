@@ -24,7 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _encKey = _Configuration.GetSection("encKey").Value;
         }
 
-        public async Task<IActionResult> Index(PageInputModel inputModel)
+        public async Task<IActionResult> Index(CustomGroupFilterModel inputModel)
         {
             string sessionUserJson = HttpContext.Session.GetString("sessionUser");
             if (sessionUserJson == null)
