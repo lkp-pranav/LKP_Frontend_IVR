@@ -19,13 +19,8 @@ namespace LKP_Frontend_MVC.Controllers.Excel
         [HttpPost]
         public async Task<IActionResult> ExportClientDealerExcel()
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             var user = new PageInputModel
             {
                 user_id = sessionUser.user_id,
@@ -55,13 +50,8 @@ namespace LKP_Frontend_MVC.Controllers.Excel
         [HttpPost]
         public async Task<IActionResult> ExportGroupMappingExcel()
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             var user = new PageInputModel
             {
                 user_id = sessionUser.user_id,
