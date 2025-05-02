@@ -112,7 +112,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             if (response == null || !response.isSuccess)
             {
                 TempData["ToastMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ToastType"] = true;
+                TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
             TempData["ToastMessage"] = response.message?? "Mapping created successfully.";
