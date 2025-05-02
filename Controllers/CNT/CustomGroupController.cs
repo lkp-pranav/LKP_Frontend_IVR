@@ -26,12 +26,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
         public async Task<IActionResult> Index(CustomGroupFilterModel inputModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             inputModel.Zone = inputModel.Zone?.Trim() ?? "";
             inputModel.user_id = sessionUser.user_id;
@@ -59,12 +54,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
         public async Task<IActionResult> CreateCustomGroup([FromBody] CustomGroupInputModel inputModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
@@ -87,12 +77,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
         public async Task<IActionResult> UpdateCustomGroup([FromBody] CustomGroupInputModel inputModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
@@ -114,13 +99,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         [HttpPost]
         public async Task<IActionResult> DeleteCustomGroup(string groupCode)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
             var responsePayload = await LoginHelper.SendHttpRequest(

@@ -22,12 +22,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
         public async Task<IActionResult> Index(CTCLMappingFilterModel inputModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 

@@ -1,4 +1,5 @@
 ﻿using LKP_Frontend_MVC.Models;
+using LKP_Frontend_MVC.Models.Response.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,10 +16,7 @@ namespace LKP_Frontend_MVC.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("sessionUser") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            
             return View();
         }
 

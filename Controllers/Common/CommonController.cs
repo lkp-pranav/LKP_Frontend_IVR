@@ -27,13 +27,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
         //[HttpPost]
         public async Task<IActionResult> GetZones()
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             var user = new CommonModel
             {
@@ -57,12 +51,8 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
         public async Task<IActionResult> GetDealerByZone(string Zone)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             var user = new CommonModel{ user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
             var response = await LoginHelper.SendHttpRequest(
@@ -80,12 +70,8 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
         public async Task<IActionResult> FetchBranch(string Zone)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
             var response = await LoginHelper.SendHttpRequest(
@@ -104,12 +90,8 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
         public async Task<IActionResult> FetchDealerByBranch(string branchCode)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
             var response = await LoginHelper.SendHttpRequest(
@@ -128,12 +110,8 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
         public async Task<IActionResult> FetchDealerByGroup(string groupCode)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
             var response = await LoginHelper.SendHttpRequest(
@@ -152,13 +130,8 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
         public async Task<IActionResult> GetDealerSegment(string dealer)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
             ResponsePayLoad payLoad = new ResponsePayLoad();

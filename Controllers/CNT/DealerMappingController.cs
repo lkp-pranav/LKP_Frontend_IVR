@@ -27,12 +27,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
        
         public async Task<IActionResult> Index(DealerCNTFilterModel inputModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson== null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             inputModel.Zone = inputModel.Zone?.Trim() ?? "";
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
@@ -62,12 +58,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         [HttpPost]
         public async Task<IActionResult> CreateMapping(DealerCNTInputModel dealerCNTModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             dealerCNTModel.user_id = sessionUser.user_id;
             dealerCNTModel.user_type = sessionUser.user_type;   
@@ -87,12 +78,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         [HttpPost]
         public async Task<IActionResult> DeleteMapping(int rowId)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
@@ -115,12 +101,8 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         [HttpPost]
         public async  Task<IActionResult> UpdateMapping(DealerCNTInputModel dealerCNTModel)
         {
-            string sessionUserJson = HttpContext.Session.GetString("sessionUser");
-            if (sessionUserJson == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var sessionUser = JsonConvert.DeserializeObject<SessionUser>(sessionUserJson);
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
             dealerCNTModel.user_id = sessionUser.user_id;
             dealerCNTModel.user_type = sessionUser.user_type;
 
