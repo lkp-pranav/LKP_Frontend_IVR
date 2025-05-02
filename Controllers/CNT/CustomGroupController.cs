@@ -42,9 +42,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return View("Error");
             }
 
-            ViewBag.CurrentPage = inputModel.Start;
-            ViewBag.PageSize = inputModel.PageSize;
-
             model = JsonConvert.DeserializeObject<List<CustomGroupResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
@@ -67,11 +64,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
-                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ShowToast"] = true;
+                TempData["ToastMessage"] = response?.errorMessages ?? "Error in creating Custom Group!!.";
+                TempData["ToastType"] = "danger";
                 return Json(new { success = false, message = response?.errorMessages ?? "An unexpected error occurred." });
             }
 
+            TempData["ToastMessage"] = response.message ?? "Custom Group created successfully!!.";
+            TempData["ToastType"] = "success";
             return Json(new { success = true, message = "Mapping created successfully." });
         }
 
@@ -90,9 +89,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
+                TempData["ToastMessage"] = response?.errorMessages ?? "Error in updating Custom Group!!";
+                TempData["ToastType"] = "danger";
                 return Json(new { success = false, message = response?.errorMessages ?? "An unexpected error occurred." });
             }
 
+            TempData["ToastMessage"] = response?.errorMessages ?? "Custom Group Updated Successfully!!";
+            TempData["ToastType"] = "success";
             return Json(new { success = true, message = "Mapping created successfully." });
         }
 
@@ -113,9 +116,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
+                TempData["ToastMessage"] = responsePayload?.errorMessages ?? "Error in updating Custom Group!!";
+                TempData["ToastType"] = "danger";
                 return View("Error");
             }
 
+            TempData["ToastMessage"] = responsePayload.errorMessages ?? "Custom Group deleted Successfully!!";
+            TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
     }

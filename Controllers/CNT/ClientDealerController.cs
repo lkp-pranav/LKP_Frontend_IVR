@@ -37,7 +37,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {
-               
                 return View(new List<ClientDealerResponse>());
             }
             model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());

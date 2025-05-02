@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.MSIdentity.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net;
 using System.Text;
 
 namespace LKP_Frontend_MVC.Controllers.Login
@@ -56,9 +57,8 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
-                TempData["ErrorMessage"] = responsePayload?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ShowToast"] = true;
-                ViewBag.IsSuccess = false;
+                TempData["ToastMessage"] = responsePayload?.errorMessages ?? "Error occured while loggin in !!";
+                TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
 
@@ -128,8 +128,10 @@ namespace LKP_Frontend_MVC.Controllers.Login
            
             ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", bearerKey);
 
-            if (responsePayload == null || !responsePayload.isSuccess)
+            if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
             {
+                TempData["ToastMessage"] = responsePayload?.errorMessages ?? "Error in creating Branch Mapping!!.";
+                TempData["ToastType"] = "danger";
                 return RedirectToAction("VerifyPan");
             }
             Console.WriteLine(responsePayload.data);

@@ -44,9 +44,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return View("Error");
             }
 
-            ViewBag.CurrentPage = inputModel.Start;
-            ViewBag.PageSize = inputModel.PageSize;
-
             model = JsonConvert.DeserializeObject<List<DealerCNTResponse>>(responsePayLoad.data.ToString());
 
             responsePayLoad.data = model;
@@ -66,12 +63,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
             if (response == null || !response.isSuccess)
             {
-                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ShowToast"] = true;
+                TempData["ToastMessage"] = response?.errorMessages ?? "Error in creating Dealer Mapping!!.";
+                TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
-            TempData["SuccessMessage"] = "Mapping created successfully.";
-            TempData["ShowToast"] = true;
+            TempData["ToastMessage"] = response.message ??"Dealer mapping created successfully!!.";
+            TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
 
@@ -92,9 +89,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
-                return View("Error");
+                TempData["ToastMessage"] = responsePayload?.errorMessages ?? "Error in creating Dealer Mapping!!.";
+                TempData["ToastType"] = "danger";
+                return RedirectToAction("Index");
             }
 
+            TempData["ToastMessage"] = responsePayload.message?? "Dealer mapping created successfully!!.";
+            TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
 
@@ -110,12 +111,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
-                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ShowToast"] = true;
+                TempData["ToastMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
+                TempData["ToastType"] = true;
                 return RedirectToAction("Index");
             }
-            TempData["SuccessMessage"] = "Mapping created successfully.";
-            TempData["ShowToast"] = true;
+            TempData["ToastMessage"] = response.message?? "Mapping created successfully.";
+            TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
     }

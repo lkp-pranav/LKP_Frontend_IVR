@@ -44,9 +44,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 return View("Error");
             }
 
-            ViewBag.CurrentPage = inputModel.Start;
-            ViewBag.PageSize = inputModel.PageSize;
-
             model = JsonConvert.DeserializeObject<List<BranchCNTResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
@@ -70,12 +67,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
-                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ShowToast"] = true;
+                TempData["ToastMessage"] = response?.errorMessages ?? "Error in creating Branch Mapping!!.";
+                TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
-            TempData["SuccessMessage"] = "Mapping created successfully.";
-            TempData["ShowToast"] = true;
+            TempData["ToastMessage"] = response.message ?? "Branch mapping created successfully!!.";
+            TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
 
@@ -96,9 +93,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
-                return View("Error");
+                TempData["ToastMessage"] = responsePayload?.errorMessages ?? "Error in deleting Branch Mapping!!.";
+                TempData["ToastType"] = "danger";
+                return RedirectToAction("Index");
             }
 
+            TempData["ToastMessage"] = responsePayload.message ?? "Branch mapping deleted successfully!!.";
+            TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
 
@@ -117,12 +118,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             if (response == null || !response.isSuccess)
             {
-                TempData["ErrorMessage"] = response?.errorMessages ?? "An unexpected error occurred.";
-                TempData["ShowToast"] = true;
+                TempData["ToastMessage"] = response?.errorMessages ?? "Error in updating Branch Mapping!!.";
+                TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
-            TempData["SuccessMessage"] = response.message ?? "Mapping updated successfully";
-            TempData["ShowToast"] = true;
+            TempData["ToastMessage"] = response.message ?? "Branch mapping Updated successfully!!.";
+            TempData["ToastType"] = "success";
 
             return RedirectToAction("Index");
 
