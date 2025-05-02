@@ -1,3 +1,5 @@
+using LKP_Frontend_MVC.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -32,6 +34,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<LoginCheckMiddleware>();
 
 app.UseAuthorization();
 

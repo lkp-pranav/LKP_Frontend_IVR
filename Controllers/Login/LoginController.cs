@@ -31,12 +31,11 @@ namespace LKP_Frontend_MVC.Controllers.Login
         #endregion
 
         #region Login
-        // Render Login Page
-        [HttpGet]
+        [HttpGet] // Render Login Page
         public IActionResult Index() => View();
 
-        // Verify Login and redirect to 2FA
-        [HttpPost]
+
+        [HttpPost] // Verify Login and redirect to 2FA
         public async Task<IActionResult> Login(LoginInputModel inputModel)
         {
             var resultJson = JsonConvert.SerializeObject(new
