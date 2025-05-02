@@ -1,7 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    const zoneDropdown = document.getElementById("zoneDropdownCreate");
     const modal = document.getElementById("addDealerModal");
 
+    const zoneDropdown = document.getElementById("zoneDropdownCreate");
     const primaryDealerDropdown = document.getElementById("primaryDealerDropdownCreate");
     const secondaryDealerDropdown = document.getElementById("secondaryDealerDropdownCreate");
 
@@ -14,17 +14,40 @@
     const primarySegment = document.getElementById("primarySegmentList");
     const secondarySegment = document.getElementById("secondarySegmentList");
 
+    const resetDropdown = (dropdown, placeholder = "Select") => {
+        dropdown.innerHTML = `<option value="">${placeholder}</option>`;
+    };
+
+    const resetDealerInfo = () => {
+        [primaryCTCL, secondaryCTCL, primaryDealerId, secondaryDealerId].forEach(el => el.value = "-");
+        [primarySegment, secondarySegment].forEach(el => el.innerHTML = "-");
+    };
+
+    const populateDealers = (dealers, ...dropdowns) => {
+        const options = dealers.map(dealer => {
+            const opt = document.createElement("option");
+            opt.value = dealer.dealerName;
+            opt.textContent = dealer.dealerName;
+            opt.dataset.ctcl = dealer.ctclLoginid;
+            opt.dataset.dealerid = dealer.dealerID;
+            return opt;
+        });
+
+        dropdowns.forEach(dropdown => {
+            resetDropdown(dropdown, "Select Dealer");
+            options.forEach(opt => dropdown.appendChild(opt.cloneNode(true)));
+        });
+    };
+
     modal.addEventListener("shown.bs.modal", function () {
         fetch('/Common/GetZones', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
         })
             .then(res => res.json())
             .then(response => {
                 if (response.isSuccess && response.data) {
-                    zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
+                    resetDropdown(zoneDropdown, "Select Zone");
                     response.data.forEach(zone => {
                         const opt = document.createElement("option");
                         opt.value = zone;
@@ -33,109 +56,76 @@
                     });
                 }
             })
-            .catch(error => console.error("Error fetching zones:", error));
+            .catch(err => console.error("Error fetching zones:", err));
     });
 
     modal.addEventListener("hidden.bs.modal", function () {
-        const inputs = modal.querySelectorAll("input, select");
-        inputs.forEach(input => {
-            if (input.tagName === "SELECT") {
-                input.selectedIndex = 0;
-            } else {
-                input.value = "-";
-            }
+        modal.querySelectorAll("input, select").forEach(el => {
+            if (el.tagName === "SELECT") el.selectedIndex = 0;
+            else el.value = "-";
         });
 
-        if (secondaryDealerDropdown) {
-            secondaryDealerDropdown.disabled = true;
-        }
-        primarySegment.innerHTML = "-";
-        secondarySegment.innerHTML = "-";
+        resetDealerInfo();
+        if (secondaryDealerDropdown) secondaryDealerDropdown.disabled = true;
     });
 
     zoneDropdown.addEventListener("change", function () {
         const selectedZone = this.value;
 
-        primaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
-        secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
-        primaryCTCL.value = "-";
-        secondaryCTCL.value = "-";
-        primaryDealerId.value = "-";
-        secondaryDealerId.value = "-";
+        resetDropdown(primaryDealerDropdown, "Select Dealer");
+        resetDropdown(secondaryDealerDropdown, "Select Dealer");
         secondaryDealerDropdown.disabled = true;
-        primarySegment.innerHTML = "-";
-        secondarySegment.innerHTML = "-";
+        resetDealerInfo();
 
         if (!selectedZone) return;
 
         fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
         })
-        .then(res => res.json())
-        .then(response => {
-            if (response.isSuccess && response.data) {
-                const dealerOptions = response.data.map(dealerObj => {
-                    const opt = document.createElement("option");
-                    opt.value = dealerObj.dealerName;
-                    opt.textContent = dealerObj.dealerName;
-                    opt.setAttribute("data-ctcl", dealerObj.ctclLoginid);
-                    opt.setAttribute("data-dealerid", dealerObj.dealerID);
-                    return opt;
-                });
-
-                dealerOptions.forEach(opt => {
-                    primaryDealerDropdown.appendChild(opt.cloneNode(true));
-                    secondaryDealerDropdown.appendChild(opt.cloneNode(true));
-                });
-            }
-        })
-        .catch(error => console.error("Error fetching dealers:", error));
+            .then(res => res.json())
+            .then(response => {
+                if (response.isSuccess && response.data) {
+                    populateDealers(response.data, primaryDealerDropdown, secondaryDealerDropdown);
+                }
+            })
+            .catch(err => console.error("Error fetching dealers:", err));
     });
 
     primaryDealerDropdown.addEventListener("change", function () {
-        const selectedPrimaryOption = this.options[this.selectedIndex];
-        const ctcl = selectedPrimaryOption.getAttribute("data-ctcl");
-        const dealerId = selectedPrimaryOption.getAttribute("data-dealerid");
+        const selected = this.selectedOptions[0];
+        const selectedValue = this.value;
 
-        primaryCTCL.value = ctcl || "-";
-        primaryDealerId.value = dealerId || "-";
+        primaryCTCL.value = selected?.dataset.ctcl || "-";
+        primaryDealerId.value = selected?.dataset.dealerid || "-";
 
-        if (this.value) {
+        if (selectedValue) {
             secondaryDealerDropdown.disabled = false;
 
-            const allPrimaryOptions = Array.from(primaryDealerDropdown.options).filter(opt => opt.value && opt.value !== this.value);
+            const validOptions = Array.from(primaryDealerDropdown.options)
+                .filter(opt => opt.value && opt.value !== selectedValue);
 
-            secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
-            allPrimaryOptions.forEach(opt => {
-                const newOpt = document.createElement("option");
-                newOpt.value = opt.value;
-                newOpt.textContent = opt.textContent;
-                newOpt.setAttribute("data-ctcl", opt.getAttribute("data-ctcl"));
-                newOpt.setAttribute("data-dealerid", opt.getAttribute("data-dealerid"));
-                secondaryDealerDropdown.appendChild(newOpt);
+            resetDropdown(secondaryDealerDropdown, "Select Dealer");
+            validOptions.forEach(opt => {
+                const clone = opt.cloneNode(true);
+                secondaryDealerDropdown.appendChild(clone);
             });
 
             secondaryCTCL.value = "-";
             secondaryDealerId.value = "-";
-            secondarySegment.value = "-"
+            secondarySegment.innerHTML = "-";
         } else {
             secondaryDealerDropdown.disabled = true;
-            secondaryDealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
+            resetDropdown(secondaryDealerDropdown, "Select Dealer");
             secondaryCTCL.value = "-";
             secondaryDealerId.value = "-";
-            secondarySegment.value = "-"
+            secondarySegment.innerHTML = "-";
         }
     });
 
     secondaryDealerDropdown.addEventListener("change", function () {
-        const selectedSecondaryOption = this.options[this.selectedIndex];
-        const ctcl = selectedSecondaryOption.getAttribute("data-ctcl");
-        const dealerId = selectedSecondaryOption.getAttribute("data-dealerid");
-
-        secondaryCTCL.value = ctcl || "-";
-        secondaryDealerId.value = dealerId || "-";
+        const selected = this.selectedOptions[0];
+        secondaryCTCL.value = selected?.dataset.ctcl || "-";
+        secondaryDealerId.value = selected?.dataset.dealerid || "-";
     });
 });

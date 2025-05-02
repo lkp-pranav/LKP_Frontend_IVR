@@ -1,43 +1,4 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
-
-    // Delete Logic
-    let deleteRowId = null;
-    const deleteModal = new bootstrap.Modal(document.getElementById("deleteDealerModal"));
-    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-
-    // Modified Delete Button Logic
-    document.querySelectorAll(".delete-btn").forEach(button => {
-        button.addEventListener("click", () => {
-            deleteRowId = button.getAttribute("data-id");
-            deleteModal.show();
-        });
-    });
-
-    // Confirm Deletion Action
-    confirmDeleteBtn.addEventListener("click", () => {
-        if (!deleteRowId) return;
-
-        fetch(`/DealerMapping/DeleteMapping?rowId=${deleteRowId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    return response.json();
-                }
-            })
-            .catch(err => console.error("Error during deletion:", err))
-            .finally(() => {
-                deleteModal.hide();
-                deleteRowId = null;
-            });
-    });
-
-
     // Update Logic
     const updateModal = new bootstrap.Modal(document.getElementById("updateDealerModal"));
     const addDealerModal = document.getElementById("addDealerModal");
