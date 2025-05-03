@@ -1,155 +1,134 @@
 ﻿@{
+    Layout = null;  // Set this to null to avoid inheritance issues, then set the layout in your individual pages.
     var username = Context.Session.GetString("username");
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LKP_Frontend_MVC</title>
-
-    <!-- Bootstrap 5.3 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LKP_Frontend_MVC.styles.css" asp-append-version="true" />
-
-    <style>
-        body {
-            padding-top: 60px; /* Clears the navbar height for body */
-        }
-
-        @@media (min-width: 992px) {
-            body
-
-        {
-            padding-left: 260px; /* For desktop sidebar */
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 60px;
-            left: 0;
-            width: 260px;
-            height: calc(100vh - 60px); /* Sidebar height is full, minus navbar */
-            background-color: #11395C;
-            overflow-y: auto;
-            padding: 1rem;
-            z-index: 1020;
-        }
-
-        main {
-            padding-top: 60px; /* Ensures content does not go under navbar */
-        }
-
-        }
-
-        /* Center the navbar content and add space around it */
-        .navbar {
-            padding: 0.5rem 2rem; /* Adds space around the navbar content */
-        }
-
-            .navbar .container-fluid {
-                justify-content: space-between; /* Distribute space between left and right content */
-            }
-
-        .navbar-nav {
-            align-items: center; /* Vertically align navbar items */
-        }
-
-        /* Optional: Make the user dropdown button bigger and more clickable */
-        .nav-link {
-            padding: 0.5rem 1rem; /* Add padding to make links larger */
-        }
-
-        /* Mobile offcanvas sidebar */
-        .offcanvas-start {
-            z-index: 1040 !important; /* Ensure offcanvas is on top of other content */
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Company - Dashboard</title>
+    <!-- Bootstrap CSS (v5.3.0-alpha1) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body>
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top px-4" style="background-color: #11395C; z-index: 1030; position: fixed; top: 0; left: 0; right: 0; height: 60px;">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <!-- Branding -->
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                <img src="~/static/logo.png" alt="LKP Logo" style="height: 60px;">
-            </a>
+<style>
 
-            <!-- Right: User Controls -->
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle me-1"></i> @username
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" style="z-index: 1040;" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="@Url.Action("Logout", "Login")">Logout</a></li>
-                    </ul>
+    li > a {
+        color: white !important;
+    }
+
+    .logout {
+        color: #11395C !important;
+    }
+</style>
+<body>
+
+    <!-- Sidebar: Always visible on large screens and collapsible on small screens -->
+    <div class="d-none d-lg-block" style="width: 270px; position: fixed; height: 100%; top: 80px; left: 0; background-color: #11395C;">
+        <div class="p-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "ClientDealer")">Primary Dealer Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "DealerMapping")">Secondary Dealer Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "BranchMapping")">CNT Terminal Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "GroupMapping")">IVR Group Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "CTCLMapping")">CTCL Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "CustomGroup")">Custom Groups</a>
                 </li>
             </ul>
         </div>
-    </nav>
-
-    <!-- Sidebar: Offcanvas for mobile, fixed for desktop -->
-    <div class="sidebar d-none d-lg-block text-white">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link text-white" href="@Url.Action("Index", "ClientDealer")">Primary Dealer Mapping</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="@Url.Action("Index", "DealerMapping")">Secondary Dealer Mapping</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="@Url.Action("Index", "BranchMapping")">CNT Terminal Mapping</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="@Url.Action("Index", "GroupMapping")">IVR Group Mapping</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="@Url.Action("Index", "CTCLMapping")">CTCL Mapping</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="@Url.Action("Index", "CustomGroup")">Custom Group</a>
-            </li>
-        </ul>
     </div>
 
-    <!-- Main content -->
-    <main class="container-fluid py-3">
-        @RenderBody()
-    </main>
-
-    <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1100; max-width: 100%;">
-        <div id="appToast" class="toast align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true"
-             style="min-width: 350px; max-width: 500px; font-size: 1.1rem;">
-            <div class="d-flex">
-                <div class="toast-body" id="toastMessage" style="padding: 1rem;">
-                    Toast message
-                </div>
-                <button type="button" class="btn-close btn-close-white me-3 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <!-- Offcanvas Sidebar: Only visible on small screens -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="background-color: #11395C; color: white;">
+        <div class="offcanvas-header">
+            @* <h5 class="offcanvas-title" id="sidebarLabel">Company Logo</h5> *@
+            <div>
+                <a class="navbar-brand" href="#">
+                    <img src="~/static/logo.png" alt="Company Logo" class="img-fluid" style="max-height: 60px; min-width:60px;">
+                </a>
             </div>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
+                
+            </button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "ClientDealer")">Primary Dealer Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "DealerMapping")">Secondary Dealer Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "BranchMapping")">CNT Terminal Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "GroupMapping")">IVR Group Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "CTCLMapping")">CTCL Mapping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "CustomGroup")">Custom Groups</a>
+                </li>
+            </ul>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @{
-        var toastPayload = new
-        {
-            message = TempData["ToastMessage"] ?? "",
-            type = TempData["ToastType"] ?? "success"
-        };
-        var toastJson = System.Text.Json.JsonSerializer.Serialize(toastPayload);
-    }
-    <script>
-        window.toastData = @Html.Raw(toastJson);
-    </script>
-    <script src="~/js/common/toast-message.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Top Navbar: Bootstrap 5 Navbar component with user dropdown -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="height: 80px; background-color: #11395C;">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <!-- Left: Hamburger + Logo aligned side by side -->
+            <div class="d-flex align-items-center">
+                <button class="navbar-toggler" style="border-color: white; height: 50px"
+                        type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle navigation">
+                    <i class="bi bi-list" style="color: white; font-size: 30px;"></i>
+                </button>
+
+                <a class="navbar-brand ms-2 px-3" href="#">
+                    <img src="~/static/logo.png" alt="Company Logo" class="img-fluid" style="max-height: 60px; min-width: 60px;">
+                </a>
+            </div>
+
+            <!-- Right: User dropdown -->
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        @username
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item logout" href="@Url.Action("Logout", "Login")">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-5 pt-5" style="margin-left: 300px;">
+        <!-- This will render the content of the current page -->
+        @RenderBody()
+    </div>
+
+    <!-- Bootstrap JS (v5.3.0-alpha1) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
-
