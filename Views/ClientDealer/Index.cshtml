@@ -12,92 +12,190 @@
 </head>
 <style>
     .info-btn {
-        border: none;
-        background: white;
+    border: none;
+    background: white;
     }
-    
+
+    @@media(min-width: 992px) {
+    .panel-button {
+    flex-direction: row-reverse
+    }
+
+
+    }
+
+    .table-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 230px); 
+    }
+
+    .pagination a {
+    border: 1px solid black;
+    color: black !important;
+    }
+
+    .pagination a:hover{
+    background-color: #11395C !important;
+    color: white !important;
+    }
 </style>
 
 <div class="container-fluid mx-0" style="max-width: 80vw; ">
-    @* <div class="row border border-primary"> *@
-    @*     <div class="col-6 col-md-6"> *@
-    @*         <h2>Primary Dealer Mapping</h2> *@
-    @*     </div> *@
-    @*     <div class="col-2 col-md-3"> *@
-    @*         <form action="/" method="post"> *@
-    @*             <button class="btn btn-success"> *@
-    @*                 <i class="bi bi-file-earmark-excel"></i> Export Excel *@
-    @*             </button> *@
-    @*             <a class="btn btn-secondary">Clear</a> *@
-    @*         </form> *@
-    @*     </div> *@
-    @*     <div class="col-2 col-md-3"> *@
-    @*         <form class="d-flex flex-row" action="/" method="post"> *@
-    @*             <select id="filterField" name="filterField" class="form-select" required> *@
-    @*                 <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> *@
-    @*                 <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> *@
-    @*                 <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> *@
-    @*                 <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> *@
-    @*                 <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> *@
-    @*                 <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> *@
-    @*                 <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> *@
-    @*             </select> *@
-    @*             <input type="text" id="filterValue" class="form-control" value="@( *@
-    @*                         !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() : *@
-    @*                         !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() : *@
-    @*                         !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() : *@
-    @*                         !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim() : *@
-    @*                         !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() : *@
-    @*                         !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() : *@
-    @*                         inputModel?.Category.Trim())" *@
-    @*             /> *@
-            
-    @*         </form> *@
-    @*     </div> *@
-    @* </div> *@
+
+    <!-- Top Panel Start -->
     <div class="container">
         <div class="row">
             <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
-            <div class="col-12 col-lg-5 bg-primary text-white p-3 mb-2">
+            <div class="col-12 col-lg-5 px-3 mb-2 align-middle">
                 <h2>Primary Dealer Mapping</h2>
             </div>
 
             <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small -->
-            <div class="col-12 col-lg-3 bg-success text-white p-3 mb-2">
-                <form action="/" method="post"> 
-                 <button class="btn btn-success">
-                     <i class="bi bi-file-earmark-excel"></i> Export Excel 
-                 </button> 
-                 <a class="btn btn-secondary">Clear</a> 
-             </form>
+            <div class="col-12 col-lg-3 d-flex flex-l-row-reverse align-items-center text-white px-3 mb-2 panel-button">
+                <form action="/" method="post">
+                    <button class="btn btn-success my-1">
+                        <i class="bi bi-file-earmark-excel"></i> Export Excel 
+                    </button> 
+                    <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a>
+                </form>
             </div>
 
             <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
-            <div class="col-12 col-lg-4 bg-warning text-dark p-3 mb-2">
-                <form class="d-flex flex-row" action="/" method="post"> 
-                 <select id="filterField" name="filterField" class="form-select" required> 
-                     <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
-                     <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
-                     <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
-                     <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> 
-                     <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> 
-                     <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> 
-                     <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
-                 </select> 
-                 <input type="text" id="filterValue" class="form-control" value="@( 
-                             !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
-                             !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
-                             !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
-                             !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim():
-                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim():
-                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim():
-                             inputModel?.Category.Trim())" 
-                 /> 
-      
-             </form> 
+            <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-3 mb-2">
+                <form id="filterForm" class="d-flex flex-row" action="/ClientDealer/Index" method="post">
+                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required> 
+                        <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
+                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
+                        <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
+                        <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> 
+                        <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> 
+                        <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> 
+                        <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
+                    </select> 
+                    <div class="input-group" style="min-width: 130px;">
+                        <input type="text" id="filterValue" class="form-control mx-1" value="@(
+                        !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
+                        !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
+                        !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
+                        !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim():
+                        !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim():
+                        !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim():
+                        inputModel?.Category.Trim())" style="min-width:80px"/>
+                        <input type="hidden" id="dynamicInput" name="" value="" />
+                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+
+                </form> 
             </div>
         </div>
     </div>
+    <!-- Top Panel End -->
+
+    <!-- Table Start -->
+    <div class="table-wrapper border border-light mx-auto">
+        @if (clientDealerList.Count >= 1)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="position-sticky">
+                        <th>Client Code</th>
+                        <th>Client Name</th>
+                        <th>Zone</th>
+                        <th>Branch</th>
+                        <th>Dealer Code</th>
+                        <th>Dealer Name</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in clientDealerList)
+                    {
+                        <tr>
+                            <td>@item.ClientCode</td>
+                            <td>
+                                @item.ClientName
+                                <button class="info-btn"
+                                data-bs-target="#clientInfoModal"
+                                data-bs-toggle="modal"
+                                data-id="@item.ClientCode">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                </button>
+
+                            </td>
+                            <td>@item.Zone</td>
+                            <td>@item.Branch</td>
+                            <td>@item.DealerID</td>
+                            <td>@item.DealerName</td>
+                            <td>@item.Category</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="no-records">
+                <i class="bi bi-folder-x icon"></i>
+                <h5>No Records Found</h5>
+                <p>Try adjusting your filters or check back later.</p>
+            </div>
+        }
+    </div>
+    <!-- Table End-->
+
+    <!-- Pagination Control Start -->
+    <div class="m-2">
+        <nav aria-label="..." class="">
+            <ul class="pagination justify-content-center">
+                @if (inputModel?.Start > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="@Url.Action("Index", new {
+                        Start = inputModel.Start - 1,
+                        PageSize = inputModel.PageSize,
+                        Zone = inputModel.Zone,
+                        ClientCode = inputModel.ClientCode,
+                        ClientName = inputModel.ClientName,
+                        branch = inputModel.Branch,
+                        DealerID = inputModel.DealerID,
+                        DealerName = inputModel.DealerName,
+                        Category = inputModel.Category})"
+                        >
+                            Previous
+                        </a>
+                    </li>
+                }  
+                <li class="page-item" aria-current="page">
+                    <a class="page-link">@inputModel.Start</a>
+                </li>
+                @if (clientDealerList?.Count >= 50)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                       href="@Url.Action("Index", new {
+                        Start = inputModel.Start + 1,
+                        PageSize = inputModel.PageSize,
+                        Zone = inputModel.Zone,
+                        ClientCode = inputModel.ClientCode,
+                        ClientName = inputModel.ClientName,
+                        branch = inputModel.Branch,
+                        DealerID = inputModel.DealerID,
+                        DealerName = inputModel.DealerName,
+                        Category = inputModel.Category})"
+                    >
+                        Next
+                    </a>
+                </li>
+            }
+            </ul>
+        </nav>
+    </div>
+
 </div>
 
 
@@ -151,7 +249,7 @@ div class="container mt-4">
                             style="width: 15em;" />
                         </div>
                         
-                        <input type="hidden" id="dynamicInput" name="" value="" />
+                        
                         <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
                             <i class="bi bi-search"></i>
                         </button>
@@ -313,6 +411,6 @@ div class="container mt-4">
     </div>
 </div>
 @section Scripts {
-    @* <script src="~/js/common/filter.js"></script> *@
-    @* <script src="~/js/client/clientGroup.js"></script> *@
+    <script src="~/js/common/filter.js"></script>
+    <script src="~/js/client/clientGroup.js"></script> 
 }
