@@ -17,6 +17,14 @@
 </head>
 <style>
 
+    @@media (min-width: 992px) {
+
+        #main-content{
+            margin-left: 270px;
+        }
+
+    }
+
     li > a {
         color: white !important;
     }
@@ -101,7 +109,7 @@
                     <i class="bi bi-list" style="color: white; font-size: 30px;"></i>
                 </button>
 
-                <a class="navbar-brand ms-2 px-3" href="#">
+                <a class="navbar-brand ms-2 px-3" href="@Url.Action("Index", "Home")">
                     <img src="~/static/logo.png" alt="Company Logo" class="img-fluid" style="max-height: 60px; min-width: 60px;">
                 </a>
             </div>
@@ -122,8 +130,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container-fluid mt-5 pt-5" style="margin-left: 300px;">
-        <!-- This will render the content of the current page -->
+    <div class="container-fluid mt-5 pt-5" id="main-content">
         @RenderBody()
     </div>
 
