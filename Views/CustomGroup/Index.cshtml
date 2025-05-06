@@ -15,143 +15,159 @@
         background: none;
     }
 </style>   
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Custom Group</h2>
-        <div class="d-flex align-items-end gap-2">
-            <a href="@Url.Action("Index", "CustomGroup")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
-                Clear
-            </a>
-            <form id="filterForm" method="post" action="/CustomGroup/Index">
-                <div class="d-flex gap-2 align-items-end">
-                    <div>
-                        <label for="filterField" class="form-label">Filter</label>
-                        <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
-                            <option value="GroupCode" selected="@(inputModel?.GroupCode!= "" ? "selected" : null)">GroupCode</option>
-                            <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
-                            <option value="branch" selected="@(inputModel?.branch != "" ? "selected" : null)">Branch</option>
 
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="filterValue" class="form-label">Value</label>
-                        <input type="text" id="filterValue" class="form-control" value="@(
+<!-- Page Content Start-->
+<div class="container-fluid mx-0" style="max-width: 80vw; ">
+    <!-- Top Panel Start-->
+    <div class="container">
+        <div class="row py-2">
+            <div class="col-12 col-lg-4 px-3 mb-2 align-middle">
+                <h2>Custom Group</h2>
+            </div>
+            <div class="col-12 col-lg-6 d-flex justify-content-lg-end justify-content-md-start align-items-center text-white px-3 mb-2 panel-button">
+                <div class="pe-2">
+                    <a href="@Url.Action("Index", "CustomGroup")" class="btn btn-secondary">Clear</a>
+                </div>
+                <form id="filterForm" class="d-flex flex-row" action="/CustomGroup/Index" method="post">
+                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
+                        <option value="GroupCode" selected="@(inputModel?.GroupCode!= "" ? "selected" : null)">GroupCode</option>
+                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
+                        <option value="branch" selected="@(inputModel?.branch != "" ? "selected" : null)">Branch</option>
+                    </select>
+                    <div class="input-group" style="min-width: 130px;">
+                        <input type="text" id="filterValue" class="form-control mx-1" value="@(
                             !string.IsNullOrEmpty(inputModel?.GroupCode) ? inputModel.GroupCode.Trim() :
                             !string.IsNullOrEmpty(inputModel?.branch) ? inputModel.branch.Trim() :
                             inputModel?.Zone.Trim())"
-                               style="width: 15em;" />
+                               style="min-width:80px" />
+
+                        <input type="hidden" id="dynamicInput" name="" value="" />
+                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
+                </form>
 
-                    <input type="hidden" id="dynamicInput" name="" value="" />
-                    <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </form>
-            <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addCustomGroup">Add New</button>
+            </div>
+            <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
+                <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addCustomGroup">Add New</button>
+            </div>
         </div>
-        
     </div>
-
-    @if (groupList.Count > 0)
-    {
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Group Code</th>
-                    <th>Zone</th>
-                    <th>Branch</th>
-                    <th>Active</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in groupList)
-                {
-                    <tr data-rowid="@item.GroupCode">
-                        <td>
-                            @item.GroupCode
-                            <button class="info-btn"
-                                    data-bs-target="#groupInfoModal"
-                                    data-bs-toggle="modal"
-                                    data-id="@item.GroupCode"
-                                    data-zone="@item.Zone"
-                                    data-branch="@item.Branch"
-                                    data-active="@item.Active"
-                            >
-                                <i class="bi bi-info-circle-fill"></i>
-                            </button>
-                        </td>
-                        <td>@item.Zone</td>
-                        <td>@item.Branch</td>
-                        <td>@item.Active</td>
-                        
-
-                        <td>
-                            <div class="d-flex justify-content-evenly">
-                                <button class="btn btn-sm btn-outline-warning update-btn"
-                                        data-id="@item.GroupCode"
-                                        title="Update"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#updateCustomGroup">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button id="deleteCustomGroupBtn"
-                                        class="btn btn-sm btn-outline-danger delete-btn"
-                                        data-id="@item.GroupCode"
-                                        title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
+    <!-- Top Panel End-->
+    <!-- Table Start-->
+    <div class="table-wrapper border border-light mx-auto">
+        @if (groupList.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Group Code</th>
+                        <th>Zone</th>
+                        <th>Branch</th>
+                        <th>Active</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="no-records">
-            <i class="bi bi-folder-x icon"></i>
-            <h5>No Records Found</h5>
-            <p>Try adjusting your filters or check back later.</p>
-        </div>
+                </thead>
+                <tbody>
+                    @foreach (var item in groupList)
+                    {
+                        <tr data-rowid="@item.GroupCode">
+                            <td>
+                                @item.GroupCode
+                                <button class="info-btn"
+                                        data-bs-target="#groupInfoModal"
+                                        data-bs-toggle="modal"
+                                        data-id="@item.GroupCode"
+                                        data-zone="@item.Zone"
+                                        data-branch="@item.Branch"
+                                        data-active="@item.Active">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                </button>
+                            </td>
+                            <td>@item.Zone</td>
+                            <td>@item.Branch</td>
+                            <td>@item.Active</td>
 
-    }
-    <div class="d-flex justify-content-between mt-4">
-        @if (inputModel?.Start > 1)
-        {
-            <a class="btn btn-secondary"
-               href="@Url.Action("Index", new {
-                    Start = inputModel.Start - 1,
-                    PageSize = inputModel.PageSize,
-                    GroupCode = inputModel.GroupCode,
-                    Zone = inputModel.Zone,
-                    branch = inputModel.branch
-            })">
-                &laquo; Previous
-            </a>
+                            <td class="d-flex justify-content-center">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                                    <button id="updateCustomGroupBtn"
+                                            class="btn btn-sm btn-outline-primary me-2 update-btn"
+                                            data-id="@item.GroupCode"
+                                            title="Update"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#updateCustomGroup">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button id="deleteCustomGroupBtn"
+                                            class="btn btn-sm btn-outline-danger delete-btn"
+                                            data-id="@item.GroupCode"
+                                            title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
-        @if (groupList?.Count >= 50)
+        else
         {
-            <a class="btn btn-primary modal-btn"
-               href="@Url.Action("Index", new {
-                Start = inputModel.Start + 1,
-                PageSize = inputModel.PageSize,
-                GroupCode = inputModel.GroupCode,
-                Zone = inputModel.Zone,
-                branch = inputModel.branch
-            })">
-                Next &raquo;
-            </a>
+            <div class="no-records">
+                <i class="bi bi-folder-x icon"></i>
+                <h5>No Records Found</h5>
+                <p>Try adjusting your filters or check back later.</p>
+            </div>
+
         }
     </div>
+    <!-- Table End-->
+
+    <!-- Pagination Control Start -->
+    @if (groupList.Count >= 50)
+    {
+        <div class="m-2">
+            <nav aria-label="..." class="">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(inputModel?.Start <= 1 ? "disabled" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("Index", new {
+                            Start = inputModel.Start - 1,
+                            PageSize = inputModel.PageSize,
+                            GroupCode = inputModel.GroupCode,
+                            Zone = inputModel.Zone,
+                            branch = inputModel.branch
+                        })">
+                            Previous
+                        </a>
+                    </li>
+                    <li class="page-item" aria-current="page">
+                        <a class="page-link">@inputModel.Start</a>
+                    </li>
+                    <li class="page-item @(groupList.Count < 50 ? "disabled" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("Index", new {
+                            Start = inputModel.Start + 1,
+                            PageSize = inputModel.PageSize,
+                            GroupCode = inputModel.GroupCode,
+                            Zone = inputModel.Zone,
+                            branch = inputModel.branch
+                        })"
+                        })">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+    <!-- Pagination Control End -->
 </div>
+<!-- Page Content End-->
 
-
-
-@* Confrim Delete Modal *@
+<!-- Confrim Delete Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -170,8 +186,7 @@
     </div>
 </div>
 
-
-@*Create Custom Group Modal*@
+<!-- Create Custom Group Modal -->
 <div class="modal fade" id="addCustomGroup" tabindex="-1" aria-labelledby="addCustomGroup" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -220,7 +235,7 @@
     </div>
 </div>
 
-@* Update Custom Group Modal*@
+<!-- Update Custom Group Modal -->
 <div class="modal fade" id="updateCustomGroup" tabindex="-1" aria-labelledby="updateCustomGroup" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -267,6 +282,7 @@
     </div>
 </div>
 
+<!--  Custom Group Info Modal -->
 <div class="modal fade" id="groupInfoModal" tabindex="-1" aria-labelledby="groupInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered ">
         <div class="modal-content">
@@ -283,10 +299,13 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
+    
     <script src="~/js/custom-group/fetchData.js"></script>
     <script src="~/js/custom-group/groupInfo.js"></script>
     <script src="~/js/common/filter.js"></script>
     <script src="~/js/custom-group/delete-group.js"></script>
     <script src="~/js/custom-group/update-group.js"></script>
+    
 }
