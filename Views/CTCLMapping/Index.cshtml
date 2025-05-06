@@ -9,69 +9,57 @@
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
 </head>
 <style>
-    .table-wrapper {
-        overflow-x: auto;
-        overflow-y: auto;
-        max-width: 100%;
-        max-height: calc(100vh - 230px); 
-    }
-
-    table th, table td {
-        white-space: nowrap;
-    }
+   
 </style>
+<!-- Page Content Start-->
+<div class="container-fluid mx-0" style="max-width: 80vw; ">
+    <!-- Top Panel Start -->
+    <div class="container">
+        <div class="row py-2">
+            <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
+            <div class="col-12 col-lg-6 px-3 mb-2 align-middle">
+                <h2>CTCL Mapping</h2>
+            </div>
 
-<div class="container-fluid">
-    <div class="ctcl-header mb-2">
-        <div class="d-flex justify-content-between align-items-end">
-            <h2 class="m-0">CTCL Mapping</h2>
+            <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
+            <div class="col-12 col-lg-6 d-flex justify-content-lg-end justify-content-md-start align-items-center align-items-center text-dark px-3 mb-2">
+                <div class="pe-2">
+                    <a href="@Url.Action("Index", "CTCLMapping")" class="btn btn-secondary">Clear</a>
+                </div>
+                <form id="filterForm" class="d-flex flex-row" action="/CTCLMapping/Index" method="post">
+                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
+                        <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option>
+                        <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
+                        <option value="PrimaryDealer" selected="@(inputModel?.PrimaryDealer != "" ? "selected" : null)">Primary Dealer</option>
+                        <option value="SecondaryDealer" selected="@(inputModel?.SecondaryDealer != "" ? "selected" : null)">Secondary Dealer</option>
+                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
+                    </select>
+                    <div class="input-group" style="min-width: 130px;">
+                        <input type="text" id="filterValue" class="form-control mx-1"
+                                value="@(!string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
+                                !string.IsNullOrEmpty(inputModel?.PrimaryDealer) ? inputModel.PrimaryDealer.Trim() :
+                                !string.IsNullOrEmpty(inputModel?.SecondaryDealer) ? inputModel.SecondaryDealer.Trim() :
+                                !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
+                                inputModel?.Category.Trim())"
+                            style="min-width:80px" 
+                        />
 
-            <div class="d-flex align-items-end gap-2">
-                <a href="@Url.Action("Index", "CTCLMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
-                    Clear
-                </a>
-
-                <form id="filterForm" method="post" action="/CTCLMapping/Index" class="d-flex gap-2 align-items-end">
-                    <div>
-                        <label for="filterField" class="form-label">Filter</label>
-                        <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
-                            <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option>
-                            <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
-                            <option value="PrimaryDealer" selected="@(inputModel?.PrimaryDealer != "" ? "selected" : null)">Primary Dealer</option>
-                            <option value="SecondaryDealer" selected="@(inputModel?.SecondaryDealer != "" ? "selected" : null)">Secondary Dealer</option>
-                            <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
-                        </select>
+                        <input type="hidden" id="dynamicInput" name="" value="" />
+                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
-
-                    <div>
-                        <label for="filterValue" class="form-label">Value</label>
-                        <input type="text"
-                               id="filterValue"
-                               class="form-control"
-                               value="@(!string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
-                                    !string.IsNullOrEmpty(inputModel?.PrimaryDealer) ? inputModel.PrimaryDealer.Trim() :
-                                    !string.IsNullOrEmpty(inputModel?.SecondaryDealer) ? inputModel.SecondaryDealer.Trim() :
-                                    !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
-                                    inputModel?.Category.Trim())"
-                               style="width: 15em;" />
-                    </div>
-
-                    <input type="hidden" id="dynamicInput" name="" value="" />
-
-                    <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
-                        <i class="bi bi-search"></i>
-                    </button>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- Scrollable Table Section -->
-    @if (ctclMappingList.Count >= 1)
-    {
-        <div class="table-wrapper bg-white rounded shadow-sm p-1">
-            <table class="table table-bordered table-striped" style="min-width: max-content;">
-                <thead class="text-white">
+    <!-- Top Panel End -->
+    <!-- Table Start -->
+    <div class="table-wrapper border border-light mx-auto">
+        @if (ctclMappingList.Count >= 1)
+        {
+            <table class="table table-bordered" style="min-width: max-content;">
+                <thead>
                     <tr>
                         <th>Client Code</th>
                         <th>Primary Dealer</th>
@@ -125,52 +113,62 @@
                     }
                 </tbody>
             </table>
-            
-        </div>
-        <div class="d-flex justify-content-between mt-4">
-                @if (inputModel?.Start > 1)
-                {
-                    <a class="btn btn-secondary"
-                       href="@Url.Action("Index", new {
-                        Start = inputModel.Start - 1,
-                        PageSize = inputModel.PageSize,
-                        ClientCode = inputModel.ClientCode,
-                        Category = inputModel.Category,
-                        PrimaryDealer = inputModel.PrimaryDealer,
-                        SecondaryDealer = inputModel.SecondaryDealer,
-                        Zone = inputModel.Zone
-                    })">
-                        &laquo; Previous
-                    </a>
-                }
-                @if (ctclMappingList?.Count >= 50)
-                {
-                    <a class="btn btn-primary modal-btn"
-                       href="@Url.Action("Index", new {
-                        Start = inputModel.Start + 1,
-                        PageSize = inputModel.PageSize,
-                        ClientCode = inputModel.ClientCode,
-                        Category = inputModel.Category,
-                        PrimaryDealer = inputModel.PrimaryDealer,
-                        SecondaryDealer = inputModel.SecondaryDealer,
-                        Zone = inputModel.Zone
-                    })">
-                        Next &raquo;
-                    </a>
-                }
+        }
+        else
+        {
+            <div class="no-records">
+                <i class="bi bi-folder-x icon"></i>
+                <h5>No Records Found</h5>
+                <p>Try adjusting your filters or check back later.</p>
             </div>
-    }
-    else
+        }
+    </div>
+    <!-- Table End-->
+    <!-- Pagination Control Start -->
+    @if (ctclMappingList.Count >= 50)
     {
-
-        <div class="no-records">
-            <i class="bi bi-folder-x icon"></i>
-            <h5>No Records Found</h5>
-            <p>Try adjusting your filters or check back later.</p>
+        <div class="m-2">
+            <nav aria-label="..." class="">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(inputModel?.Start <= 1 ? "disabled" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("Index", new {
+                            Start = inputModel.Start - 1,
+                            PageSize = inputModel.PageSize,
+                            ClientCode = inputModel.ClientCode,
+                            Category = inputModel.Category,
+                            PrimaryDealer = inputModel.PrimaryDealer,
+                            SecondaryDealer = inputModel.SecondaryDealer,
+                            Zone = inputModel.Zone
+                        })">
+                            Previous
+                        </a>
+                    </li>
+                    <li class="page-item" aria-current="page">
+                        <a class="page-link">@inputModel.Start</a>
+                    </li>
+                    <li class="page-item @(ctclMappingList.Count < 50 ? "disabled" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("Index", new {
+                            Start = inputModel.Start + 1,
+                            PageSize = inputModel.PageSize,
+                            ClientCode = inputModel.ClientCode,
+                            Category = inputModel.Category,
+                            PrimaryDealer = inputModel.PrimaryDealer,
+                            SecondaryDealer = inputModel.SecondaryDealer,
+                            Zone = inputModel.Zone
+                        })">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-    }    
-</div>
+    }
+    <!-- Pagination Control End -->
 
+</div>
+<!-- Page Content End-->
 @section Scripts {
-    <script src="~/js/common/filter.js"></script>
+    <script src="~/js/common/filter.js"></script> 
 }
