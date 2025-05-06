@@ -30,20 +30,10 @@
         max-height: calc(100vh - 230px); 
     }
 
-    .pagination a {
-        border: 1px solid #11395C;
-        color: black !important;
-    }
-
-    .pagination a:hover{
-        background-color: #11395C !important;
-        border: 1px solid #11395C;
-        color: white !important;
-    }
+    
 </style>
-
+<!-- Page Content Start-->
 <div class="container-fluid mx-0" style="max-width: 80vw; ">
-
     <!-- Top Panel Start -->
     <div class="container">
         <div class="row py-2">
@@ -81,19 +71,20 @@
                     </select> 
                     <div class="input-group" style="min-width: 130px;">
                         <input type="text" id="filterValue" class="form-control mx-1" value="@(
-                        !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
-                        !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
-                        !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
-                        !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim():
-                        !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim():
-                        !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim():
-                        inputModel?.Category.Trim())" style="min-width:80px"/>
+                            !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
+                            !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim():
+                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim():
+                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim():
+                            inputModel?.Category.Trim())" style="min-width:80px"
+                        />
+
                         <input type="hidden" id="dynamicInput" name="" value="" />
                         <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
-
                 </form> 
             </div>
         </div>
@@ -153,6 +144,7 @@
     <!-- Table End-->
 
     <!-- Pagination Control Start -->
+    @if(clientDealerList.Count >= 50) {
     <div class="m-2">
         <nav aria-label="..." class="">
             <ul class="pagination justify-content-center">
@@ -194,9 +186,11 @@
             </ul>
         </nav>
     </div>
+    }
+    <!-- Pagination Control End -->
 
 </div>
-
+<!-- Page Content End-->
 
 @*
 div class="container mt-4">
@@ -257,93 +251,6 @@ div class="container mt-4">
             </div>
         </div>
     </div>
-    @if(clientDealerList.Count >= 1) {
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Client Code</th>
-                    <th>Client Name</th>
-                    <th>Zone</th>
-                    <th>Branch</th>
-                    <th>Dealer Code</th>
-                    <th>Dealer Name</th>
-                    <th>Category</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in clientDealerList)
-                {
-                    
-                    <tr>
-                        <td>@item.ClientCode</td>
-                        <td>
-                            @item.ClientName
-                            <button 
-                                class="info-btn" 
-                                data-bs-target="#clientInfoModal" 
-                                data-bs-toggle="modal"
-                                data-id="@item.ClientCode">
-                                <i class="bi bi-info-circle-fill"></i>
-                            </button>
-                            
-                        </td>
-                        <td>@item.Zone</td>
-                        <td>@item.Branch</td>
-                        <td>@item.DealerID</td>
-                        <td>@item.DealerName</td>
-                        <td>@item.Category</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    } else
-    {
-        <div class="no-records">
-            <i class="bi bi-folder-x icon"></i>
-            <h5>No Records Found</h5>
-            <p>Try adjusting your filters or check back later.</p>
-        </div>
-    }
-    
-    
-
-    <div class="d-flex justify-content-between mt-4">
-        @if (inputModel?.Start > 1)
-        {
-            <a class="btn btn-secondary"
-               href="@Url.Action("Index", new {
-                   Start = inputModel.Start - 1,
-                   PageSize = inputModel.PageSize,
-                   Zone = inputModel.Zone,
-                   ClientCode = inputModel.ClientCode,
-                   ClientName = inputModel.ClientName,
-                   branch = inputModel.Branch,
-                   DealerID = inputModel.DealerID,
-                   DealerName = inputModel.DealerName,
-                   Category = inputModel.Category
-            })">
-                &laquo; Previous
-            </a>
-        }
-        @if (clientDealerList?.Count >= 50)
-        {
-            <a class="btn btn-primary modal-btn"
-               href="@Url.Action("Index", new {
-               Start = inputModel.Start + 1,
-               PageSize = inputModel.PageSize,
-               Zone = inputModel.Zone,
-               ClientCode = inputModel.ClientCode,
-               ClientName = inputModel.ClientName,
-               branch = inputModel.Branch,
-               DealerID = inputModel.DealerID,
-               DealerName = inputModel.DealerName,
-               Category = inputModel.Category
-            })">
-                Next &raquo;
-            </a>
-        }
-    </div>
-</div>
 *@
 <div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered ">

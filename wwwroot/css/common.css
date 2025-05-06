@@ -36,3 +36,14 @@ th, .modal-btn {
     color: #11395C;
     margin-bottom: 1rem;
 }
+
+.pagination a {
+    border: 1px solid #11395C;
+    color: black !important;
+}
+
+.pagination a:hover {
+    background-color: #11395C !important;
+    border: 1px solid #11395C;
+    color: white !important;
+}
