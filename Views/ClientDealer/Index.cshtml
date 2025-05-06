@@ -12,33 +12,33 @@
 </head>
 <style>
     .info-btn {
-    border: none;
-    background: white;
+        border: none;
+        background: white;
     }
 
     @@media(min-width: 992px) {
-    .panel-button {
-    flex-direction: row-reverse
-    }
-
+        .panel-button {
+            flex-direction: row-reverse
+        }
 
     }
 
     .table-wrapper {
-    overflow-x: auto;
-    overflow-y: auto;
-    max-width: 100%;
-    max-height: calc(100vh - 230px); 
+        overflow-x: auto;
+        overflow-y: auto;
+        max-width: 100%;
+        max-height: calc(100vh - 230px); 
     }
 
     .pagination a {
-    border: 1px solid black;
-    color: black !important;
+        border: 1px solid #11395C;
+        color: black !important;
     }
 
     .pagination a:hover{
-    background-color: #11395C !important;
-    color: white !important;
+        background-color: #11395C !important;
+        border: 1px solid #11395C;
+        color: white !important;
     }
 </style>
 
@@ -46,7 +46,7 @@
 
     <!-- Top Panel Start -->
     <div class="container">
-        <div class="row">
+        <div class="row py-2">
             <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
             <div class="col-12 col-lg-5 px-3 mb-2 align-middle">
                 <h2>Primary Dealer Mapping</h2>
@@ -55,7 +55,12 @@
             <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small -->
             <div class="col-12 col-lg-3 d-flex flex-l-row-reverse align-items-center text-white px-3 mb-2 panel-button">
                 <form action="/" method="post">
-                    <button class="btn btn-success my-1">
+                    <button 
+                        type="submit"
+                        class="btn btn-success my-1"
+                        formaction="/Excel/ExportClientDealerExcel"
+                        formmethod="post"
+                    >
                         <i class="bi bi-file-earmark-excel"></i> Export Excel 
                     </button> 
                     <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a>
@@ -101,7 +106,7 @@
         {
             <table class="table table-bordered">
                 <thead>
-                    <tr class="position-sticky">
+                    <tr>
                         <th>Client Code</th>
                         <th>Client Name</th>
                         <th>Zone</th>
@@ -151,47 +156,41 @@
     <div class="m-2">
         <nav aria-label="..." class="">
             <ul class="pagination justify-content-center">
-                @if (inputModel?.Start > 1)
-                {
-                    <li class="page-item">
-                        <a class="page-link"
-                        href="@Url.Action("Index", new {
-                        Start = inputModel.Start - 1,
-                        PageSize = inputModel.PageSize,
-                        Zone = inputModel.Zone,
-                        ClientCode = inputModel.ClientCode,
-                        ClientName = inputModel.ClientName,
-                        branch = inputModel.Branch,
-                        DealerID = inputModel.DealerID,
-                        DealerName = inputModel.DealerName,
-                        Category = inputModel.Category})"
-                        >
-                            Previous
-                        </a>
-                    </li>
-                }  
+                <li class="page-item @(inputModel?.Start <= 1 ? "disabled" : "")">
+                    <a class="page-link"
+                    href="@Url.Action("Index", new {
+                    Start = inputModel.Start - 1,
+                    PageSize = inputModel.PageSize,
+                    Zone = inputModel.Zone,
+                    ClientCode = inputModel.ClientCode,
+                    ClientName = inputModel.ClientName,
+                    branch = inputModel.Branch,
+                    DealerID = inputModel.DealerID,
+                    DealerName = inputModel.DealerName,
+                    Category = inputModel.Category})"
+                    >
+                        Previous
+                    </a>
+                </li>
                 <li class="page-item" aria-current="page">
                     <a class="page-link">@inputModel.Start</a>
                 </li>
-                @if (clientDealerList?.Count >= 50)
-                {
-                    <li class="page-item">
-                        <a class="page-link"
-                       href="@Url.Action("Index", new {
-                        Start = inputModel.Start + 1,
-                        PageSize = inputModel.PageSize,
-                        Zone = inputModel.Zone,
-                        ClientCode = inputModel.ClientCode,
-                        ClientName = inputModel.ClientName,
-                        branch = inputModel.Branch,
-                        DealerID = inputModel.DealerID,
-                        DealerName = inputModel.DealerName,
-                        Category = inputModel.Category})"
-                    >
-                        Next
-                    </a>
-                </li>
-            }
+                <li class="page-item @(clientDealerList.Count < 50 ? "disabled" : "")">
+                    <a class="page-link"
+                    href="@Url.Action("Index", new {
+                    Start = inputModel.Start + 1,
+                    PageSize = inputModel.PageSize,
+                    Zone = inputModel.Zone,
+                    ClientCode = inputModel.ClientCode,
+                    ClientName = inputModel.ClientName,
+                    branch = inputModel.Branch,
+                    DealerID = inputModel.DealerID,
+                    DealerName = inputModel.DealerName,
+                    Category = inputModel.Category})"
+                >
+                    Next
+                </a>
+            </li>
             </ul>
         </nav>
     </div>
