@@ -9,109 +9,151 @@
 <head>
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
 </head>
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>CNT Terminal Mapping</h2>
-        <div class="d-flex align-items-end gap-2">
-            <a href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
-                Clear
-            </a>
-            <div class="d-flex gap-2 align-items-end">
-                <form id="filterForm" method="post" action="/BranchMapping/Index">
-                    <div class="d-flex gap-2 align-items-end">
-                        <div>
-                            <label for="filterField" class="form-label">Filter</label>
-                            <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
-                                <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
-                                <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
-                                <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
-                            </select>
-                        </div>
 
-                        <div>
-                            <label for="filterValue" class="form-label">Value</label>
-                            <input type="text" id="filterValue" class="form-control" value="@(
+<!-- Page Content Start-->
+<div class="container-fluid mx-0" style="max-width: 80vw; ">
+    <!-- Top Panel Start-->
+    <div class="container">
+        <div class="row py-2">
+            <div class="col-12 col-lg-4 px-3 mb-2 align-middle">
+                <h2>CNT Terminal Mapping</h2>
+            </div>
+            <div class="col-12 col-lg-6 d-flex justify-content-lg-end justify-content-md-start align-items-center text-white px-3 mb-2 panel-button">
+                <div class="pe-2">
+                    <a href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary">Clear</a>
+                </div>
+                <form id="filterForm" class="d-flex flex-row" action="/BranchMapping/Index" method="post">
+                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
+                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
+                        <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
+                        <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
+                    </select>
+                    <div class="input-group" style="min-width: 130px;">
+                        <input type="text" id="filterValue" class="form-control mx-1" value="@(
                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
-                            inputModel?.Zone.Trim())"
-                                   style="width: 15em;" />
-                        </div>
+                            inputModel?.Zone.Trim())" 
+                            style="min-width:80px" 
+                        />
 
                         <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
+                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
                 </form>
-                <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal" >Add New</button>
+
+            </div>
+            <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
+                <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
             </div>
         </div>
-
-       
-        
     </div>
+    <!-- Top Panel End-->
 
-    @if(branchCNTList.Count > 0) {
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Zone</th>
-                    <th>Dealer ID</th>
-                    <th>Dealer Name</th>
-                    <th>CTCL Login</th>
-                    <th>HO CNT</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in branchCNTList)
-                {
-                    <tr data-rowid="@item.RowId">
-                        <td>@item.Zone</td>
-                        <td>@item.DealerID</td>
-                        <td>@item.DealerName</td>
-                        <td>@item.CTCLLoginID</td>
-                        @if(item.isHOCNT == 1)
-                        {
-                            <td>Yes</td>
-                        } else
-                        {
-                            <td>No</td>
-                        }
-
-                        <td>
-                            <div class="d-flex justify-content-evenly">
-                                <button class="btn btn-sm btn-outline-warning update-btn"
-                                        data-id="@item.RowId"
-                                        title="Update"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#updateBranchModal">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button id="deleteBranchBtn"
-                                        class="btn btn-sm btn-outline-danger delete-btn"
-                                        data-id="@item.RowId"
-                                        title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
+    <!-- Table Start-->
+    <div class="table-wrapper border border-light mx-auto">
+        @if (branchCNTList.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Zone</th>
+                        <th>Dealer ID</th>
+                        <th>Dealer Name</th>
+                        <th>CTCL Login</th>
+                        <th>HO CNT</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    } else
+                </thead>
+                <tbody>
+                    @foreach (var item in branchCNTList)
+                    {
+                        <tr data-rowid="@item.RowId">
+                            <td>@item.Zone</td>
+                            <td>@item.DealerID</td>
+                            <td>@item.DealerName</td>
+                            <td>@item.CTCLLoginID</td>
+                            <td>@(item.isHOCNT == 1 ? "Yes" : "No")</td>
+
+                            <td class="d-flex justify-content-center">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                                    <button id="updateBranchBtn"
+                                            class="btn btn-sm btn-outline-primary me-2 update-btn"
+                                            data-id="@item.RowId"
+                                            title="Update"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#updateBranchModal">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button id="deleteBranchBtn"
+                                            class="btn btn-sm btn-outline-danger delete-btn"
+                                            data-id="@item.RowId"
+                                            title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="no-records">
+                <i class="bi bi-folder-x icon"></i>
+                <h5>No Records Found</h5>
+                <p>Try adjusting your filters or check back later.</p>
+            </div>
+
+        }
+    </div>
+    <!-- Table End-->
+
+    <!-- Pagination Control Start -->
+    @if (branchCNTList.Count >= 50)
     {
-        <div class="no-records">
-            <i class="bi bi-folder-x icon"></i>
-            <h5>No Records Found</h5>
-            <p>Try adjusting your filters or check back later.</p>
+        <div class="m-2">
+            <nav aria-label="..." class="">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(inputModel?.Start <= 1 ? "disabled" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("Index", new {
+                            Start = inputModel.Start - 1,
+                            PageSize = inputModel.PageSize,
+                            Zone = inputModel.Zone,
+                            DealerID = inputModel.DealerID,
+                            DealerName = inputModel.DealerName
+                        })">
+                            Previous
+                        </a>
+                    </li>
+                    <li class="page-item" aria-current="page">
+                        <a class="page-link">@inputModel.Start</a>
+                    </li>
+                    <li class="page-item @(branchCNTList.Count < 50 ? "disabled" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("Index", new {
+                            Start = inputModel.Start + 1,
+                            PageSize = inputModel.PageSize,
+                            Zone = inputModel.Zone,
+                            DealerID = inputModel.DealerID,
+                            DealerName = inputModel.DealerName
+                        })">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-
     }
+    <!-- Pagination Control End -->
 </div>
+<!-- Page Content End-->
 
-@*Create Branch Modal*@
+<!--Create Branch Modal -->
 <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -154,7 +196,7 @@
     </div>
 </div>
 
-@*Update Branch Modal*@
+<!--Update Branch Modal -->
 <div class="modal fade" id="updateBranchModal" tabindex="-1" aria-labelledby="updateBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -197,7 +239,7 @@
     </div>
 </div>
 
-@* Confrim Delete Modal *@
+<!--Confrim Delete Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -216,39 +258,10 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-between mt-4">
-    @if (inputModel?.Start > 1)
-    {
-        <a class="btn btn-secondary modal-btn"
-           href="@Url.Action("Index", new {
-            Start = inputModel.Start - 1,
-            PageSize = inputModel.PageSize,
-            Zone = inputModel.Zone,
-            DealerID = inputModel.DealerID,
-            DealerName = inputModel.DealerName
-        })">
-            &laquo; Previous
-        </a>
-    }
-    @if (branchCNTList.Count >= 50)
-    {
-        <a class="btn btn-primary modal-btn"
-           href="@Url.Action("Index", new {
-            Start = inputModel.Start + 1,
-            PageSize = inputModel.PageSize,
-            Zone = inputModel.Zone,
-            DealerID = inputModel.DealerID,
-            DealerName = inputModel.DealerName
-        })">
-            Next &raquo;
-        </a>
-    }
-</div>
-
 @section Scripts {
     
-   
-    <script src="~/js/branch/branch-mapping.js"></script>
-    <script src="~/js/branch/branch-actions.js"></script>
-    <script src="~/js/common/filter.js"></script>
+     <script src="~/js/branch/branch-mapping.js"></script>
+     <script src="~/js/branch/branch-actions.js"></script>
+     <script src="~/js/common/filter.js"></script>
+    
 }

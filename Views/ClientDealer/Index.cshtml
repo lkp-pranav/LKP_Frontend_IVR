@@ -21,16 +21,7 @@
             flex-direction: row-reverse
         }
 
-    }
-
-    .table-wrapper {
-        overflow-x: auto;
-        overflow-y: auto;
-        max-width: 100%;
-        max-height: calc(100vh - 230px); 
-    }
-
-    
+    }    
 </style>
 <!-- Page Content Start-->
 <div class="container-fluid mx-0" style="max-width: 80vw; ">
@@ -192,66 +183,7 @@
 </div>
 <!-- Page Content End-->
 
-@*
-div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-end mb-3" style="height: 50px;">
-        <h2>Primary Dealer Mapping</h2>
-
-        <div class="d-flex align-items-end gap-2">
-            <form>
-                <button type="submit"
-                        class="btn btn-success p-2 d-flex align-items-center gap-1"
-                        formaction="/Excel/ExportClientDealerExcel"
-                        formmethod="post"
-                        style="height: 40px;">
-                    <i class="bi bi-file-earmark-excel"></i> Export to Excel
-                </button>
-            </form>
-            
-            <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
-                Clear
-            </a>
-
-            <!-- Form inside a div to align inputs on the same row -->
-            <div class="d-flex gap-2 align-items-end">
-                <form id="filterForm" method="post" action="/ClientDealer/Index">
-                    <div class="d-flex gap-2 align-items-end">
-                        <div>
-                            <label for="filterField" class="form-label">Filter</label>
-                            <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
-                                <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option>
-                                <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
-                                <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
-                                <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option>
-                                <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option>
-                                <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
-                                <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="filterValue" class="form-label">Value</label>
-                            <input type="text" id="filterValue" class="form-control" value="@(
-                            !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
-                            inputModel?.Category.Trim())" 
-                            style="width: 15em;" />
-                        </div>
-                        
-                        
-                        <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-*@
+<!-- Client Info Accordian -->
 <div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered ">
         <div class="modal-content">

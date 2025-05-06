@@ -85,7 +85,7 @@
                             <td>@item.SecondaryDealerCTCLLogin</td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
-                                    <button id="updateBranchBtn"
+                                    <button id="updateDealerBtn"
                                             class="btn btn-sm btn-outline-primary me-2 update-btn"
                                             data-id="@item.RowId"
                                             title="Update"
@@ -93,7 +93,7 @@
                                             data-bs-target="#updateDealerModal">
                                         <i class="fas fa-pen"></i>
                                     </button>
-                                    <button id="deleteBranchBtn"
+                                    <button id="deletDealerBtn"
                                             class="btn btn-sm btn-outline-danger delete-btn"
                                             data-id="@item.RowId"
                                             title="Delete">
@@ -348,59 +348,6 @@
         </div>
     </div>
 </div>
-
-@*
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Secondary Dealer Mapping</h2>
-        <div class="d-flex align-items-end gap-2">
-            <a href="@Url.Action("Index", "DealerMapping")" class="btn btn-secondary p-2" style="width: 60px; height: 40px;">
-                Clear
-            </a>
-
-            <!-- Form inside a div to align inputs on the same row -->
-            <div class="d-flex gap-2 align-items-end">
-                <form id="filterForm" method="post" action="/DealerMapping/Index">
-                    <div class="d-flex gap-2 align-items-end">
-                        <div>
-                            <label for="filterField" class="form-label">Filter</label>
-                            <select id="filterField" name="filterField" class="form-select" required style="width: 150px;">
-                                <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
-                                <option value="PrimaryDealer" selected="@(inputModel?.PrimaryDealer != "" ? "selected" : null)">Primary Dealer ID</option>
-                                <option value="PrimaryCTCL" selected="@(inputModel?.PrimaryCTCL != "" ? "selected" : null)">Primary CLTCL</option>
-                                <option value="SecondaryDealer" selected="@(inputModel?.SecondaryDealer != "" ? "selected" : null)">Secondary Dealer ID</option>
-                                <option value="SecondaryCTCL" selected="@(inputModel?.SecondaryCTCL != "" ? "selected" : null)">Secondary CTCL</option>
-
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="filterValue" class="form-label">Value</label>
-                            <input type="text" id="filterValue" class="form-control" value="@(
-                            !string.IsNullOrEmpty(inputModel?.PrimaryDealer) ? inputModel.PrimaryDealer.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.PrimaryCTCL) ? inputModel.PrimaryCTCL.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.SecondaryDealer) ? inputModel.SecondaryDealer.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.SecondaryCTCL) ? inputModel.SecondaryCTCL.Trim() :
-                            inputModel?.Zone.Trim())"
-                            style="width: 15em;" />
-                        </div>
-
-                        <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-primary p-2 modal-btn" style="width: 40px; height: 40px;">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
-                <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-*@
-
-
-
 
 @section Scripts {
     

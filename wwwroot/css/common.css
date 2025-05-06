@@ -47,3 +47,10 @@ th, .modal-btn {
     border: 1px solid #11395C;
     color: white !important;
 }
+
+.table-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 230px);
+}
