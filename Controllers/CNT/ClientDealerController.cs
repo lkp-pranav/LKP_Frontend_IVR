@@ -7,6 +7,8 @@ using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace LKP_Frontend_MVC.Controllers.CNT
 {
@@ -66,6 +68,58 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             responsePayLoad.data = groupList;
 
             return Json(responsePayLoad);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDealerClientCSV()
+        {
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+            var user = new CommonModel
+            {
+                user_id = sessionUser.user_id,
+                user_type = sessionUser.user_type
+            };
+
+            var json = JsonConvert.SerializeObject(user);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+            var response = await _httpClient.PostAsync("https://localhost:7121/api/ClientDealer/GetUploadMapping?option=DealerAdd", content);
+
+            if (!response.IsSuccessStatusCode)
+                return Content("Failed to export data.");
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            return File(stream, "application/octet-stream", "Add_ClientDealerMapping.csv");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDealerClientCSV()
+        {
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+            var user = new CommonModel
+            {
+                user_id = sessionUser.user_id,
+                user_type = sessionUser.user_type
+            };
+
+            var json = JsonConvert.SerializeObject(user);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+            var response = await _httpClient.PostAsync("https://localhost:7121/api/ClientDealer/GetUploadMapping?option=DealerDelete", content);
+
+            if (!response.IsSuccessStatusCode)
+                return Content("Failed to export data.");
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            return File(stream, "application/octet-stream", "Delete_ClientDealerMapping.csv");
         }
     }
 }

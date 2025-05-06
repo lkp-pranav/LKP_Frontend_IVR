@@ -59,6 +59,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index", "CustomGroup")">Custom Groups</a>
                 </li>
+                <li class="nav-item">
+                    <form asp-action="AddDealerClientCSV" asp-controller="ClientDealer" method="post">
+                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Client (Add File)</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form asp-action="DeleteDealerClientCSV" asp-controller="ClientDealer" method="post">
+                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Client (Delete File)</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
@@ -95,6 +105,16 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index", "CustomGroup")">Custom Groups</a>
+                </li>
+                <li class="nav-item">
+                    <form asp-action="AddDealerClientCSV" asp-controller="ClientDealer" method="post">
+                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Client (Add File)</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form asp-action="DeleteDealerClientCSV" asp-controller="ClientDealer" method="post">
+                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Client (Delete File)</button>
+                    </form>
                 </li>
             </ul>
         </div>
