@@ -54,3 +54,12 @@ th, .modal-btn {
     max-width: 100%;
     max-height: calc(100vh - 230px);
 }
+
+.page-content {
+    max-width: 80vw;
+}
+@media (max-width: 991.98px) {
+    .page-content {
+        max-width: 100vw;
+    }
+}
