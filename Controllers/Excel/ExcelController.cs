@@ -77,5 +77,33 @@ namespace LKP_Frontend_MVC.Controllers.Excel
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "GroupMappingList.xlsx");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ExportDealerCreationFile()
+        {
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+
+            var user = new CommonModel
+            {
+                user_id = sessionUser.user_id,
+                user_type = sessionUser.user_type
+            };
+
+            // Serialize CommonModel to JSON string
+            var json = JsonConvert.SerializeObject(user);
+
+            // Create StringContent with JSON data
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            // Send POST request with CommonModel data
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
+            var response = await _httpClient.PostAsync("https://localhost:7121/api/Excel/ExportDealerCreationFile", content);
+
+            if (!response.IsSuccessStatusCode)
+                return Content("Failed to export data.");
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Dealer_Creation.xlsx");
+        }
+
     }
 }
