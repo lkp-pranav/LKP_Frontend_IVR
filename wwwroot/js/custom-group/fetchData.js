@@ -109,7 +109,7 @@
                         const label = document.createElement('label');
                         label.className = 'form-check-label';
                         label.htmlFor = `dealer_${index}`;
-                        label.textContent = item.dealerName;
+                        label.textContent = `${item.dealerName} (${item.ctclLoginid})`;
 
                         // Append checkbox and label to the container div
                         checkboxContainer.appendChild(checkbox);
