@@ -33,6 +33,32 @@
         color: #11395C !important;
     }
 
+    .card-body {
+        background-color: #11395C;
+        border: 1px solid #ffffff22;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        padding: 0.5rem;
+    }
+
+    .card-body button {
+        background-color: #145a8b;
+        border: none;
+        color: white;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        text-align: left;
+        border-radius: 0.375rem;
+        font-size: 0.95rem;
+        transition: background-color 0.2s ease, text-decoration 0.2s ease;
+    }
+
+    .card-body button:hover {
+        background-color: #1c6fa8;
+        text-decoration: underline;
+    }
+
 
 </style>
 <body class="overflow-x-auto">
@@ -59,23 +85,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index", "CustomGroup")">Custom Groups</a>
                 </li>
-                <li class="nav-item">
-                    <form asp-action="AddDealerClientCSV" asp-controller="ClientDealer" method="post">
-                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Client (Add File)</button>
-                    </form>
-                </li>
-                <li class="nav-item">
-                    <form asp-action="DeleteDealerClientCSV" asp-controller="ClientDealer" method="post">
-                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Client (Delete File)</button>
-                    </form>
-                </li>
-                <li class="nav-item">
-                    <form asp-action="ExportDealerCreationFile" asp-controller="Excel" method="post">
-                        <button type="submit" class="btn btn-primary text-white my-2">Dealer Creation File</button>
-                    </form>
-                </li>
-            </ul>
+            </ul> 
         </div>
+        <div>
+            <button class="btn btn-outline-light mb-1 mx-5" type="button" data-bs-toggle="collapse" data-bs-target="#downloadLinks" aria-expanded="false" aria-controls="downloadLinks">
+                Download Links <i class="bi bi-download"></i>
+            </button>
+            <div class="mx-3" style="min-height: 120px;">
+                <div class="collapse" id="downloadLinks">
+                    <div class="card card-body" style="width: 240px;">
+                        <form asp-action="AddDealerClientCSV" asp-controller="ClientDealer" method="post">
+                            <button type="submit" class="list-group-item my-1">Dealer Client (Add File)</button>
+                        </form>
+                        <form asp-action="DeleteDealerClientCSV" asp-controller="ClientDealer" method="post">
+                            <button type="submit" class="list-group-item my-1">Dealer Client (Delete File)</button>
+                        </form>
+                        <form asp-action="ExportDealerCreationFile" asp-controller="Excel" method="post">
+                            <button type="submit" class="list-group-item my-1">Dealer Creation File</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
     <!-- Offcanvas Sidebar: Only visible on small screens -->
