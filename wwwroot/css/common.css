@@ -63,3 +63,8 @@ th, .modal-btn {
         max-width: 100vw;
     }
 }
+
+.info-btn {
+    border: none;
+    background: none;
+}
