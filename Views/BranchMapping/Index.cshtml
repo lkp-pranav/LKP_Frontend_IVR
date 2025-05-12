@@ -116,36 +116,55 @@
     @if (branchCNTList.Count >= 50)
     {
         <div class="m-2">
-            <nav aria-label="..." class="">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item @(inputModel?.Start <= 1 ? "disabled" : "")">
-                        <a class="page-link"
-                            href="@Url.Action("Index", new {
-                            Start = inputModel.Start - 1,
-                            PageSize = inputModel.PageSize,
-                            Zone = inputModel.Zone,
-                            DealerID = inputModel.DealerID,
-                            DealerName = inputModel.DealerName
+            <nav class="d-flex align-items-center position-relative" aria-label="...">
+                <!-- Centered Pagination -->
+                <div class="position-absolute start-50 translate-middle-x">
+                    <ul class="pagination justify-content-center mb-0" style="max-width: fit-content;">
+                        <li class="page-item @(inputModel?.Start <= 1 ? "disabled" : "")">
+                            <a class="page-link"
+                               href="@Url.Action("Index", new {
+                                Start = inputModel.Start - 1,
+                                PageSize = inputModel.PageSize,
+                                Zone = inputModel.Zone,
+                                DealerID = inputModel.DealerID,
+                                DealerName = inputModel.DealerName
                         })">
-                            Previous
-                        </a>
-                    </li>
-                    <li class="page-item" aria-current="page">
-                        <a class="page-link">@inputModel.Start</a>
-                    </li>
-                    <li class="page-item @(branchCNTList.Count < 50 ? "disabled" : "")">
-                        <a class="page-link"
-                            href="@Url.Action("Index", new {
+                                Previous
+                            </a>
+                        </li>
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link">@inputModel.Start</a>
+                        </li>
+                        <li class="page-item @(branchCNTList.Count < 50 ? "disabled" : "")">
+                            <a class="page-link"
+                               href="@Url.Action("Index", new {
+                                Start = inputModel.Start + 1,
+                                PageSize = inputModel.PageSize,
+                                Zone = inputModel.Zone,
+                                DealerID = inputModel.DealerID,
+                                DealerName = inputModel.DealerName
+                        })">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Go to Page Form -->
+                <form class="go-to ms-auto"
+                      method="post"
+                      action="@Url.Action("Index", new {
                             Start = inputModel.Start + 1,
                             PageSize = inputModel.PageSize,
                             Zone = inputModel.Zone,
                             DealerID = inputModel.DealerID,
-                            DealerName = inputModel.DealerName
-                        })">
-                            Next
-                        </a>
-                    </li>
-                </ul>
+                            DealerName = inputModel.DealerName})"
+                >
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary btn-sm" type="submit">Go to Page:</button>
+                        <input name="Start" value="@inputModel.Start" type="number" min="1" class="form-control-sm">
+                    </div>
+                </form>
             </nav>
         </div>
     }

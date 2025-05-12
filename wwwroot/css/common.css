@@ -68,3 +68,22 @@ th, .modal-btn {
     border: none;
     background: none;
 }
+
+.go-to input {
+    width: 60px;
+    border-left: none;
+    border-color: #11395C;
+    color: #11395C;
+    font-weight: bold;
+}
+
+.go-to button {
+    border-color: #11395C;
+    color: #11395C;
+    font-weight: bold;
+}
+
+.go-to button:hover {
+    color: white;
+    background-color: #11395C;
+}
