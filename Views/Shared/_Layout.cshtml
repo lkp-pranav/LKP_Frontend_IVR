@@ -34,11 +34,11 @@
     }
 
     .card-body {
-        background-color: #11395C;
-        border: 1px solid #ffffff22;
+        background-color: #11395C !important;
+        border: 1px solid white !important;
         border-radius: 0.5rem;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        padding: 0.5rem;
+        padding: 1rem;
     }
 
     .card-body button {
@@ -58,6 +58,7 @@
         background-color: #1c6fa8;
         text-decoration: underline;
     }
+
 
 
 </style>
@@ -93,20 +94,21 @@
             </button>
             <div class="mx-3" style="min-height: 120px;">
                 <div class="collapse" id="downloadLinks">
-                    <div class="card card-body" style="width: 240px;">
+                    <div class="card card-body" style="width: 230px;">
                         <form asp-action="AddDealerClientCSV" asp-controller="ClientDealer" method="post">
-                            <button type="submit" class="list-group-item my-1">Dealer Client (Add File)</button>
+                            <button type="submit" class="list-group-item">Dealer Client (Add File)</button>
                         </form>
                         <form asp-action="DeleteDealerClientCSV" asp-controller="ClientDealer" method="post">
-                            <button type="submit" class="list-group-item my-1">Dealer Client (Delete File)</button>
+                            <button type="submit" class="list-group-item">Dealer Client (Delete File)</button>
                         </form>
                         <form asp-action="ExportDealerCreationFile" asp-controller="Excel" method="post">
-                            <button type="submit" class="list-group-item my-1">Dealer Creation File</button>
+                            <button type="submit" class="list-group-item">Dealer Creation File</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
 
 
     </div>
