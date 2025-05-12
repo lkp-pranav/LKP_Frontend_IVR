@@ -53,6 +53,7 @@ th, .modal-btn {
     overflow-y: auto;
     max-width: 100%;
     max-height: calc(100vh - 230px);
+    min-height: 74vh;
 }
 
 .page-content {
