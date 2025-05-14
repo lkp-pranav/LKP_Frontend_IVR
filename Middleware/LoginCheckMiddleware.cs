@@ -24,7 +24,8 @@ namespace LKP_Frontend_MVC.Middleware
             {
                 "/Login",
                 "/VerifyPan",
-                "/AuthenticatePAN"
+                "/AuthenticatePAN",
+                "/SSOLogin"
             };
 
             if (excludedPaths.Any(path => context.Request.Path.StartsWithSegments(path)))
