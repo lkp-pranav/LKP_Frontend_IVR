@@ -22,7 +22,7 @@
                 <div class="pe-2">
                     <a href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary">Clear</a>
                 </div>
-                <form id="filterForm" class="d-flex flex-row" action="/BranchMapping/Index" method="post">
+                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "BranchMapping")" method="post">
                     <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
                         <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                         <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
@@ -176,7 +176,7 @@
 <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form id="branchForm" method="post" action="/BranchMapping/CreateMapping">
+            <form id="branchForm" method="post" action="@Url.Action("CreateMapping","BranchMapping")">
                 <input type="hidden" name="RowId" id="rowIdInput" />
                 <div class="modal-header">
                     <h5 class="modal-title" id="addBranchModalLabel">Add Branch Mapping</h5>
@@ -219,7 +219,7 @@
 <div class="modal fade" id="updateBranchModal" tabindex="-1" aria-labelledby="updateBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form id="updateBranchForm" method="post" action="/BranchMapping/UpdateMapping">
+            <form id="updateBranchForm" method="post" action=@Url.Action("UpdateMapping","BranchMapping")>
                 <input type="hidden" name="RowId" id="rowIdInputUpdate" />
                 <div class="modal-header">
                     <h5 class="modal-title">Update Branch Mapping</h5>

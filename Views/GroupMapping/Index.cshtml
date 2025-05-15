@@ -24,7 +24,7 @@
                 <form action="/" method="post">
                     <button type="submit"
                             class="btn btn-success my-1"
-                            formaction="/Excel/ExportGroupMappingExcel"
+                            formaction="@Url.Action("ExportGroupMappingExcel", "Excel")"
                             formmethod="post">
                         <i class="bi bi-file-earmark-excel"></i> Export Excel
                     </button>
@@ -34,7 +34,7 @@
 
             <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
             <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-3 mb-2">
-                <form id="filterForm" class="d-flex flex-row" action="/GroupMapping/Index" method="post">
+                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "GroupMapping")" method="post">
                     <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
                         <option value="GroupCode">GroupCode</option>
                     </select>

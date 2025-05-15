@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
                 <h4 class="text-center mb-4" style="color: #11395C;">Enter PAN Number</h4>
-                <form method="post" action="/Login/AuthenticatePan">
+                <form method="post" action="@Url.Action("AuthenticatePan", "Login")">
                     <div class="mb-3">
                         <label class="form-label">PAN Number</label>
                         <input type="text" class="form-control" name="pan" required />

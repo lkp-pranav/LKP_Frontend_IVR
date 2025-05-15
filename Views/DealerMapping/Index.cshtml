@@ -24,7 +24,7 @@
                 <div class="pe-2">
                     <a href="@Url.Action("Index", "DealerMapping")" class="btn btn-secondary">Clear</a>
                 </div>
-                <form id="filterForm" class="d-flex flex-row" action="/DealerMapping/Index" method="post">
+                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "DealerMapping")" method="post">
                     <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
                         <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                         <option value="PrimaryDealer" selected="@(inputModel?.PrimaryDealer != "" ? "selected" : null)">Primary Dealer ID</option>
@@ -189,7 +189,7 @@
 <div class="modal fade" id="addDealerModal" tabindex="-1" aria-labelledby="addDealerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <form id="addDealerForm" method="post" action="/DealerMapping/CreateMapping">
+            <form id="addDealerForm" method="post" action="@Url.Action("CreateMapping", "DealerMapping")">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addDealerModalLabel">Add Dealer Mapping</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -270,7 +270,7 @@
 <div class="modal fade" id="updateDealerModal" tabindex="-1" aria-labelledby="updateDealerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <form id="updateDealerForm" method="post" action="/DealerMapping/UpdateMapping">
+            <form id="updateDealerForm" method="post" action="@Url.Action("UpdateMapping", "DealerMapping")">
                 <input type="hidden" name="RowId" id="rowIdInputUpdate" />
                 <div class="modal-header">
                     <h5 class="modal-title" id="updateDealerModalLabel">Update Dealer Mapping</h5>
