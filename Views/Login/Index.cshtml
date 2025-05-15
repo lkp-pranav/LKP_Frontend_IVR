@@ -22,7 +22,7 @@
                 <img src="~/static/logo.png" alt="LKP Logo">
             </div>
             <div class="card-body">
-                <form method="post" action="/Login/Login">
+                <form method="post" action="@Url.Action("Login", "Login")">
                     <div class="mb-3">
                         <label class="form-label">User Type</label>
                         <input type="text" class="form-control" name="User_type" required />
