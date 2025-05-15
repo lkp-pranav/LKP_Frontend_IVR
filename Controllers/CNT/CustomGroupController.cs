@@ -16,12 +16,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private string _encKey = "";
+        private readonly string baseURL = "";
 
         public CustomGroupController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
             _encKey = _Configuration.GetSection("encKey").Value;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
         public async Task<IActionResult> Index(CustomGroupFilterModel inputModel)
@@ -34,7 +36,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<CustomGroupResponse> model = new List<CustomGroupResponse>();
-            string url = $"https://localhost:7121/api/CustomGroup/GetAllCustomGroups";
+            string url = $"{baseURL}/api/CustomGroup/GetAllCustomGroups";
             responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
@@ -57,7 +59,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_type = sessionUser.user_type;
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                "https://localhost:7121/api/CustomGroup/CreateCustomGroup", 
+                $"{baseURL}/api/CustomGroup/CreateCustomGroup", 
                 inputModel, "Bearer", 
                 sessionUser.accessToken
             );
@@ -82,7 +84,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_type = sessionUser.user_type;
             ResponsePayLoad response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                "https://localhost:7121/api/CustomGroup/UpdateCustomGroup",
+                $"{baseURL}/api/CustomGroup/UpdateCustomGroup",
                 inputModel, "Bearer",
                 sessionUser.accessToken
             );
@@ -108,7 +110,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             var responsePayload = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/CustomGroup/DeleteCustomGroup?groupCode={groupCode}",
+                $"{baseURL}/api/CustomGroup/DeleteCustomGroup?groupCode={groupCode}",
                 user,
                 "Bearer",
                 sessionUser.accessToken

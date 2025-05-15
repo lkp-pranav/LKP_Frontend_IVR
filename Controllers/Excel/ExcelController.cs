@@ -2,6 +2,7 @@
 using LKP_Frontend_MVC.Models.Response.User;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -9,11 +10,15 @@ namespace LKP_Frontend_MVC.Controllers.Excel
 {
     public class ExcelController : Controller
     {
+        private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
 
-        public ExcelController(HttpClient httpClient)
+        public ExcelController(IConfiguration configuration, HttpClient httpClient)
         {
+            _Configuration = configuration;
             _httpClient = httpClient;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
         [HttpPost]
@@ -37,7 +42,7 @@ namespace LKP_Frontend_MVC.Controllers.Excel
 
             // Send POST request with CommonModel data
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.PostAsync("https://localhost:7121/api/Excel/ExportClientDealerExcel", content);
+            var response = await _httpClient.PostAsync($"{baseURL}/api/Excel/ExportClientDealerExcel", content);
 
             if (!response.IsSuccessStatusCode)
                 return Content("Failed to export data.");
@@ -68,7 +73,7 @@ namespace LKP_Frontend_MVC.Controllers.Excel
 
             // Send POST request with CommonModel data
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.PostAsync("https://localhost:7121/api/Excel/ExportGroupMappingExcel", content);
+            var response = await _httpClient.PostAsync($"{baseURL}/api/Excel/ExportGroupMappingExcel", content);
 
             if (!response.IsSuccessStatusCode)
                 return Content("Failed to export data.");
@@ -96,7 +101,7 @@ namespace LKP_Frontend_MVC.Controllers.Excel
 
             // Send POST request with CommonModel data
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.PostAsync("https://localhost:7121/api/Excel/ExportDealerCreationFile", content);
+            var response = await _httpClient.PostAsync($"{baseURL}/api/Excel/ExportDealerCreationFile", content);
 
             if (!response.IsSuccessStatusCode)
                 return Content("Failed to export data.");

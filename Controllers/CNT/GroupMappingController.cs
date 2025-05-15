@@ -16,11 +16,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
 
         public GroupMappingController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
         public async Task<IActionResult> Index(GroupFilterModel inputModel)
@@ -33,7 +35,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<GroupCNTResponse> model = new List<GroupCNTResponse>();
 
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient,"https://localhost:7121/api/GroupCNT/GetAllMapping",inputModel,"Bearer",sessionUser.accessToken);
+            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient,$"{baseURL}/api/GroupCNT/GetAllMapping",inputModel,"Bearer",sessionUser.accessToken);
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {

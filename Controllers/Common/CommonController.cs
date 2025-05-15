@@ -17,11 +17,13 @@ namespace LKP_Frontend_MVC.Controllers.Common
     {
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
 
         public CommonController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
         //[HttpPost]
@@ -37,7 +39,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                "https://localhost:7121/api/CommonIVR/GetZoneList",
+                $"{baseURL}/api/CommonIVR/GetZoneList",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -57,7 +59,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/CommonIVR/GetDealerBasisZone?Zone={Zone}",
+                $"{baseURL}/api/CommonIVR/GetDealerBasisZone?Zone={Zone}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -76,7 +78,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/CommonIVR/FetchBranch?zone={Zone}",
+                $"{baseURL}/api/CommonIVR/FetchBranch?zone={Zone}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -96,7 +98,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/CommonIVR/FetchDealerByBranch?branchCode={branchCode}",
+                $"{baseURL}/api/CommonIVR/FetchDealerByBranch?branchCode={branchCode}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -116,7 +118,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/CommonIVR/FetchDealerByGroup?groupCode={groupCode}",
+                $"{baseURL}/api/CommonIVR/FetchDealerByGroup?groupCode={groupCode}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -138,7 +140,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var response = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/CommonIVR/GetDealerSegment?dealer={dealer}",
+                $"{baseURL}/api/CommonIVR/GetDealerSegment?dealer={dealer}",
                 user,
                 "Bearer",
                 sessionUser.accessToken

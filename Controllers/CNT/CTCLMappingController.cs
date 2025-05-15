@@ -13,11 +13,15 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 {
     public class CTCLMappingController : Controller
     {
+        private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
 
-        public CTCLMappingController(HttpClient httpClient)
+        public CTCLMappingController(IConfiguration configuration,HttpClient httpClient)
         {
+            _Configuration = configuration;
             _httpClient = httpClient;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
         public async Task<IActionResult> Index(CTCLMappingFilterModel inputModel)
@@ -30,7 +34,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<CTCLMappingResponse> model = new List<CTCLMappingResponse>();
             inputModel.Category = inputModel.Category ?? "ALL";
-            string url = "https://localhost:7121/api/CTCLMapping/GetAllMapping";
+            string url = $"{baseURL}/api/CTCLMapping/GetAllMapping";
             responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)

@@ -9,11 +9,13 @@ namespace LKP_Frontend_MVC.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
+        private readonly string lkpConnectURL = "";
 
         public LoginCheckMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
             _configuration = configuration;
+            lkpConnectURL = _configuration["ApiSettings:LkpConnect"];
         }
 
         public async Task Invoke(HttpContext context)
@@ -40,7 +42,7 @@ namespace LKP_Frontend_MVC.Middleware
 
                 if (string.IsNullOrEmpty(sessionUserJson))
                 {
-                    context.Response.Redirect("/Login/Index");
+                    context.Response.Redirect("https://lkpconnect.net.in");
                     return;
                 }
 

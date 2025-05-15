@@ -15,6 +15,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
     {
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
         private string _encKey = "";
 
         public BranchMappingController(IConfiguration configuration, HttpClient httpClient)
@@ -22,6 +23,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _Configuration = configuration;
             _httpClient = httpClient;
             _encKey = _Configuration.GetSection("encKey").Value;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
         
@@ -36,7 +38,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<BranchCNTResponse> model = new List<BranchCNTResponse>();
 
-            string url = $"https://localhost:7121/api/BranchCNT/GetAllBranchCNTMapping";
+            string url = $"{baseURL}/api/BranchCNT/GetAllBranchCNTMapping";
             responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel,"Bearer", sessionUser.accessToken);
 
             if(responsePayLoad == null || !responsePayLoad.isSuccess)
@@ -63,7 +65,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             branchCNTInput.user_type = sessionUser.user_type;
             branchCNTInput.IsHOCNT = IsHOCNT;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient,"https://localhost:7121/api/BranchCNT/CreateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient,$"{baseURL}/api/BranchCNT/CreateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
 
             if (response == null || !response.isSuccess)
             {
@@ -85,7 +87,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             var responsePayload = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}",
+                $"{baseURL}/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -114,7 +116,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             branchCNTInput.user_type = sessionUser.user_type;
             branchCNTInput.IsHOCNT = IsHOCNT;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/BranchCNT/UpdateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/BranchCNT/UpdateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
 
             if (response == null || !response.isSuccess)
             {

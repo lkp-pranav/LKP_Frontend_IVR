@@ -17,11 +17,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
 
         public ClientDealerController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
    
         public async Task<IActionResult> Index(ClientDealerFilterModel inputModel)
@@ -34,7 +36,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<ClientDealerResponse> model = new List<ClientDealerResponse>();
 
-            string url = $"https://localhost:7121/api/ClientDealer/GetAllMapping";
+            string url = $"{baseURL}/api/ClientDealer/GetAllMapping";
             responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel,"Bearer", sessionUser.accessToken);
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
@@ -61,7 +63,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             ClientGroupResponse groupList = new ClientGroupResponse();
 
-            string url = $"https://localhost:7121/api/ClientDealer/GetClientGroups?clientCode={clientCode}";
+            string url = $"{baseURL}/api/ClientDealer/GetClientGroups?clientCode={clientCode}";
             var responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, user, "Bearer", sessionUser.accessToken);
 
             groupList = JsonConvert.DeserializeObject<ClientGroupResponse>(responsePayLoad.data.ToString());
@@ -86,7 +88,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
-            var response = await _httpClient.PostAsync("https://localhost:7121/api/ClientDealer/GetUploadMapping?option=DealerAdd", content);
+            var response = await _httpClient.PostAsync($"{baseURL}/api/ClientDealer/GetUploadMapping?option=DealerAdd", content);
 
             if (!response.IsSuccessStatusCode)
                 return Content("Failed to export data.");
@@ -112,7 +114,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
-            var response = await _httpClient.PostAsync("https://localhost:7121/api/ClientDealer/GetUploadMapping?option=DealerDelete", content);
+            var response = await _httpClient.PostAsync($"{baseURL}/api/ClientDealer/GetUploadMapping?option=DealerDelete", content);
 
             if (!response.IsSuccessStatusCode)
                 return Content("Failed to export data.");

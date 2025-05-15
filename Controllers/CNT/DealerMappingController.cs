@@ -17,11 +17,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
     {
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
+        private readonly string baseURL = "";
 
         public DealerMappingController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
+            baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
 
        
@@ -36,7 +38,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             ResponsePayLoad responsePayLoad = new ResponsePayLoad();
             List<DealerCNTResponse> model = new List<DealerCNTResponse>();
 
-            string url = $"https://localhost:7121/api/DealerCNT/GetAllDealerCNTMapping";
+            string url = $"{baseURL}/api/DealerCNT/GetAllDealerCNTMapping";
             responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
@@ -60,7 +62,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.user_id = sessionUser.user_id;
             dealerCNTModel.user_type = sessionUser.user_type;   
             
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
             if (response == null || !response.isSuccess)
             {
                 TempData["ToastMessage"] = response?.errorMessages ?? "Error in creating Dealer Mapping!!.";
@@ -81,7 +83,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             var responsePayload = await LoginHelper.SendHttpRequest(
                 _httpClient,
-                $"https://localhost:7121/api/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}",
+                $"{baseURL}/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
@@ -107,7 +109,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.user_id = sessionUser.user_id;
             dealerCNTModel.user_type = sessionUser.user_type;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, "https://localhost:7121/api/DealerCNT/UpdateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/DealerCNT/UpdateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
 
             if (response == null || !response.isSuccess)
             {
