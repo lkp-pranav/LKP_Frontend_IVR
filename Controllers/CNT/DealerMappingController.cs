@@ -98,7 +98,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             var responsePayload = await RequestHelper.SendHttpRequest(
                 _httpClient,
-                $"{baseURL}/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}",
+                $"{baseURL}/api/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}",
                 user,
                 "Bearer",
                 sessionUser.accessToken
