@@ -25,6 +25,8 @@
         })
             .then(res => res.json()) // ✅ Correctly parse JSON here
             .then(response => {
+                console.log(`[DEBUG] Parsed response:`, response);
+
                 // Clear any existing content
                 targetInput.innerHTML = "";
 
@@ -39,6 +41,7 @@
                 }
             })
             .catch(err => {
+                //console.error(`[ERROR] Failed to fetch ${label} dealer segment:`, err);
                 targetInput.textContent = "-";
             });
     }

@@ -39,6 +39,7 @@
             })
                 .then(res => res.json())
                 .then(response => {
+                    console.log(response);
                     if (response.isSuccess && response.data && response.data.length > 0) {
 
                         const table = document.createElement("table");

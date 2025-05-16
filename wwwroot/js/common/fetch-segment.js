@@ -8,8 +8,11 @@
     function fetchSegment(dealerId, targetInput, label) {
         if (!dealerId) {
             targetInput.textContent = "-";
+            console.log(`[INFO] No ${label} dealer selected`);
             return;
         }
+
+        console.log(`[DEBUG] Fetching segment for ${label} dealer ID: ${dealerId}`);
 
         fetch(`${window.appBasePath}/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`, {
             method: 'POST',
@@ -19,6 +22,8 @@
         })
             .then(res => res.json()) // ✅ Correctly parse JSON here
             .then(response => {
+                console.log(`[DEBUG] Parsed response:`, response);
+
                 // Clear any existing content
                 targetInput.innerHTML = "";
 
@@ -41,6 +46,7 @@
     primaryDealerDropdown?.addEventListener("change", function () {
         const selectedOption = this.options[this.selectedIndex];
         const dealerId = selectedOption.getAttribute("data-dealerId");
+        console.log("this is the primary dealer id: ", dealerId);
         fetchSegment(dealerId, primarySegment, "primary");
         secondarySegment.innerHTML = "-"
     });
