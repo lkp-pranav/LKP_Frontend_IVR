@@ -16,7 +16,6 @@
         })
             .then(res => res.json())
             .then(response => {
-                //console.log(response.data)
                 if (response.isSuccess && response.data) {
                     zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
                     response.data.forEach(zone => {
@@ -26,7 +25,6 @@
                         zoneDropdown.appendChild(opt);
                     });
                 }
-                console.log(zoneDropdown)
             })
             .catch(error => console.error("Error fetching zones:", error));
     });
@@ -59,7 +57,6 @@
             .then(res => res.json())
             .then(response => {
                 if (response.isSuccess && response.data) {
-                    //console.log(response.data)
                     response.data.forEach(branch => {
                         const opt = document.createElement("option");
                         opt.value = branch;
@@ -92,7 +89,6 @@
             .then(res => res.json())
             .then(response => {
                 if (response.isSuccess && response.data) {
-                    console.log(response);
                     response.data.forEach((item, index) => {
                         // Creating container div for each checkbox
                         const checkboxContainer = document.createElement('div');
@@ -160,8 +156,6 @@
             Active: activeCheckbox.checked ? "Y" : "N"
         };
 
-        console.log("Payload to send:", payload);
-
         fetch(`${window.appBasePath}/CustomGroup/CreateCustomGroup`, {
             method: 'POST',
             headers: {
@@ -172,7 +166,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log("Success:", data.message);
                     bootstrap.Modal.getInstance(modal)?.hide();
                     window.location.href = `${window.appBasePath}/CustomGroup/Index`; // manually reload/redirect
                 } else {

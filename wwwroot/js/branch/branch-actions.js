@@ -19,10 +19,8 @@
             }
         })
             .then(response => {
-                console.log(`Base URL: ${window.appBasePath}`)
                 if (response.redirected) {
                     window.location.href = response.url;
-                    console.log(`Base URL: ${window.appBasePath}`)
                 } else {
                     return response.json();
                 }

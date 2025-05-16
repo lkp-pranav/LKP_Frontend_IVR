@@ -19,7 +19,6 @@
         })
         .then(res => res.json())
         .then(response => {
-            console.log("Base url: ",window.appBasePath);
             if (response.isSuccess && response.data) {
                 zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
                 response.data.forEach(zone => {
@@ -29,7 +28,6 @@
                     zoneDropdown.appendChild(opt);
                 });
             }
-            console.log(zoneDropdown)
         })
         .catch(error => console.error("Error fetching zones:", error));
     });
@@ -61,7 +59,6 @@
         })
         .then(res => res.json())
         .then(response => {
-            console.log(response);
             if (response.isSuccess && response.data) {
                 response.data.forEach(dealerObj => {
                     const opt = document.createElement("option");

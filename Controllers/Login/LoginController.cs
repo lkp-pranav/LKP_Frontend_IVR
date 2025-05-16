@@ -57,7 +57,6 @@ namespace LKP_Frontend_MVC.Controllers.Login
             var requestData = new EncryptedDataInput { Data = encryptedData };
 
             ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/Login", requestData, "Basic", base64Credentials);
-            Console.WriteLine("Response after login", responsePayload);
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
@@ -101,7 +100,6 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             if (string.IsNullOrEmpty(bearerKey) || string.IsNullOrEmpty(encryptedData))
             {
-                Console.WriteLine("Missing Bearer Key or Encrypted Data");
                 return RedirectToAction("VerifyPan");
             }
 
@@ -138,7 +136,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("VerifyPan");
             }
-            Console.WriteLine(responsePayload.data);
+            
             JObject jsonData = JObject.FromObject(responsePayload.data);
             string username = jsonData?["name"]?.ToString();
 
@@ -192,7 +190,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("VerifyPan");
             }
-            Console.WriteLine(responsePayload.data);
+            
             JObject jsonData = JObject.FromObject(responsePayload.data);
             string username = jsonData?["name"]?.ToString();
 
