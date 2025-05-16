@@ -10,7 +10,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LKP_Frontend_MVC.Utils
 {
-    public class LoginHelper
+    public class RequestHelper
     {
         [HttpPost]
         public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient _httpClient, string url, T data, string authType, string authToken)

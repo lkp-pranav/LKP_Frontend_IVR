@@ -13,11 +13,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 {
     public class BranchMappingController : Controller
     {
+        #region Fields
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private readonly string baseURL = "";
         private string _encKey = "";
+        #endregion
 
+        #region Constructor
         public BranchMappingController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
@@ -25,8 +28,10 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _encKey = _Configuration.GetSection("encKey").Value;
             baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
+        #endregion
 
-        
+        #region Methods
+        // GET: Branch CNT Mapping
         public async Task<IActionResult> Index(BranchCNTFilterModel inputModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -35,25 +40,27 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
-            ResponsePayLoad responsePayLoad = new ResponsePayLoad();
-            List<BranchCNTResponse> model = new List<BranchCNTResponse>();
-
-            string url = $"{baseURL}/api/BranchCNT/GetAllBranchCNTMapping";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel,"Bearer", sessionUser.accessToken);
+            var responsePayLoad = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/BranchCNT/GetAllBranchCNTMapping", 
+                inputModel,
+                "Bearer",
+                sessionUser.accessToken
+            );
 
             if(responsePayLoad == null || !responsePayLoad.isSuccess)
             {
                 return View("Error");
             }
 
-            model = JsonConvert.DeserializeObject<List<BranchCNTResponse>>(responsePayLoad.data.ToString());
+            var model = JsonConvert.DeserializeObject<List<BranchCNTResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
             
             return View(responsePayLoad);
         }
 
-        [HttpPost]
+        [HttpPost] // CREATE: Branch CNT Mapping
         public async Task<IActionResult> CreateMapping(BranchCNTInputModel branchCNTInput)
         {
 
@@ -65,7 +72,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             branchCNTInput.user_type = sessionUser.user_type;
             branchCNTInput.IsHOCNT = IsHOCNT;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient,$"{baseURL}/api/BranchCNT/CreateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
+            var response = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/BranchCNT/CreateBranchCNTMapping", 
+                branchCNTInput,
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
             if (response == null || !response.isSuccess)
             {
@@ -73,19 +86,20 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
+
             TempData["ToastMessage"] = response.message ?? "Branch mapping created successfully!!.";
             TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpPost] // DELETE: Branch CNT Mapping
         public async Task<IActionResult> DeleteMapping(int rowId)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var responsePayload = await LoginHelper.SendHttpRequest(
+            var responsePayload = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}",
                 user,
@@ -105,7 +119,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpPost] // UPDATE: Branch CNT Mapping
         public async Task<IActionResult> UpdateMapping(BranchCNTInputModel branchCNTInput)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -116,7 +130,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             branchCNTInput.user_type = sessionUser.user_type;
             branchCNTInput.IsHOCNT = IsHOCNT;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/BranchCNT/UpdateBranchCNTMapping", branchCNTInput, "Bearer", sessionUser.accessToken);
+            var response = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/BranchCNT/UpdateBranchCNTMapping",
+                branchCNTInput, 
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
             if (response == null || !response.isSuccess)
             {
@@ -124,12 +144,12 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
+
             TempData["ToastMessage"] = response.message ?? "Branch mapping Updated successfully!!.";
             TempData["ToastType"] = "success";
-
             return RedirectToAction("Index");
-
         }
+        #endregion
 
     }
 }

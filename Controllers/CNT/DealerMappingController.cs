@@ -15,18 +15,23 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 {
     public class DealerMappingController : Controller
     {
+        #region Fields
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private readonly string baseURL = "";
+        #endregion
 
+        #region Constructor
         public DealerMappingController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
             baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
+        #endregion
 
-       
+        #region Methods
+        // GET: Secondary Dealer Mapping
         public async Task<IActionResult> Index(DealerCNTFilterModel inputModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -35,18 +40,20 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
-            ResponsePayLoad responsePayLoad = new ResponsePayLoad();
-            List<DealerCNTResponse> model = new List<DealerCNTResponse>();
-
-            string url = $"{baseURL}/api/DealerCNT/GetAllDealerCNTMapping";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
+            var responsePayLoad = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/DealerCNT/GetAllDealerCNTMapping", 
+                inputModel, 
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {
                 return View("Error");
             }
 
-            model = JsonConvert.DeserializeObject<List<DealerCNTResponse>>(responsePayLoad.data.ToString());
+            var model = JsonConvert.DeserializeObject<List<DealerCNTResponse>>(responsePayLoad.data.ToString());
 
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
@@ -54,7 +61,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return View(responsePayLoad);
         }
 
-        [HttpPost]
+        [HttpPost] // CREATE: Secondary Dealer Mapping
         public async Task<IActionResult> CreateMapping(DealerCNTInputModel dealerCNTModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -62,26 +69,34 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.user_id = sessionUser.user_id;
             dealerCNTModel.user_type = sessionUser.user_type;   
             
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/DealerCNT/CreateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+            var response = await RequestHelper.SendHttpRequest(
+                _httpClient, 
+                $"{baseURL}/api/DealerCNT/CreateDealerCNTMapping",
+                dealerCNTModel, 
+                "Bearer", 
+                sessionUser.accessToken
+            );
+
             if (response == null || !response.isSuccess)
             {
                 TempData["ToastMessage"] = response?.errorMessages ?? "Error in creating Dealer Mapping!!.";
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
+
             TempData["ToastMessage"] = response.message ??"Dealer mapping created successfully!!.";
             TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpPost] // DELETE: Secondary Dealer Mapping
         public async Task<IActionResult> DeleteMapping(int rowId)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var responsePayload = await LoginHelper.SendHttpRequest(
+            var responsePayload = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/DealerCNT/DeleteDealerCNTMapping?rowId={rowId}",
                 user,
@@ -101,7 +116,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpPost] // UPDATE: Secondary Dealer Mapping
         public async  Task<IActionResult> UpdateMapping(DealerCNTInputModel dealerCNTModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -109,7 +124,13 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             dealerCNTModel.user_id = sessionUser.user_id;
             dealerCNTModel.user_type = sessionUser.user_type;
 
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/DealerCNT/UpdateDealerCNTMapping", dealerCNTModel, "Bearer", sessionUser.accessToken);
+            var response = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/DealerCNT/UpdateDealerCNTMapping",
+                dealerCNTModel, 
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
             if (response == null || !response.isSuccess)
             {
@@ -117,9 +138,11 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("Index");
             }
+
             TempData["ToastMessage"] = response.message?? "Mapping created successfully.";
             TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
+        #endregion
     }
 }

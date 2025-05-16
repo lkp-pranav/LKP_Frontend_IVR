@@ -37,7 +37,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
                 user_type = sessionUser.user_type
             };
 
-            var response = await LoginHelper.SendHttpRequest(
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/GetZoneList",
                 user,
@@ -57,7 +57,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var user = new CommonModel{ user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var response = await LoginHelper.SendHttpRequest(
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/GetDealerBasisZone?Zone={Zone}",
                 user,
@@ -76,7 +76,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var response = await LoginHelper.SendHttpRequest(
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/FetchBranch?zone={Zone}",
                 user,
@@ -96,7 +96,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var response = await LoginHelper.SendHttpRequest(
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/FetchDealerByBranch?branchCode={branchCode}",
                 user,
@@ -116,7 +116,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var response = await LoginHelper.SendHttpRequest(
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/FetchDealerByGroup?groupCode={groupCode}",
                 user,
@@ -138,7 +138,7 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             ResponsePayLoad payLoad = new ResponsePayLoad();
 
-            var response = await LoginHelper.SendHttpRequest(
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/GetDealerSegment?dealer={dealer}",
                 user,

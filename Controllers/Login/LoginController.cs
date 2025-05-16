@@ -14,7 +14,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
 {
     public class LoginController : Controller
     {
-        #region fields
+        #region Fields
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private readonly string _key;
@@ -23,7 +23,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
         private readonly string lkpConnectURL = "";
         #endregion
 
-        #region constructor
+        #region Constructor
         public LoginController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
@@ -56,7 +56,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             string base64Credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"admin:admin"));
             var requestData = new EncryptedDataInput { Data = encryptedData };
 
-            ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/Login", requestData, "Basic", base64Credentials);
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/Login", requestData, "Basic", base64Credentials);
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
@@ -103,7 +103,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
                 return RedirectToAction("VerifyPan");
             }
 
-            var user = LoginHelper.DeserializeEncryptedData<TwoFactorAuthInputModel>(encryptedData, _encKey);
+            var user = RequestHelper.DeserializeEncryptedData<TwoFactorAuthInputModel>(encryptedData, _encKey);
             if (user == null)
             {
                 return RedirectToAction("VerifyPan");
@@ -128,7 +128,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
             var requestData = new EncryptedDataInput { Data = encrypted2FAData };
            
-            ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", bearerKey);
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", bearerKey);
 
             if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
             {
@@ -182,7 +182,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
             var requestData = new EncryptedDataInput { Data = encrypted2FAData };
 
-            ResponsePayLoad? responsePayload = await LoginHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", inputModel.accessToken);
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", inputModel.accessToken);
 
             if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
             {
@@ -208,11 +208,13 @@ namespace LKP_Frontend_MVC.Controllers.Login
         }
         #endregion
 
+        #region Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             // Redirect to login page
             return Redirect(lkpConnectURL);
         }
+        #endregion
     }
 }
