@@ -14,18 +14,24 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 {
     public class ClientDealerController : Controller
     {
-
+        #region Fields
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private readonly string baseURL = "";
+        #endregion
 
+        #region Constructor
         public ClientDealerController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
             baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
-   
+        #endregion
+
+        #region Methods
+
+        // GET: Client-Dealer Mapping
         public async Task<IActionResult> Index(ClientDealerFilterModel inputModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -33,25 +39,28 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
-            ResponsePayLoad responsePayLoad = new ResponsePayLoad();
-            List<ClientDealerResponse> model = new List<ClientDealerResponse>();
-
-            string url = $"{baseURL}/api/ClientDealer/GetAllMapping";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel,"Bearer", sessionUser.accessToken);
+            var responsePayLoad = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/ClientDealer/GetAllMapping", 
+                inputModel,
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {
                 return View(new List<ClientDealerResponse>());
             }
-            model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());
+
+            var model = JsonConvert.DeserializeObject<List<ClientDealerResponse>>(responsePayLoad.data.ToString());
+
             inputModel.Category = inputModel.Category ?? "ALL";
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
-
             return View(responsePayLoad);
         }
 
-        [HttpPost]
+        [HttpPost] // GET: Client Group Info
         public async Task<IActionResult> GetClientGroups(string clientCode)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -61,18 +70,21 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 user_type = sessionUser.user_type
             };
 
-            ClientGroupResponse groupList = new ClientGroupResponse();
+            var responsePayLoad = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/ClientDealer/GetClientGroups?clientCode={clientCode}",
+                user, 
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
-            string url = $"{baseURL}/api/ClientDealer/GetClientGroups?clientCode={clientCode}";
-            var responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, user, "Bearer", sessionUser.accessToken);
-
-            groupList = JsonConvert.DeserializeObject<ClientGroupResponse>(responsePayLoad.data.ToString());
+            var groupList = JsonConvert.DeserializeObject<ClientGroupResponse>(responsePayLoad.data.ToString());
             responsePayLoad.data = groupList;
 
             return Json(responsePayLoad);
         }
 
-        [HttpPost]
+        [HttpPost] // EXPORT: Add Dealer Client CSV
         public async Task<IActionResult> AddDealerClientCSV()
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -98,7 +110,7 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return File(stream, "application/octet-stream", "Add_ClientDealerMapping.csv");
         }
 
-        [HttpPost]
+        [HttpPost] // EXPORT: Delete Dealer Client CSV
         public async Task<IActionResult> DeleteDealerClientCSV()
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -123,5 +135,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             return File(stream, "application/octet-stream", "Delete_ClientDealerMapping.csv");
         }
+        #endregion
     }
 }

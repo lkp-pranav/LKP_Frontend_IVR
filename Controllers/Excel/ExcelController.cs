@@ -10,18 +10,23 @@ namespace LKP_Frontend_MVC.Controllers.Excel
 {
     public class ExcelController : Controller
     {
+        #region Fields
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private readonly string baseURL = "";
+        #endregion
 
+        #region Constructor
         public ExcelController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
             _httpClient = httpClient;
             baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
+        #endregion
 
-        [HttpPost]
+        #region Methods
+        [HttpPost] // EXPORT: Client Dealer Excel
         public async Task<IActionResult> ExportClientDealerExcel()
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -52,7 +57,7 @@ namespace LKP_Frontend_MVC.Controllers.Excel
         }
 
 
-        [HttpPost]
+        [HttpPost] // EXPORT: Group Mapping Excel
         public async Task<IActionResult> ExportGroupMappingExcel()
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -82,7 +87,7 @@ namespace LKP_Frontend_MVC.Controllers.Excel
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "GroupMappingList.xlsx");
         }
 
-        [HttpPost]
+        [HttpPost] // EXPORT: Dealer Creation Excel
         public async Task<IActionResult> ExportDealerCreationFile()
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -109,6 +114,7 @@ namespace LKP_Frontend_MVC.Controllers.Excel
             var stream = await response.Content.ReadAsStreamAsync();
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Dealer_Creation.xlsx");
         }
+        #endregion
 
     }
 }

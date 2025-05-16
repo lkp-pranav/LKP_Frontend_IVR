@@ -13,11 +13,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 {
     public class CustomGroupController : Controller
     {
+        #region Fields
         private readonly IConfiguration _Configuration;
         private readonly HttpClient _httpClient;
         private string _encKey = "";
         private readonly string baseURL = "";
+        #endregion
 
+        #region Constructor
         public CustomGroupController(IConfiguration configuration, HttpClient httpClient)
         {
             _Configuration = configuration;
@@ -25,7 +28,10 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             _encKey = _Configuration.GetSection("encKey").Value;
             baseURL = _Configuration["ApiSettings:BaseUrl"];
         }
+        #endregion
 
+        #region Methods
+        // GET: Custom Groups 
         public async Task<IActionResult> Index(CustomGroupFilterModel inputModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
@@ -34,30 +40,35 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
-            ResponsePayLoad responsePayLoad = new ResponsePayLoad();
-            List<CustomGroupResponse> model = new List<CustomGroupResponse>();
-            string url = $"{baseURL}/api/CustomGroup/GetAllCustomGroups";
-            responsePayLoad = await LoginHelper.SendHttpRequest(_httpClient, url, inputModel, "Bearer", sessionUser.accessToken);
+            var responsePayLoad = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/CustomGroup/GetAllCustomGroups", 
+                inputModel, 
+                "Bearer", 
+                sessionUser.accessToken
+            );
 
             if (responsePayLoad == null || !responsePayLoad.isSuccess)
             {
                 return View("Error");
             }
 
-            model = JsonConvert.DeserializeObject<List<CustomGroupResponse>>(responsePayLoad.data.ToString());
+            var model = JsonConvert.DeserializeObject<List<CustomGroupResponse>>(responsePayLoad.data.ToString());
             responsePayLoad.data = model;
             responsePayLoad.message = inputModel;
 
             return View(responsePayLoad);
         }
 
+        [HttpPost] // CREATE: Custom Group
         public async Task<IActionResult> CreateCustomGroup([FromBody] CustomGroupInputModel inputModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(
+
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CustomGroup/CreateCustomGroup", 
                 inputModel, "Bearer", 
@@ -76,13 +87,15 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return Json(new { success = true, message = "Mapping created successfully." });
         }
 
+        [HttpPost] // UPDATE; Custom Group
         public async Task<IActionResult> UpdateCustomGroup([FromBody] CustomGroupInputModel inputModel)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
-            ResponsePayLoad response = await LoginHelper.SendHttpRequest(
+
+            var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CustomGroup/UpdateCustomGroup",
                 inputModel, "Bearer",
@@ -101,14 +114,14 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             return Json(new { success = true, message = "Mapping created successfully." });
         }
 
-        [HttpPost]
+        [HttpPost] // DELETE: Custom Group
         public async Task<IActionResult> DeleteCustomGroup(string groupCode)
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            var responsePayload = await LoginHelper.SendHttpRequest(
+            var responsePayload = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CustomGroup/DeleteCustomGroup?groupCode={groupCode}",
                 user,
@@ -127,5 +140,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             TempData["ToastType"] = "success";
             return RedirectToAction("Index");
         }
+        #endregion
     }
 }
