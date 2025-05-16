@@ -12,15 +12,17 @@
     document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
         if (!rowIdToDelete) return;
 
-        fetch(`/BranchMapping/DeleteMapping?rowId=${rowIdToDelete}`, {
+        fetch(`${window.appBasePath}/BranchMapping/DeleteMapping?rowId=${rowIdToDelete}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
             .then(response => {
+                console.log(`Base URL: ${window.appBasePath}`)
                 if (response.redirected) {
                     window.location.href = response.url;
+                    console.log(`Base URL: ${window.appBasePath}`)
                 } else {
                     return response.json();
                 }
@@ -53,7 +55,7 @@
             zoneDropdownUpdate.innerHTML = `<option value="${zone}" selected>${zone}</option>`; // Only the selected zone is shown
 
             // Fetch dealers for the selected zone
-            fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`, {
+            fetch(`${window.appBasePath}/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

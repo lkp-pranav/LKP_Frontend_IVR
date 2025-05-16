@@ -15,7 +15,7 @@
     // Utility functions
     async function getGroupDealers(groupCode) {
         try {
-            const res = await fetch(`/Common/FetchDealerByGroup?groupCode=${encodeURIComponent(groupCode)}`, {
+            const res = await fetch(`${window.appBasePath}/Common/FetchDealerByGroup?groupCode=${encodeURIComponent(groupCode)}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -31,7 +31,7 @@
 
     async function populateZones(selectedZone = '') {
         try {
-            const res = await fetch('/Common/GetZones', {
+            const res = await fetch(`${window.appBasePath}/Common/GetZones`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -53,7 +53,7 @@
 
     async function populateBranches(zone, selectedBranch = '') {
         try {
-            const res = await fetch(`/Common/FetchBranch?Zone=${encodeURIComponent(zone)}`, {
+            const res = await fetch(`${window.appBasePath}/Common/FetchBranch?Zone=${encodeURIComponent(zone)}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -75,7 +75,7 @@
 
     async function populateDealers(branch) {
         try {
-            const res = await fetch(`/Common/FetchDealerByBranch?branchCode=${encodeURIComponent(branch)}`, {
+            const res = await fetch(`${window.appBasePath}/Common/FetchDealerByBranch?branchCode=${encodeURIComponent(branch)}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -223,7 +223,7 @@
         submitButton.disabled = true;
         submitButton.innerText = "Updating...";
 
-        fetch('/CustomGroup/UpdateCustomGroup', { 
+        fetch(`${window.appBasePath}/CustomGroup/UpdateCustomGroup`, { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -236,7 +236,7 @@
                 if (data.success) { 
                     console.log("Success:", data.message);
                     bootstrap.Modal.getInstance(modal)?.hide();
-                    window.location.href = "/CustomGroup/Index";
+                    window.location.href = `${window.appBasePath}/CustomGroup/Index`;
                 } else {
                     console.error("Server Error:", data.message);
                     alert(data.message);

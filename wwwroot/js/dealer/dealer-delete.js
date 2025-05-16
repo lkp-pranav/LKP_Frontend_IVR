@@ -13,7 +13,7 @@
     confirmDeleteBtn.addEventListener("click", () => {
         if (!deleteRowId) return;
 
-        fetch(`/DealerMapping/DeleteMapping?rowId=${deleteRowId}`, {
+        fetch(`${window.appBasePath}/DealerMapping/DeleteMapping?rowId=${deleteRowId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })

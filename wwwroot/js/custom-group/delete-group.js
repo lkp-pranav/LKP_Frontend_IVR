@@ -12,7 +12,7 @@
     document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
         if (!groupToDelete) return;
 
-        fetch(`/CustomGroup/DeleteCustomGroup?groupCode=${groupToDelete}`, {
+        fetch(`${window.appBasePath}/CustomGroup/DeleteCustomGroup?groupCode=${groupToDelete}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

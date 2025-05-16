@@ -17,7 +17,7 @@
             return;
         }
 
-        fetch(`/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`, {
+        fetch(`${window.appBasePath}/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,7 +62,7 @@
             document.getElementById("rowIdInputUpdate").value = rowId;
             zoneDropdownUpdate.innerHTML = `<option value="${zone}" selected>${zone}</option>`;
 
-            fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`, {
+            fetch(`${window.appBasePath}/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

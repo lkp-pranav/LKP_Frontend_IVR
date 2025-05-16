@@ -11,7 +11,7 @@
 
     // Populate zones when modal is shown
     modal.addEventListener("shown.bs.modal", function () {
-        fetch('/Common/GetZones', {
+        fetch(`${window.appBasePath}/Common/GetZones`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -19,7 +19,7 @@
         })
         .then(res => res.json())
         .then(response => {
-            console.log(response.data)
+            console.log("Base url: ",window.appBasePath);
             if (response.isSuccess && response.data) {
                 zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
                 response.data.forEach(zone => {
@@ -41,7 +41,7 @@
         dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
         ctclInput.value = "-";
         rowIdInput.value = "";
-        form.action = "/BranchMapping/CreateMapping";
+        form.action = `${window.appBasePath}/BranchMapping/CreateMapping`;
         document.getElementById("addBranchModalLabel").textContent = "Add Branch Mapping";
     });
 
@@ -53,7 +53,7 @@
 
         if (!selectedZone) return;
 
-        fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
+        fetch(`${window.appBasePath}/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

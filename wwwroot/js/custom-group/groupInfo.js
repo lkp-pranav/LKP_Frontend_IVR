@@ -31,7 +31,7 @@
             modalBody.appendChild(groupInfoSection);
 
             // Fetch dealers
-            fetch(`/Common/FetchDealerByGroup?groupCode=${encodeURIComponent(groupCode)}`, {
+            fetch(`${window.appBasePath}/Common/FetchDealerByGroup?groupCode=${encodeURIComponent(groupCode)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

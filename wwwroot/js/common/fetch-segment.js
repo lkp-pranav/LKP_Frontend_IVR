@@ -14,7 +14,7 @@
 
         console.log(`[DEBUG] Fetching segment for ${label} dealer ID: ${dealerId}`);
 
-        fetch(`/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`, {
+        fetch(`${window.appBasePath}/Common/GetDealerSegment?dealer=${encodeURIComponent(dealerId)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

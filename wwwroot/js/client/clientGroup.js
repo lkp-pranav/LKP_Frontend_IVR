@@ -5,7 +5,7 @@
         button.addEventListener("click", function () {
             const clientCode = button.getAttribute("data-id");
 
-            fetch(`/ClientDealer/GetClientGroups?clientCode=${encodeURIComponent(clientCode)}`, {
+            fetch(`${window.appBasePath}/ClientDealer/GetClientGroups?clientCode=${encodeURIComponent(clientCode)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

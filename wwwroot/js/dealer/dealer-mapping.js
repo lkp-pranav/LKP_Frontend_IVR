@@ -40,7 +40,7 @@
     };
 
     modal.addEventListener("shown.bs.modal", function () {
-        fetch('/Common/GetZones', {
+        fetch(`${window.appBasePath}/Common/GetZones`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -79,7 +79,7 @@
 
         if (!selectedZone) return;
 
-        fetch(`/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
+        fetch(`${window.appBasePath}/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })

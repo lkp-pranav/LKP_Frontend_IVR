@@ -8,7 +8,7 @@
 
     // Populate zones when modal is shown
     modal.addEventListener("shown.bs.modal", () => {
-        fetch('/Common/GetZones', {
+        fetch(`${window.appBasePath}/Common/GetZones`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -50,7 +50,7 @@
 
         if (!selectedZone) return;
 
-        fetch(`/Common/FetchBranch?Zone=${encodeURIComponent(selectedZone)}`, {
+        fetch(`${window.appBasePath}/Common/FetchBranch?Zone=${encodeURIComponent(selectedZone)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,7 +83,7 @@
 
         if (!selectedBranch) return;
 
-        fetch(`/Common/FetchDealerByBranch?branchCode=${encodeURIComponent(selectedBranch)}`, {
+        fetch(`${window.appBasePath}/Common/FetchDealerByBranch?branchCode=${encodeURIComponent(selectedBranch)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -162,7 +162,7 @@
 
         console.log("Payload to send:", payload);
 
-        fetch('/CustomGroup/CreateCustomGroup', {
+        fetch(`${window.appBasePath}/CustomGroup/CreateCustomGroup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -174,7 +174,7 @@
                 if (data.success) {
                     console.log("Success:", data.message);
                     bootstrap.Modal.getInstance(modal)?.hide();
-                    window.location.href = "/CustomGroup/Index"; // manually reload/redirect
+                    window.location.href = `${window.appBasePath}/CustomGroup/Index`; // manually reload/redirect
                 } else {
                     alert(data.message)
                     console.error("Server Error:", data.message);
