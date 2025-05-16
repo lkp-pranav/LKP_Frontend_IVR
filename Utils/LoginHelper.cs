@@ -43,7 +43,6 @@ namespace LKP_Frontend_MVC.Utils
             catch (Exception ex)
             {
 
-                Console.WriteLine($"HTTP Request Failed: {ex.Message}");
                 return null;
             }
         }
@@ -66,7 +65,6 @@ namespace LKP_Frontend_MVC.Utils
             }
             catch(Exception ex) 
             {
-                Console.WriteLine($"HTTP Request Failed: {ex.Message}");
                 return null;
             }
             
@@ -82,7 +80,6 @@ namespace LKP_Frontend_MVC.Utils
             }
             catch
             {
-                Console.WriteLine("Failed to decrypt/deserialize data.");
                 return null;
             }
         }
