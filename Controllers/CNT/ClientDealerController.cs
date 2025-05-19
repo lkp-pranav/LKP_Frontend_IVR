@@ -94,18 +94,9 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 user_type = sessionUser.user_type
             };
 
-            var json = JsonConvert.SerializeObject(user);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var stream = await RequestHelper.CreateCSV(_httpClient, $"{baseURL}/api/ClientDealer/GetUploadMapping?option=DealerAdd", user, sessionUser.accessToken);
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
-
-            var response = await _httpClient.PostAsync($"{baseURL}/api/ClientDealer/GetUploadMapping?option=DealerAdd", content);
-
-            if (!response.IsSuccessStatusCode)
-                return Content("Failed to export data.");
-
-            var stream = await response.Content.ReadAsStreamAsync();
+            if(stream == null) return Content("Failed to export data.");
 
             return File(stream, "application/octet-stream", "Add_ClientDealerMapping.csv");
         }
@@ -120,18 +111,9 @@ namespace LKP_Frontend_MVC.Controllers.CNT
                 user_type = sessionUser.user_type
             };
 
-            var json = JsonConvert.SerializeObject(user);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var stream = await RequestHelper.CreateCSV(_httpClient, $"{baseURL}/api/ClientDealer/GetUploadMapping?option=DealerDelete", user, sessionUser.accessToken);
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
-
-            var response = await _httpClient.PostAsync($"{baseURL}/api/ClientDealer/GetUploadMapping?option=DealerDelete", content);
-
-            if (!response.IsSuccessStatusCode)
-                return Content("Failed to export data.");
-
-            var stream = await response.Content.ReadAsStreamAsync();
+            if (stream == null) return Content("Failed to export data.");
 
             return File(stream, "application/octet-stream", "Delete_ClientDealerMapping.csv");
         }

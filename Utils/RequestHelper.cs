@@ -71,7 +71,7 @@ namespace LKP_Frontend_MVC.Utils
             }
         }
 
-        // Handle .xlsx file creation requests  
+        // Handle .XLSX file creation requests  
         public static async Task<MemoryStream?> CreateExcel<T>(HttpClient _httpClient, string url, T data, string authToken)
         {
             using var request = new HttpRequestMessage(HttpMethod.Post, url)
@@ -95,6 +95,31 @@ namespace LKP_Frontend_MVC.Utils
             return stream;
         }
 
+        // Handle .CSV file creation requests  
+        public static async Task<MemoryStream> CreateCSV<T>(HttpClient _httpClient, string url, T data, string authToken)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json")
+            };
+
+            if(!string.IsNullOrWhiteSpace(authToken))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+            }
+
+            using var response = await _httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var stream = new MemoryStream();
+            await response.Content.CopyToAsync(stream);
+            stream.Position = 0;
+            return stream;
+
+        } 
         public static T? DeserializeEncryptedData<T>(string encryptedData, string _encKey) where T : class
         {
             try
