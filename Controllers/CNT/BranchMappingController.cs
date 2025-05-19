@@ -119,11 +119,9 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
-
             branchCNTInput.user_id = sessionUser.user_id;
             branchCNTInput.user_type = sessionUser.user_type;
-            branchCNTInput.IsHOCNT = IsHOCNT;
+            branchCNTInput.IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,

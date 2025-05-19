@@ -7,69 +7,69 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using LKP_Frontend_MVC.Models.Response.User;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net;
 
 namespace LKP_Frontend_MVC.Utils
 {
     public class RequestHelper
     {
         [HttpPost]
-        public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient _httpClient, string url, T data, string authType, string authToken)
+        public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient httpClient, string url, T data, string authType, string authToken)
         {
             try
             {
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authType, authToken);
+                using var request = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json")
+                };
 
-                var requestBody = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _httpClient.PostAsync(url, requestBody);
+                if (!string.IsNullOrWhiteSpace(authToken))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
+                }
 
-                if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                using var response = await httpClient.SendAsync(request);
+
+                string responseJson = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     return new ResponsePayLoad
                     {
                         isSuccess = false,
                         message = "Login Failed",
-                        errorMessages = "Please enter the correct crendentials"
+                        errorMessages = "Please enter the correct credentials",
+                        statusCode = HttpStatusCode.Unauthorized
                     };
                 }
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return null;
+                    return new ResponsePayLoad
+                    {
+                        isSuccess = false,
+                        message = $"Error: {response.ReasonPhrase}",
+                        errorMessages = responseJson,
+                        statusCode = response.StatusCode
+                    };
                 }
 
-                string responseJson = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<ResponsePayLoad>(responseJson);
+                var payload = JsonConvert.DeserializeObject<ResponsePayLoad>(responseJson);
+                payload.statusCode = response.StatusCode;
+                return payload;
             }
             catch (Exception ex)
             {
-
-                return null;
-            }
-        }
-
-        [HttpGet]
-        public static async Task<ResponsePayLoad?> SendHttpRequest(HttpClient _httpClient, string url, string authType, string authToken)
-        {
-            try
-            {
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authType, authToken);
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
+                
+                return new ResponsePayLoad
                 {
-                    return null;
-                }
-
-                string responseJson = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<ResponsePayLoad>(responseJson);
+                    isSuccess = false,
+                    message = "Exception occurred during API request.",
+                    errorMessages = ex.Message,
+                    statusCode = HttpStatusCode.InternalServerError
+                };
             }
-            catch(Exception ex) 
-            {
-                return null;
-            }
-            
         }
-
 
         public static T? DeserializeEncryptedData<T>(string encryptedData, string _encKey) where T : class
         {
