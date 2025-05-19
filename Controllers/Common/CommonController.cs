@@ -136,8 +136,6 @@ namespace LKP_Frontend_MVC.Controllers.Common
 
             var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
 
-            ResponsePayLoad payLoad = new ResponsePayLoad();
-
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CommonIVR/GetDealerSegment?dealer={dealer}",

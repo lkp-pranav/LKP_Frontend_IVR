@@ -63,14 +63,11 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         [HttpPost] // CREATE: Branch CNT Mapping
         public async Task<IActionResult> CreateMapping(BranchCNTInputModel branchCNTInput)
         {
-
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
-
-            int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
             branchCNTInput.user_id = sessionUser.user_id;
             branchCNTInput.user_type = sessionUser.user_type;
-            branchCNTInput.IsHOCNT = IsHOCNT;
+            branchCNTInput.IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
@@ -97,12 +94,10 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            var user = new CommonModel { user_id = sessionUser.user_id, user_type = sessionUser.user_type };
-
             var responsePayload = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/BranchCNT/DeleteBranchCNTMapping?rowId={rowId}",
-                user,
+                sessionUser,
                 "Bearer",
                 sessionUser.accessToken
             );
@@ -124,11 +119,9 @@ namespace LKP_Frontend_MVC.Controllers.CNT
         {
             var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
 
-            int IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
-
             branchCNTInput.user_id = sessionUser.user_id;
             branchCNTInput.user_type = sessionUser.user_type;
-            branchCNTInput.IsHOCNT = IsHOCNT;
+            branchCNTInput.IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
