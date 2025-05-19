@@ -1,10 +1,12 @@
 ﻿using LKP_Frontend_MVC.Models.Request.Common;
 using LKP_Frontend_MVC.Models.Response.User;
+using LKP_Frontend_MVC.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace LKP_Frontend_MVC.Controllers.Excel
 {
@@ -39,20 +41,10 @@ namespace LKP_Frontend_MVC.Controllers.Excel
                 PageSize = 1000000
             };
 
-            // Serialize CommonModel to JSON string
-            var json = JsonConvert.SerializeObject(user);
+            var stream = await RequestHelper.CreateExcel(_httpClient, $"{baseURL}/api/Excel/ExportClientDealerExcel", user, sessionUser.accessToken);
 
-            // Create StringContent with JSON data
-            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            if (stream == null) return Content("Failed to export data.");
 
-            // Send POST request with CommonModel data
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.PostAsync($"{baseURL}/api/Excel/ExportClientDealerExcel", content);
-
-            if (!response.IsSuccessStatusCode)
-                return Content("Failed to export data.");
-
-            var stream = await response.Content.ReadAsStreamAsync();
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ClientDealerList.xlsx");
         }
 
@@ -70,21 +62,11 @@ namespace LKP_Frontend_MVC.Controllers.Excel
                 PageSize = 1000000
             };
 
-            // Serialize CommonModel to JSON string
-            var json = JsonConvert.SerializeObject(user);
+            var stream = await RequestHelper.CreateExcel(_httpClient, $"{baseURL}/api/Excel/ExportGroupMappingExcel", user, sessionUser.accessToken);
 
-            // Create StringContent with JSON data
-            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            if (stream == null) return Content("Failed to export data.");
 
-            // Send POST request with CommonModel data
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.PostAsync($"{baseURL}/api/Excel/ExportGroupMappingExcel", content);
-
-            if (!response.IsSuccessStatusCode)
-                return Content("Failed to export data.");
-
-            var stream = await response.Content.ReadAsStreamAsync();
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "GroupMappingList.xlsx");
+            return File( stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "GroupMapping.xlsx");
         }
 
         [HttpPost] // EXPORT: Dealer Creation Excel
@@ -98,23 +80,12 @@ namespace LKP_Frontend_MVC.Controllers.Excel
                 user_type = sessionUser.user_type
             };
 
-            // Serialize CommonModel to JSON string
-            var json = JsonConvert.SerializeObject(user);
+            var stream = await RequestHelper.CreateExcel(_httpClient, $"{baseURL}/api/Excel/ExportDealerCreationFile", user, sessionUser.accessToken);
 
-            // Create StringContent with JSON data
-            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            if (stream == null) return Content("Failed to export data.");
 
-            // Send POST request with CommonModel data
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessionUser.accessToken);
-            var response = await _httpClient.PostAsync($"{baseURL}/api/Excel/ExportDealerCreationFile", content);
-
-            if (!response.IsSuccessStatusCode)
-                return Content("Failed to export data.");
-
-            var stream = await response.Content.ReadAsStreamAsync();
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Dealer_Creation.xlsx");
         }
         #endregion
-
     }
 }

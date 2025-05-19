@@ -13,7 +13,7 @@ namespace LKP_Frontend_MVC.Utils
 {
     public class RequestHelper
     {
-        [HttpPost]
+        // Handle All Post Requests (EXCEPT XLSX)
         public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient httpClient, string url, T data, string authType, string authToken)
         {
             try
@@ -69,6 +69,30 @@ namespace LKP_Frontend_MVC.Utils
                     statusCode = HttpStatusCode.InternalServerError
                 };
             }
+        }
+
+        // Handle .xlsx file creation requests  
+        public static async Task<MemoryStream?> CreateExcel<T>(HttpClient _httpClient, string url, T data, string authToken)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json")
+            };
+
+            if (!string.IsNullOrWhiteSpace(authToken))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            };
+
+            using var response = await _httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var stream = new MemoryStream();
+            await response.Content.CopyToAsync(stream);
+            stream.Position = 0;
+            return stream;
         }
 
         public static T? DeserializeEncryptedData<T>(string encryptedData, string _encKey) where T : class
