@@ -9,6 +9,5 @@ namespace LKP_Frontend_MVC.Models.Request.BranchCNT
         public string DealerID { get; set; }
         public string DealerName { get; set; }
         public string CtclLoginId { get; set; }
-        public int IsHOCNT { get; set; }
     }
 }
