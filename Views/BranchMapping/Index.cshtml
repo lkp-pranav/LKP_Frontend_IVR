@@ -14,30 +14,31 @@
 <div class="container-fluid page-content">
     <!-- Top Panel Start-->
     <div class="container">
-        <div class="row py-2">
+        <div class="row pt-3">
             <div class="col-12 col-lg-4 px-3 mb-2 align-middle">
                 <h2>CNT Terminal Mapping</h2>
             </div>
             <div class="col-12 col-lg-6 d-flex justify-content-lg-end justify-content-md-start align-items-center text-white px-3 mb-2 panel-button">
                 <div class="pe-2">
-                    <a href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary">Clear</a>
+                    <a id="topBtn" href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary">Clear</a>
                 </div>
-                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "BranchMapping")" method="post">
-                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
+                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "DealerMapping")" method="post">
+                    <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required>
                         <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                         <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
                         <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option>
                     </select>
-                    <div class="input-group" style="min-width: 130px;">
+
+                    <div class="input-group input-group-sm" style="min-width: 200px;">
                         <input type="text" id="filterValue" class="form-control mx-1" value="@(
                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
                             inputModel?.Zone.Trim())" 
-                            style="min-width:80px" 
+                            style="min-width:150px" 
                         />
 
                         <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
+                        <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
@@ -45,7 +46,7 @@
 
             </div>
             <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
-                <button class="btn btn-primary modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
+                <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
             </div>
         </div>
     </div>

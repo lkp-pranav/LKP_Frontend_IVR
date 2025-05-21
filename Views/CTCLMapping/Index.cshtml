@@ -15,37 +15,37 @@
 <div class="container-fluid page-content">
     <!-- Top Panel Start -->
     <div class="container">
-        <div class="row py-2">
+        <div class="row pt-3">
             <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
-            <div class="col-12 col-lg-6 px-3 mb-2 align-middle">
+            <div class="col-12 col-lg-4 px-3 mb-2 align-middle">
                 <h2>CTCL Mapping</h2>
             </div>
 
             <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
-            <div class="col-12 col-lg-6 d-flex justify-content-lg-end justify-content-md-start align-items-center align-items-center text-dark px-3 mb-2">
+            <div class="col-12 col-lg-6 d-flex justify-content-lg-end justify-content-md-start align-items-center text-white px-3 mb-2 panel-button">
                 <div class="pe-2">
-                    <a href="@Url.Action("Index", "CTCLMapping")" class="btn btn-secondary">Clear</a>
+                    <a id="topBtn" href="@Url.Action("Index", "CTCLMapping")" class="btn btn-secondary">Clear</a>
                 </div>
                 <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "CTCLMapping")" method="post">
-                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
+                    <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required>
                         <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option>
                         <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option>
                         <option value="PrimaryDealer" selected="@(inputModel?.PrimaryDealer != "" ? "selected" : null)">Primary Dealer</option>
                         <option value="SecondaryDealer" selected="@(inputModel?.SecondaryDealer != "" ? "selected" : null)">Secondary Dealer</option>
                         <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                     </select>
-                    <div class="input-group" style="min-width: 130px;">
+                    <div class="input-group input-group-sm" style="min-width: 200px;">
                         <input type="text" id="filterValue" class="form-control mx-1"
                                 value="@(!string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
                                 !string.IsNullOrEmpty(inputModel?.PrimaryDealer) ? inputModel.PrimaryDealer.Trim() :
                                 !string.IsNullOrEmpty(inputModel?.SecondaryDealer) ? inputModel.SecondaryDealer.Trim() :
                                 !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
                                 inputModel?.Category.Trim())"
-                            style="min-width:80px" 
+                            style="min-width:150px" 
                         />
 
                         <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
+                        <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>

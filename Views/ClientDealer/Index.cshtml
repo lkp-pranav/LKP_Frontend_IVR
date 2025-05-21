@@ -20,60 +20,66 @@
 </style>
 <!-- Page Content Start-->
 <div class="container-fluid page-content">
-    <!-- Top Panel Start -->
-    <div class="container">
-        <div class="row py-2">
-            <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
-            <div class="col-12 col-lg-5 px-3 mb-2 align-middle">
-                <h2>Primary Dealer Mapping</h2>
-            </div>
+     <!-- Top Panel Start --> 
+     <div class="container"> 
+         <div class="row pt-3"> 
+             <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small --> 
+             <div class="col-12 col-lg-4 px-3 mb-2 align-middle"> 
+                 <h2>Primary Dealer Mapping</h2> 
+             </div> 
 
-            <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small -->
-            <div class="col-12 col-lg-3 d-flex flex-l-row-reverse align-items-center text-white px-3 mb-2 panel-button">
-                <form action="/" method="post">
-                    <button type="submit"
-                            class="btn btn-success my-1"
-                            formaction="@Url.Action("ExportClientDealerExcel", "Excel")"
-                            formmethod="post">
-                        <i class="bi bi-file-earmark-excel"></i> Export Excel
-                    </button>
-                    <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a>
-                </form>
-            </div>
+             <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small --> 
+             <div class="col-12 col-lg-3 d-flex flex-l-row-reverse align-items-center text-white px-3 mb-2 panel-button"> 
+                 <form action="/" method="post"> 
+                     <button type="submit" 
+                             id="topBtn" 
+                             class="btn btn-success my-1" 
+                             formaction="@Url.Action("ExportClientDealerExcel", "Excel")" 
+                             formmethod="post"> 
+                         <i class="bi bi-file-earmark-excel"></i> Export Excel 
+                     </button> 
+                     <a  id="topBtn" href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a> 
+                 </form> 
+             </div> 
 
-            <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
-            <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-3 mb-2">
-                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "ClientDealer")" method="post">
-                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required> 
-                        <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
-                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
-                        <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
-                        <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> 
-                        <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> 
-                        <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> 
-                        <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
-                    </select> 
-                    <div class="input-group" style="min-width: 130px;">
-                        <input type="text" id="filterValue" class="form-control mx-1" value="@(
-                            !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim():
-                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim():
-                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim():
-                            inputModel?.Category.Trim())" style="min-width:80px"
-                        />
+             <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small --> 
+             <div class="col-12 col-lg-5 d-flex align-items-center text-dark px-3 mb-2"> 
+                 <div class="w-75"> 
+                     <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "ClientDealer")" method="post"> 
+                         <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required> 
+                             <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
+                             <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
+                             <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
+                             <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> 
+                             <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> 
+                             <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> 
+                             <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
+                         </select> 
 
-                        <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form> 
-            </div>
-        </div>
-    </div>
-    <!-- Top Panel End -->
+                         <div class="input-group input-group-sm" style="min-width: 200px;"> 
+                             <input type="text" id="filterValue" class="form-control mx-1 form-control-sm" value="@( 
+                             !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() : 
+                             inputModel?.Category.Trim())" style="min-width:150px" /> 
+
+                             <input type="hidden" id="dynamicInput" name="" value="" /> 
+                             <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;"> 
+                                 <i class="bi bi-search"></i> 
+                             </button> 
+                         </div> 
+                     </form> 
+                 </div> 
+             </div> 
+
+         </div> 
+     </div> 
+     <!-- Top Panel End --> 
+
+
 
     <!-- Table Start -->
     <div class="table-wrapper border border-light mx-auto">
@@ -130,7 +136,7 @@
     <!-- Pagination Control Start -->
     @* @if(clientDealerList.Count >= 50) { *@
         <div class="m-1">
-            <nav class="d-flex align-items-center position-relative" aria-label="...">
+            <nav id="pagination-nav" class="d-flex align-items-center position-relative" aria-label="...">
                 <!-- Centered Pagination -->
                 <div class="position-absolute start-50 translate-middle-x">
                     <ul class="pagination justify-content-center mb-0" style="max-width: fit-content;">
