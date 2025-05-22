@@ -23,7 +23,12 @@
 
                         Object.entries(groups).forEach(([groupKey, groupData]) => {
                             const container = document.getElementById(`${groupKey}Body`);
+                            const header = document.getElementById(`${groupKey}`)
+                            if (groupData.length) {
+                                header.innerHTML = `Group ${groupKey.substring(5)}: ${groupData[0].groupCode}`;
+                            }
                             container.innerHTML = ""; // Clear previous content
+                            console.log(groupData);
 
                             if (!groupData || groupData.length === 0) {
                                 container.innerHTML = `<p class="text-muted">Group is empty</p>`;
@@ -35,7 +40,6 @@
                                 table.innerHTML = `
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Group Code</th>
                                             <th>Dealer ID</th>
                                             <th>Name</th>
                                             <th>CTCL Login</th>
@@ -45,7 +49,6 @@
                                     <tbody>
                                         ${groupData.map(dealer => `
                                             <tr>
-                                                <td>${dealer.groupCode}</td>
                                                 <td>${dealer.dealerID}</td>
                                                 <td>${dealer.dealerName}</td>
                                                 <td>${dealer.ctclLoginid}</td>
