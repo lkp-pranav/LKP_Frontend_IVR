@@ -20,60 +20,66 @@
 </style>
 <!-- Page Content Start-->
 <div class="container-fluid page-content">
-    <!-- Top Panel Start -->
-    <div class="container">
-        <div class="row py-2">
-            <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
-            <div class="col-12 col-lg-5 px-3 mb-2 align-middle">
-                <h2>Primary Dealer Mapping</h2>
-            </div>
+     <!-- Top Panel Start --> 
+     <div class="container"> 
+         <div class="row pt-3"> 
+             <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small --> 
+             <div class="col-12 col-lg-4 px-3 mb-2 align-middle"> 
+                 <h2>Primary Dealer Mapping</h2> 
+             </div> 
 
-            <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small -->
-            <div class="col-12 col-lg-3 d-flex flex-l-row-reverse align-items-center text-white px-3 mb-2 panel-button">
-                <form action="/" method="post">
-                    <button type="submit"
-                            class="btn btn-success my-1"
-                            formaction="@Url.Action("ExportClientDealerExcel", "Excel")"
-                            formmethod="post">
-                        <i class="bi bi-file-earmark-excel"></i> Export Excel
-                    </button>
-                    <a href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a>
-                </form>
-            </div>
+             <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small --> 
+             <div class="col-12 col-lg-3 d-flex flex-l-row-reverse align-items-center text-white px-3 mb-2 panel-button"> 
+                 <form action="/" method="post"> 
+                     <button type="submit" 
+                             id="topBtn" 
+                             class="btn btn-success my-1" 
+                             formaction="@Url.Action("ExportClientDealerExcel", "Excel")" 
+                             formmethod="post"> 
+                         <i class="bi bi-file-earmark-excel"></i> Export Excel 
+                     </button> 
+                     <a  id="topBtn" href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a> 
+                 </form> 
+             </div> 
 
-            <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
-            <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-3 mb-2">
-                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "ClientDealer")" method="post">
-                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required> 
-                        <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
-                        <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
-                        <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
-                        <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> 
-                        <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> 
-                        <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> 
-                        <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
-                    </select> 
-                    <div class="input-group" style="min-width: 130px;">
-                        <input type="text" id="filterValue" class="form-control mx-1" value="@(
-                            !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() :
-                            !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim():
-                            !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim():
-                            !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim():
-                            inputModel?.Category.Trim())" style="min-width:80px"
-                        />
+             <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small --> 
+             <div class="col-12 col-lg-5 d-flex align-items-center text-dark px-3 mb-2"> 
+                 <div class="w-75"> 
+                     <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "ClientDealer")" method="post"> 
+                         <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required> 
+                             <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
+                             <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
+                             <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
+                             <option value="ClientName" selected="@(inputModel?.ClientName != "" ? "selected" : null)">Client Name</option> 
+                             <option value="branch" selected="@(inputModel?.Branch != "" ? "selected" : null)">Branch</option> 
+                             <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option> 
+                             <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
+                         </select> 
 
-                        <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form> 
-            </div>
-        </div>
-    </div>
-    <!-- Top Panel End -->
+                         <div class="input-group input-group-sm" style="min-width: 200px;"> 
+                             <input type="text" id="filterValue" class="form-control mx-1 form-control-sm" value="@( 
+                             !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.ClientName) ? inputModel.ClientName.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() : 
+                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() : 
+                             inputModel?.Category.Trim())" style="min-width:150px" /> 
+
+                             <input type="hidden" id="dynamicInput" name="" value="" /> 
+                             <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;"> 
+                                 <i class="bi bi-search"></i> 
+                             </button> 
+                         </div> 
+                     </form> 
+                 </div> 
+             </div> 
+
+         </div> 
+     </div> 
+     <!-- Top Panel End --> 
+
+
 
     <!-- Table Start -->
     <div class="table-wrapper border border-light mx-auto">
@@ -130,7 +136,7 @@
     <!-- Pagination Control Start -->
     @* @if(clientDealerList.Count >= 50) { *@
         <div class="m-1">
-            <nav class="d-flex align-items-center position-relative" aria-label="...">
+            <nav id="pagination-nav" class="d-flex align-items-center position-relative" aria-label="...">
                 <!-- Centered Pagination -->
                 <div class="position-absolute start-50 translate-middle-x">
                     <ul class="pagination justify-content-center mb-0" style="max-width: fit-content;">
@@ -200,69 +206,138 @@
 
 <!-- Client Info Accordian -->
 <div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="clientInfoModalLabel">Client Info</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered" style="width: 50%;">
+        <div class="modal-content" style="font-size: 0.9rem;">
+            <div class="modal-header py-2 px-3">
+                <h5 class="modal-title" id="clientInfoModalLabel" style="font-size: 1.1rem;">Client Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-top: -2px;"></button>
             </div>
-            <div class="modal-body">
-                <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="modal-body py-2 px-3">
+                <div class="accordion" id="accordionPanelsStayOpenExample" style="font-size: 0.9rem;">
                     <!-- Group 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <button id="group1" class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="font-size: 1rem;">
                                 Group 1
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-                            <div id="group1Body" class="accordion-body"></div>
+                            <div id="group1Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
 
                     <!-- Group 2 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                            <button id="group2" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo" style="font-size: 1rem;">
                                 Group 2
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                            <div id="group2Body" class="accordion-body"></div>
+                            <div id="group2Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
 
                     <!-- Group 3 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">
+                            <button id="group3" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="font-size: 1rem;">
                                 Group 3
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                            <div id="group3Body" class="accordion-body"></div>
+                            <div id="group3Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
 
                     <!-- Group 4 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour">
+                            <button id="group4" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour" style="font-size: 1rem;">
                                 Group 4
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
-                            <div id="group4Body" class="accordion-body"></div>
+                            <div id="group4Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer py-2 px-3">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
+@* <div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true"> *@
+@*     <div class="modal-dialog modal-lg modal-dialog-centered "> *@
+@*         <div class="modal-content"> *@
+@*             <div class="modal-header"> *@
+@*                 <h5 class="modal-title" id="clientInfoModalLabel">Client Info</h5> *@
+@*                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
+@*             </div> *@
+@*             <div class="modal-body"> *@
+@*                 <div class="accordion" id="accordionPanelsStayOpenExample"> *@
+@*                     <!-- Group 1 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne"> *@
+@*                                 Group 1 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"> *@
+@*                             <div id="group1Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+
+@*                     <!-- Group 2 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo"> *@
+@*                                 Group 2 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"> *@
+@*                             <div id="group2Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+
+@*                     <!-- Group 3 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree"> *@
+@*                                 Group 3 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"> *@
+@*                             <div id="group3Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+
+@*                     <!-- Group 4 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour"> *@
+@*                                 Group 4 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse"> *@
+@*                             <div id="group4Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*             <div class="modal-footer"> *@
+@*                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
 @section Scripts {
     <script src="~/js/common/filter.js"></script>
     <script src="~/js/client/clientGroup.js"></script> 

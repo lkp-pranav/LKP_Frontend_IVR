@@ -67,7 +67,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             branchCNTInput.user_id = sessionUser.user_id;
             branchCNTInput.user_type = sessionUser.user_type;
-            branchCNTInput.IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
@@ -121,7 +120,6 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             branchCNTInput.user_id = sessionUser.user_id;
             branchCNTInput.user_type = sessionUser.user_type;
-            branchCNTInput.IsHOCNT = branchCNTInput.Zone == "H.O." ? 1 : 0;
 
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,

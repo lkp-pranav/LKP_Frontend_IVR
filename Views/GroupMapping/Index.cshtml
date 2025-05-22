@@ -13,46 +13,48 @@
 <div class="container-fluid page-content">
     <!-- Top Panel Start -->
     <div class="container">
-        <div class="row py-2">
-            <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small -->
-            <div class="col-12 col-lg-5 px-3 mb-2 align-middle">
-                <h2>IVR Group Mapping</h2>
+        <div class="row pt-3">
+            <!-- ~60% width -->
+            <div class="col-12 col-lg-4 px-3 mb-2 align-middle">
+                <h2 class="h4">IVR Group Mapping</h2>
             </div>
 
-            <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small -->
+            <!-- ~20% width -->
             <div class="col-12 col-lg-3 d-flex justify-content-lg-end justify-content-md-start align-items-center text-white px-3 mb-2 panel-button">
                 <form action="/" method="post">
                     <button type="submit"
+                            id="topBtn"
                             class="btn btn-success my-1"
                             formaction="@Url.Action("ExportGroupMappingExcel", "Excel")"
                             formmethod="post">
                         <i class="bi bi-file-earmark-excel"></i> Export Excel
                     </button>
-                    <a href="@Url.Action("Index", "GroupMapping")" class="btn btn-secondary">Clear</a>
+                    <a id="topBtn" href="@Url.Action("Index", "GroupMapping")" class="btn btn-secondary ms-1">Clear</a>
                 </form>
             </div>
 
-            <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small -->
-            <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-3 mb-2">
-                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "GroupMapping")" method="post">
-                    <select id="filterField" name="filterField" class="form-select" style="width: 150px; max-height: 50px" required>
-                        <option value="GroupCode">GroupCode</option>
-                    </select>
-                    <div class="input-group" style="min-width: 130px;">
-                        <input 
-                            type="text" 
-                            id="filterValue" 
-                            class="form-control mx-1"
-                            value="@(inputModel?.GroupCode != "" ? inputModel.GroupCode: "")"
-                            style="min-width:80px" 
-                        />
+            <!-- ~20% width -->
+            <div class="col-12 col-lg-5 d-flex align-items-center text-dark px-3 mb-2">
+                <div class="w-75">
+                    <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "GroupMapping")" method="post">
+                        <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required>
+                            <option value="GroupCode">GroupCode</option>
+                        </select>
 
-                        <input type="hidden" id="dynamicInput" name="" value="" />
-                        <button type="submit" class="btn btn-outline-primary p-2 modal-btn" style="min-width: 50px; height: 40px;">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
+                        <div class="input-group input-group-sm" style="min-width: 200px;">
+                            <input type="text"
+                                   id="filterValue"
+                                   class="form-control form-control-sm mx-1"
+                                   value="@(inputModel?.GroupCode != "" ? inputModel.GroupCode : "")"
+                                   style="min-width: 150px" />
+
+                            <input type="hidden" id="dynamicInput" name="" value="" />
+                            <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

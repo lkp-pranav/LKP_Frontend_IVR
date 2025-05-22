@@ -1,4 +1,16 @@
-﻿.readonly-select {
+﻿h2 {
+    font-size: 1.5rem;
+}
+
+#topBtn {
+    font-size: 0.75rem;
+}
+
+.delete-btn, .update-btn {
+    font-size: 0.65rem;
+}
+
+.readonly-select {
     pointer-events: none;
     background-color: #e9ecef;
     opacity: 1;
@@ -53,7 +65,8 @@ th, .modal-btn {
     overflow-y: auto;
     max-width: 100%;
     max-height: calc(100vh - 230px);
-    min-height: 74vh;
+    min-height: 72vh;
+    font-size: 0.75rem;
 }
 
 .page-content {
@@ -70,21 +83,35 @@ th, .modal-btn {
     background: none;
 }
 
+
+
 .go-to input {
     width: 60px;
     border-left: none;
     border-color: #11395C;
     color: #11395C;
     font-weight: bold;
+    font-size: 0.6rem;
+ 
 }
 
 .go-to button {
     border-color: #11395C;
     color: #11395C;
     font-weight: bold;
+    
 }
 
 .go-to button:hover {
     color: white;
     background-color: #11395C;
 }
+
+.page-link {
+    font-size: 0.72rem;
+}
+
+.input-group button {
+    font-size: 0.7rem;
+}
+
