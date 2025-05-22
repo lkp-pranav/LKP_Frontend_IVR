@@ -22,7 +22,7 @@
                 <div class="pe-2">
                     <a id="topBtn" href="@Url.Action("Index", "BranchMapping")" class="btn btn-secondary">Clear</a>
                 </div>
-                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "DealerMapping")" method="post">
+                <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "BranchMapping")" method="post">
                     <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required>
                         <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option>
                         <option value="DealerID" selected="@(inputModel?.DealerID != "" ? "selected" : null)">Dealer Code</option>
