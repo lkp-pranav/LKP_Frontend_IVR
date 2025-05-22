@@ -206,69 +206,138 @@
 
 <!-- Client Info Accordian -->
 <div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="clientInfoModalLabel">Client Info</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered" style="width: 50%;">
+        <div class="modal-content" style="font-size: 0.9rem;">
+            <div class="modal-header py-2 px-3">
+                <h5 class="modal-title" id="clientInfoModalLabel" style="font-size: 1.1rem;">Client Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-top: -2px;"></button>
             </div>
-            <div class="modal-body">
-                <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="modal-body py-2 px-3">
+                <div class="accordion" id="accordionPanelsStayOpenExample" style="font-size: 0.9rem;">
                     <!-- Group 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <button id="group1" class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="font-size: 1rem;">
                                 Group 1
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-                            <div id="group1Body" class="accordion-body"></div>
+                            <div id="group1Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
 
                     <!-- Group 2 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                            <button id="group2" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo" style="font-size: 1rem;">
                                 Group 2
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                            <div id="group2Body" class="accordion-body"></div>
+                            <div id="group2Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
 
                     <!-- Group 3 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">
+                            <button id="group3" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="font-size: 1rem;">
                                 Group 3
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                            <div id="group3Body" class="accordion-body"></div>
+                            <div id="group3Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
 
                     <!-- Group 4 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour">
+                            <button id="group4" class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour" style="font-size: 1rem;">
                                 Group 4
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
-                            <div id="group4Body" class="accordion-body"></div>
+                            <div id="group4Body" class="accordion-body p-2"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer py-2 px-3">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
+@* <div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true"> *@
+@*     <div class="modal-dialog modal-lg modal-dialog-centered "> *@
+@*         <div class="modal-content"> *@
+@*             <div class="modal-header"> *@
+@*                 <h5 class="modal-title" id="clientInfoModalLabel">Client Info</h5> *@
+@*                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
+@*             </div> *@
+@*             <div class="modal-body"> *@
+@*                 <div class="accordion" id="accordionPanelsStayOpenExample"> *@
+@*                     <!-- Group 1 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne"> *@
+@*                                 Group 1 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"> *@
+@*                             <div id="group1Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+
+@*                     <!-- Group 2 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo"> *@
+@*                                 Group 2 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"> *@
+@*                             <div id="group2Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+
+@*                     <!-- Group 3 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree"> *@
+@*                                 Group 3 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"> *@
+@*                             <div id="group3Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+
+@*                     <!-- Group 4 --> *@
+@*                     <div class="accordion-item"> *@
+@*                         <h2 class="accordion-header"> *@
+@*                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour"> *@
+@*                                 Group 4 *@
+@*                             </button> *@
+@*                         </h2> *@
+@*                         <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse"> *@
+@*                             <div id="group4Body" class="accordion-body"></div> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*             <div class="modal-footer"> *@
+@*                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
 @section Scripts {
     <script src="~/js/common/filter.js"></script>
     <script src="~/js/client/clientGroup.js"></script> 

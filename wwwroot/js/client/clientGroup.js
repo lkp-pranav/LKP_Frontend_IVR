@@ -35,6 +35,7 @@
                                 table.innerHTML = `
                                     <thead class="table-light">
                                         <tr>
+                                            <th>Group Code</th>
                                             <th>Dealer ID</th>
                                             <th>Name</th>
                                             <th>CTCL Login</th>
@@ -44,6 +45,7 @@
                                     <tbody>
                                         ${groupData.map(dealer => `
                                             <tr>
+                                                <td>${dealer.groupCode}</td>
                                                 <td>${dealer.dealerID}</td>
                                                 <td>${dealer.dealerName}</td>
                                                 <td>${dealer.ctclLoginid}</td>
