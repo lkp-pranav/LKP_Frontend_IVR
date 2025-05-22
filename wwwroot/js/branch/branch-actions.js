@@ -4,33 +4,35 @@
     document.querySelectorAll(".delete-btn").forEach(button => {
         button.addEventListener("click", () => {
             rowIdToDelete = button.getAttribute("data-id");
+            const deleteInput = document.getElementById("deleteInput");
+            deleteInput.value = rowIdToDelete;
             const deleteModal = new bootstrap.Modal(document.getElementById("deleteConfirmModal"));
             deleteModal.show();
         });
     });
 
-    document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
-        if (!rowIdToDelete) return;
+    //document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+    //    if (!rowIdToDelete) return;
 
-        fetch(`${window.appBasePath}/BranchMapping/DeleteMapping?rowId=${rowIdToDelete}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    return response.json();
-                }
-            })
-            .catch(err => console.error("Error during deletion:", err))
-            .finally(() => {
-                const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal"));
-                deleteModal.hide();
-            });
-    });
+    //    fetch(`${window.appBasePath}/BranchMapping/DeleteMapping?rowId=${rowIdToDelete}`, {
+    //        method: 'POST',
+    //        headers: {
+    //            'Content-Type': 'application/json'
+    //        }
+    //    })
+    //        .then(response => {
+    //            if (response.redirected) {
+    //                window.location.href = response.url;
+    //            } else {
+    //                return response.json();
+    //            }
+    //        })
+    //        .catch(err => console.error("Error during deletion:", err))
+    //        .finally(() => {
+    //            const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal"));
+    //            deleteModal.hide();
+    //        });
+    //});
 
     const updateModal = new bootstrap.Modal(document.getElementById("updateBranchModal"));
     const zoneDropdownUpdate = document.getElementById("zoneDropdownUpdate");
