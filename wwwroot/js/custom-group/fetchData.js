@@ -170,11 +170,9 @@
                     window.location.href = `${window.appBasePath}/CustomGroup/Index`; // manually reload/redirect
                 } else {
                     alert(data.message)
-                    console.error("Server Error:", data.message);
                 }
             })
             .catch(error => {
-                console.error("Fetch Error:", error);
             });
 
     });

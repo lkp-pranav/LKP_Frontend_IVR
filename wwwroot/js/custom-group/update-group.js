@@ -217,8 +217,6 @@
             Active: activeCheckbox.checked ? "Y" : "N"
         };
 
-        console.log("Payload to send:", payload);
-
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.innerText = "Updating...";
@@ -232,20 +230,16 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.success) { 
-                    console.log("Success:", data.message);
                     bootstrap.Modal.getInstance(modal)?.hide();
                     window.location.href = `${window.appBasePath}/CustomGroup/Index`;
                 } else {
-                    console.error("Server Error:", data.message);
                     alert(data.message);
                     submitButton.disabled = false;
                     submitButton.innerText = "Update";
                 }
             })
             .catch(error => {
-                console.error("Fetch Error:", error);
                 alert("Something went wrong. Please try again.");
                 submitButton.disabled = false;
                 submitButton.innerText = "Update";
