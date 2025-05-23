@@ -21,6 +21,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
         private readonly string _encKey;
         private readonly string baseURL = "";
         private readonly string lkpConnectURL = "";
+        private readonly string uat_lkpConnectURL = "";
         #endregion
 
         #region Constructor
@@ -32,6 +33,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             _encKey = _Configuration.GetSection("encKey").Value;
             baseURL = _Configuration["ApiSettings:BaseUrl"];
             lkpConnectURL = _Configuration["ApiSettings:LkpConnect"];
+            uat_lkpConnectURL = _Configuration["ApiSettings:LkpConnectUAT"];
         }
         #endregion
 
@@ -165,8 +167,11 @@ namespace LKP_Frontend_MVC.Controllers.Login
         {
 
             var origin = Request.Headers["Origin"].ToString();
+            string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL };
 
-            if (string.IsNullOrEmpty(origin) || !origin.StartsWith(lkpConnectURL, StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(origin) ||
+                !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
+            )
             {
                 return Unauthorized("Invalid origin.");
             }
