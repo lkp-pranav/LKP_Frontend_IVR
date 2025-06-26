@@ -49,10 +49,12 @@
                 if (response.isSuccess && response.data) {
                     resetDropdown(zoneDropdown, "Select Zone");
                     response.data.forEach(zone => {
-                        const opt = document.createElement("option");
-                        opt.value = zone;
-                        opt.textContent = zone;
-                        zoneDropdown.appendChild(opt);
+                        if (zone != "PPAL") {
+                            const opt = document.createElement("option");
+                            opt.value = zone;
+                            opt.textContent = zone;
+                            zoneDropdown.appendChild(opt);
+                        }
                     });
                 }
             })

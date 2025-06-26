@@ -6,6 +6,12 @@
     // Dynamically set the name and value for dynamicInput
     dynamicInput.name = selectedField;
     dynamicInput.value = inputValue.trim();
+
+    const clientType = document.getElementById("clientType");
+    const hiddenClientType = document.getElementById("hiddenClientType");
+    if (clientType && hiddenClientType) {
+        hiddenClientType.value = clientType.value;
+    }
 });
 
 document.getElementById("filterField").addEventListener("change", () => {
