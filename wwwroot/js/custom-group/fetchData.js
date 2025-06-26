@@ -19,10 +19,12 @@
                 if (response.isSuccess && response.data) {
                     zoneDropdown.innerHTML = '<option value="">Select Zone</option>';
                     response.data.forEach(zone => {
-                        const opt = document.createElement("option");
-                        opt.value = zone;
-                        opt.textContent = zone;
-                        zoneDropdown.appendChild(opt);
+                        if (zone != "PPAL") {
+                            const opt = document.createElement("option");
+                            opt.value = zone;
+                            opt.textContent = zone;
+                            zoneDropdown.appendChild(opt);
+                        }
                     });
                 }
             })

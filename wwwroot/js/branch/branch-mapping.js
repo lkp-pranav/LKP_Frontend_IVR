@@ -49,6 +49,17 @@
         dealerDropdown.innerHTML = '<option value="">Select Dealer</option>';
         ctclInput.value = "";
 
+        if (selectedZone == "PPAL") {
+            const opt = document.createElement("option");
+            opt.value = "-";
+            opt.textContent = "-";
+            opt.setAttribute("data-ctcl", "PennyPal01");
+            opt.setAttribute("data-dealerId", "");
+            dealerDropdown.appendChild(opt);
+            opt.selected = true;
+            ctclInput.value = "PPAL01";
+            return;
+        }
         if (!selectedZone) return;
 
         fetch(`${window.appBasePath}/Common/GetDealerByZone?Zone=${encodeURIComponent(selectedZone)}`, {
