@@ -68,6 +68,11 @@ namespace LKP_Frontend_MVC.Controllers.CNT
             inputModel.user_id = sessionUser.user_id;
             inputModel.user_type = sessionUser.user_type;
 
+            if(string.IsNullOrEmpty(inputModel.DealerName) || string.IsNullOrEmpty(inputModel.DealerID) || string.IsNullOrEmpty(inputModel.CTCLLoginId))
+            {
+                return Json(new { success = false, message = "Select atleast one dealer to create group"});
+            }
+
             var response = await RequestHelper.SendHttpRequest(
                 _httpClient,
                 $"{baseURL}/api/CustomGroup/CreateCustomGroup", 

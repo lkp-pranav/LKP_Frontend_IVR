@@ -1,5 +1,9 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
     const clientInfoModal = document.getElementById("clientInfoModal");
+    //const group1 = document.getElementById("group1Body");
+    //const group2 = document.getElementById("group2Body");
+    //const group3 = document.getElementById("group3Body");
+    //const group4 = document.getElementById("group4Body");
 
     document.querySelectorAll(".info-btn").forEach(button => {
         button.addEventListener("click", function () {
@@ -64,5 +68,14 @@
                     }
                 });
         });
+    });
+
+    clientInfoModal.addEventListener("hidden.bs.modal", function () {
+        for(let i = 1; i <= 4; i++) {
+            const container = document.getElementById(`group${i}Body`);
+            const header = document.getElementById(`group${i}`);
+            container.innerHTML = "";
+            header.innerHTML = `Group ${i}`
+        }
     });
 });

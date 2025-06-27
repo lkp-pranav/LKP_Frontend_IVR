@@ -11,29 +11,6 @@
         });
     });
 
-    //document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
-    //    if (!rowIdToDelete) return;
-
-    //    fetch(`${window.appBasePath}/BranchMapping/DeleteMapping?rowId=${rowIdToDelete}`, {
-    //        method: 'POST',
-    //        headers: {
-    //            'Content-Type': 'application/json'
-    //        }
-    //    })
-    //        .then(response => {
-    //            if (response.redirected) {
-    //                window.location.href = response.url;
-    //            } else {
-    //                return response.json();
-    //            }
-    //        })
-    //        .catch(err => console.error("Error during deletion:", err))
-    //        .finally(() => {
-    //            const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal"));
-    //            deleteModal.hide();
-    //        });
-    //});
-
     const updateModal = new bootstrap.Modal(document.getElementById("updateBranchModal"));
     const zoneDropdownUpdate = document.getElementById("zoneDropdownUpdate");
     const dealerDropdownUpdate = document.getElementById("dealerDropdownUpdate");
@@ -53,7 +30,16 @@
 
             // Pre-populate Zone dropdown (it should be read-only, so no need to populate with other zones)
             zoneDropdownUpdate.innerHTML = `<option value="${zone}" selected>${zone}</option>`; // Only the selected zone is shown
-
+            if (zone == "PPAL") {
+                dealerDropdownUpdate.innerHTML = "-";
+                const opt = document.createElement("option");
+                opt.value = "-";
+                opt.textContent = "-";
+                dealerDropdownUpdate.appendChild(opt);
+                document.querySelector("#updateBranchForm input[name='DealerID']").value = "-";
+                document.querySelector("#updateBranchForm input[name='CtclLoginId']").value = "PPAL01";
+                return;
+            }
             // Fetch dealers for the selected zone
             fetch(`${window.appBasePath}/Common/GetDealerByZone?Zone=${encodeURIComponent(zone)}`, {
                 method: 'POST',
