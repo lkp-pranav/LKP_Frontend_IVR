@@ -117,6 +117,53 @@ namespace LKP_Frontend_MVC.Controllers.CNT
 
             return File(stream, "application/octet-stream", "Delete_ClientDealerMapping.csv");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PushClientInfoExcel([FromBody] PushClientInfo input)
+        {
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+            input.user_id = sessionUser.user_id;
+            input.user_type = sessionUser.user_type;
+            input.Mode = "Excel";
+
+            var stream = await RequestHelper.CreateExcel(_httpClient, $"{baseURL}/api/ClientInfoAPI/PushClientInfoExcel", input, sessionUser.accessToken);
+
+            if (stream == null) return Content("Failed to export data.");
+
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"PushClientInfo_{DateTime.Now:yyyy-MM-dd}.xlsx");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PushClientInfo(PushClientInfo input)
+        {
+            var sessionUser = HttpContext.Items["SessionUser"] as SessionUser;
+            input.user_id = sessionUser.user_id;
+            input.user_type = sessionUser.user_type;
+            input.Mode = "Incremental";
+
+            var response = await RequestHelper.SendHttpRequest(
+                _httpClient,
+                $"{baseURL}/api/ClientInfoAPI/PushClientInfo",
+                input,
+                "Bearer",
+                sessionUser.accessToken
+            );
+
+            if (response == null || !response.isSuccess)
+            {
+                TempData["ToastMessage"] = response?.errorMessages ?? "Error in pushing client info!!.";
+                TempData["ToastType"] = "danger";
+                return RedirectToAction("Index");
+            }
+
+            TempData["ToastMessage"] = response.message ?? "Client info pushed successfully successfully!!.";
+            TempData["ToastType"] = "success";
+            return RedirectToAction("Index");
+
+
+        }
+
+
         #endregion
     }
 }

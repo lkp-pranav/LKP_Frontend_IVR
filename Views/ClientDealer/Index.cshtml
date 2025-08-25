@@ -24,25 +24,33 @@
      <div class="container"> 
          <div class="row pt-4"> 
              <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small --> 
-             <div class="col-12 col-lg-4 px-0 mb-2 align-middle"> 
-                 <h2>Primary Dealer Mapping</h2> 
+             <div class="col-12 col-lg-5 px-0 mb-2 align-middle d-flex align-items-center ">  
+                 <h2>Primary Dealer Mapping</h2>
+                <button 
+                        id="topBtn" 
+                        class="btn modal-btn btn-sm mx-3 py-2"
+                        data-bs-target="#pushClientInfoModal"
+                        data-bs-toggle="modal"
+                >
+                    Push Client Info
+                </button>
              </div> 
 
              <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small --> 
-             <div class="col-12 col-lg-4 d-flex flex-l-row-reverse align-items-center text-white px-2 mb-2 panel-button">
+             <div class="col-12 col-lg-3 d-flex align-items-center text-white px-1 mb-2">
                 
                  <form action="/" method="post"> 
                      <button type="submit" 
                              id="topBtn" 
-                             class="btn btn-success my-1" 
+                             class="btn btn-success btn-sm my-1 py-1" 
                              formaction="@Url.Action("ExportClientDealerExcel", "Excel")" 
                              formmethod="post"> 
                          <i class="bi bi-file-earmark-excel"></i> Excel 
                      </button> 
                      <a  id="topBtn" href="@Url.Action("Index", "ClientDealer")" class="btn btn-secondary">Clear</a> 
                  </form>
-                <form id="clientTypeForm" method="post" class="d-flex flex-row mx-3" action="@Url.Action("Index", "ClientDealer")">
-                    <select id="clientType" name="ClientType" class="form-select form-select-sm me-1" style="width: 113px; max-height: 37px">
+                <form id="clientTypeForm" method="post" class="d-flex flex-row mx-1" action="@Url.Action("Index", "ClientDealer")">
+                    <select id="clientType" name="ClientType" class="form-select form-select-sm me-1" style="width: 80px; max-height: 37px">
                         <option value="LKP" selected="@(inputModel?.ClientType == "LKP" ? "selected" : null)">LKP</option>
                         <option value="PPAL" selected="@(inputModel?.ClientType == "PPAL" ? "selected" : null)">PPAL</option>
                     </select>
@@ -51,11 +59,11 @@
              </div> 
 
              <!-- 20% width on large screens (2.4 columns ≈ 3), full width on small --> 
-             <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-3 mb-2"> 
+             <div class="col-12 col-lg-4 d-flex align-items-center text-dark px-0 mb-2"> 
                  <div class="w-75"> 
                      <form id="filterForm" class="d-flex flex-row" action="@Url.Action("Index", "ClientDealer")" method="post">
                       
-                         <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 112px; max-height: 37px" required> 
+                         <select id="filterField" name="filterField" class="form-select form-select-sm me-1" style="width: 105px; max-height: 37px" required> 
                              <option value="Category" selected="@(inputModel?.Category != "" ? "selected" : null)">Category</option> 
                              <option value="Zone" selected="@(inputModel?.Zone != "" ? "selected" : null)">Zone</option> 
                              <option value="ClientCode" selected="@(inputModel?.ClientCode != "" ? "selected" : null)">Client Code</option> 
@@ -65,7 +73,7 @@
                              <option value="DealerName" selected="@(inputModel?.DealerName != "" ? "selected" : null)">Dealer Name</option> 
                          </select> 
 
-                         <div class="input-group input-group-sm" style="min-width: 200px;"> 
+                         <div class="input-group input-group-sm" style="min-width: 180px; height: 35px;"> 
                              <input type="text" id="filterValue" class="form-control mx-1 form-control-sm" value="@( 
                              !string.IsNullOrEmpty(inputModel?.Zone) ? inputModel.Zone.Trim() : 
                              !string.IsNullOrEmpty(inputModel?.ClientCode) ? inputModel.ClientCode.Trim() : 
@@ -73,11 +81,11 @@
                              !string.IsNullOrEmpty(inputModel?.Branch) ? inputModel.Branch.Trim() : 
                              !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() : 
                              !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() : 
-                             inputModel?.Category.Trim())" style="min-width:150px" /> 
+                             inputModel?.Category.Trim())" style="min-width:100px" /> 
 
                              <input type="hidden" id="dynamicInput" name="" value="" />
                             <input type="hidden" id="hiddenClientType" name="ClientType" />
-                             <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;"> 
+                             <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 30px; height: 35px;"> 
                                  <i class="bi bi-search"></i> 
                              </button> 
                          </div> 
@@ -283,8 +291,52 @@
     </div>
 </div>
 
+<div class="modal fade" id="pushClientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" style="width: 50%;">
+        <div class="modal-content" style="font-size: 0.9rem;">
+            <div class="modal-header py-2 px-3">
+                <h5 class="modal-title" id="pushClientInfoModalLabel" style="font-size: 1.1rem;">Push Client Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-top: -2px;"></button>
+            </div>
+            <div class="modal-body py-2 px-3">
+                <form id="pushClientInfoForm" method="post" action="@Url.Action("PushClientInfo", "ClientDealer")">
+                    <div class="row mb-2">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label small">Zone</label>
+                            <select id="zoneDropdown" class="form-select form-select-sm" name="Zone" required>
+                                <option value="ALL">ALL</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label small">Branch</label>
+                            <select id="branchDropdown" class="form-select form-select-sm" name="Branch" required>
+                                <option value="ALL">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label small">Dealer Code</label>
+                            <input id="dealerCode" type="text" class="form-control form-control-sm" name="DealerCode" placeholder="Enter Dealer Code" required />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label small">Client Code</label>
+                            <input id="clientCode" type="text" class="form-control form-control-sm" name="ClientCode" placeholder="Enter Client Code" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer py-2">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button id = "pushClientInfoExcel" type="button" class="btn btn-success btn-sm"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                        <button type="submit" class="btn btn-success btn-sm modal-btn">Push Info</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="~/js/common/filter.js"></script>
+    <script src="~/js/client/pushClientInfo.js"></script>
     <script src="~/js/client/clientGroup.js"></script> 
 }
