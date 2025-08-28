@@ -13,6 +13,17 @@ namespace LKP_Frontend_MVC.Utils
 {
     public class RequestHelper
     {
+
+        private static readonly IConfiguration _config;
+
+        static RequestHelper()
+        {
+            _config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // base path of MVC app
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+        }
+
         // Handle All Post Requests (EXCEPT XLSX)
         public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient httpClient, string url, T data, string authType, string authToken)
         {
@@ -26,6 +37,12 @@ namespace LKP_Frontend_MVC.Utils
                 if (!string.IsNullOrWhiteSpace(authToken))
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
+                }
+
+                string projectId = _config["ApiSettings:ProjectId"];
+                if (!string.IsNullOrEmpty(projectId))
+                {
+                    request.Headers.Add("X-Project-Id", projectId);
                 }
 
                 using var response = await httpClient.SendAsync(request);
@@ -84,6 +101,12 @@ namespace LKP_Frontend_MVC.Utils
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             };
 
+            string projectId = _config["ApiSettings:ProjectId"];
+            if (!string.IsNullOrEmpty(projectId))
+            {
+                request.Headers.Add("X-Project-Id", projectId);
+            }
+
             using var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
@@ -107,6 +130,12 @@ namespace LKP_Frontend_MVC.Utils
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+            }
+
+            string projectId = _config["ApiSettings:ProjectId"];
+            if (!string.IsNullOrEmpty(projectId))
+            {
+                request.Headers.Add("X-Project-Id", projectId);
             }
 
             using var response = await _httpClient.SendAsync(request);
