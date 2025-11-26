@@ -1,10 +1,14 @@
 ﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+@using LKP_Frontend_MVC.Models.Response.User
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Branch CNT Mapping";
     var branchCNTList = Model.data as List<LKP_Frontend_MVC.Models.Response.BranchCNT.BranchCNTResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.BranchCNT.BranchCNTFilterModel;
+    var sessionUser = Context.Items["SessionUser"] as SessionUser;
+    var allowedUserIds = Configuration.GetSection("AllowedUserIds").Get<string[]>();
 }
 <head>
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
@@ -34,7 +38,7 @@
                             !string.IsNullOrEmpty(inputModel?.DealerID) ? inputModel.DealerID.Trim() :
                             !string.IsNullOrEmpty(inputModel?.DealerName) ? inputModel.DealerName.Trim() :
                             inputModel?.Zone.Trim())" 
-                            style="min-width:150px" 
+                        style="min-width:150px" 
                         />
 
                         <input type="hidden" id="dynamicInput" name="" value="" />
@@ -45,9 +49,12 @@
                 </form>
 
             </div>
-            <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
-                <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
-            </div>
+            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+            {
+                <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
+                    <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">Add New</button>
+                </div>
+            }
         </div>
     </div>
     <!-- Top Panel End-->
@@ -64,7 +71,10 @@
                         <th>Dealer Name</th>
                         <th>CTCL Login</th>
                         <th>HO CNT</th>
-                        <th>Actions</th>
+                        @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                        {
+                            <th>Actions</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -77,25 +87,28 @@
                             <td>@item.CTCLLoginID</td>
                             <td>@(item.isHOCNT == 1 ? "Yes" : "No")</td>
 
-                            <td class="d-flex justify-content-center">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
-                                    <button id="updateBranchBtn"
-                                            class="btn btn-sm btn-outline-primary me-2 update-btn"
-                                            data-id="@item.RowId"
-                                            title="Update"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#updateBranchModal">
-                                        <i class="fas fa-pen"></i>
-                                    </button>
-                                    <button id="deleteBranchBtn"
-                                            class="btn btn-sm btn-outline-danger delete-btn"
-                                            data-id="@item.RowId"
-                                            title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                            {
+                                <td class="d-flex justify-content-center">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                                        <button id="updateBranchBtn"
+                                                class="btn btn-sm btn-outline-primary me-2 update-btn"
+                                                data-id="@item.RowId"
+                                                title="Update"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#updateBranchModal">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
+                                        <button id="deleteBranchBtn"
+                                                class="btn btn-sm btn-outline-danger delete-btn"
+                                                data-id="@item.RowId"
+                                                title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
 
-                            </td>
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>

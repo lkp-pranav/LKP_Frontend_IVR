@@ -1,10 +1,13 @@
 ﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
-
+@using LKP_Frontend_MVC.Models.Response.User
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Custom Groups";
     var groupList = Model.data as List<LKP_Frontend_MVC.Models.Response.CustomGroup.CustomGroupResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.CustomGroup.CustomGroupFilterModel;
+    var sessionUser = Context.Items["SessionUser"] as SessionUser;
+    var allowedUserIds = Configuration.GetSection("AllowedUserIds").Get<string[]>();
 }
 <head>
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
@@ -36,7 +39,7 @@
                             !string.IsNullOrEmpty(inputModel?.GroupCode) ? inputModel.GroupCode.Trim() :
                             !string.IsNullOrEmpty(inputModel?.branch) ? inputModel.branch.Trim() :
                             inputModel?.Zone.Trim())"
-                               style="min-width:150px" />
+                        style="min-width:150px" />
 
                         <input type="hidden" id="dynamicInput" name="" value="" />
                         <button type="submit" class="btn btn-outline-primary btn-sm p-2 modal-btn" style="min-width: 37px; height: 35px;">
@@ -46,9 +49,12 @@
                 </form>
 
             </div>
-            <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
-                <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addCustomGroup">Add New</button>
-            </div>
+            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+            {
+                <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
+                    <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addCustomGroup">Add New</button>
+                </div>    
+            }
         </div>
     </div>
     <!-- Top Panel End-->
@@ -63,7 +69,10 @@
                         <th>Zone</th>
                         <th>Branch</th>
                         <th>Active</th>
-                        <th>Actions</th>
+                        @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                        {
+                            <th>Actions</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -73,19 +82,20 @@
                             <td>
                                 @item.GroupCode
                                 <button class="info-btn"
-                                        data-bs-target="#groupInfoModal"
-                                        data-bs-toggle="modal"
-                                        data-id="@item.GroupCode"
-                                        data-zone="@item.Zone"
-                                        data-branch="@item.Branch"
-                                        data-active="@item.Active">
+                                data-bs-target="#groupInfoModal"
+                                data-bs-toggle="modal"
+                                data-id="@item.GroupCode"
+                                data-zone="@item.Zone"
+                                data-branch="@item.Branch"
+                                data-active="@item.Active">
                                     <i class="bi bi-info-circle-fill"></i>
                                 </button>
                             </td>
                             <td>@item.Zone</td>
                             <td>@item.Branch</td>
                             <td>@item.Active</td>
-
+                            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                            {   
                             <td class="d-flex justify-content-center">
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
                                     <button id="updateCustomGroupBtn"
@@ -103,8 +113,8 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
-
                             </td>
+                            }
                         </tr>
                     }
                 </tbody>

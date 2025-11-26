@@ -1,9 +1,13 @@
 ﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+@using LKP_Frontend_MVC.Models.Response.User
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Dealer Mapping";
     var dealerCNTList= Model.data as List<LKP_Frontend_MVC.Models.Response.DealerCNT.DealerCNTResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.DealerCNT.DealerCNTFilterModel;
+    var sessionUser = Context.Items["SessionUser"] as SessionUser;
+    var allowedUserIds = Configuration.GetSection("AllowedUserIds").Get<string[]>();
 }
 <head>
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
@@ -50,10 +54,12 @@
                     </div>
                 </form>
             </div>
-
-            <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
-                <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
-            </div>
+            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+            {
+                <div class="col-12 col-lg-2 d-flex align-items-center text-dark px-3 mb-2">
+                    <button class="btn btn-primary btn-sm modal-btn" data-bs-toggle="modal" data-bs-target="#addDealerModal">Add New</button>
+                </div>
+            }
         </div>
     </div>
     <!-- Top Panel End-->
@@ -72,7 +78,10 @@
                         <th>Secondary Dealer</th>
                         <th>Secondary Dealer Name</th>
                         <th>Secondary CTCL Login</th>
-                        <th>Actions</th>
+                        @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                        {
+                            <th>Actions</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +95,8 @@
                             <td>@item.SecondaryDealer</td>
                             <td>@item.SecondaryDealerName</td>
                             <td>@item.SecondaryDealerCTCLLogin</td>
+                            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                            {
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
                                     <button id="updateDealerBtn"
@@ -103,8 +114,8 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
-                                
                             </td>
+                            }
                         </tr>
                     }
                 </tbody>
