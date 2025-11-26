@@ -1,6 +1,11 @@
-﻿@{
+﻿@using LKP_Frontend_MVC.Models.Response.User
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@{
     Layout = null;  // Set this to null to avoid inheritance issues, then set the layout in your individual pages.
     var username = Context.Session.GetString("username");
+    var sessionUser = Context.Items["SessionUser"] as SessionUser;
+    var allowedUserIds = Configuration.GetSection("AllowedUserIds").Get<string[]>();
 }
 
 <!DOCTYPE html>
@@ -19,67 +24,67 @@
 
     @@media (min-width: 992px) {
 
-        #main-content{
-            margin-left: 220px;
-            width: 82% !important;
-        }
+    #main-content{
+    margin-left: 220px;
+    width: 82% !important;
+    }
 
     }
     li > a {
-        color: white !important;
+    color: white !important;
     }
 
     .logout {
-        color: #11395C !important;
-        font-size: 12px !important;
+    color: #11395C !important;
+    font-size: 12px !important;
     }
 
     .card-body {
-        background-color: #11395C !important;
-        border: 1px solid white !important;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        /* padding: 1rem; */
+    background-color: #11395C !important;
+    border: 1px solid white !important;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    /* padding: 1rem; */
     }
 
     .card-body button {
-        background-color: #145a8b;
-        border: none;
-        color: white;
-        padding: 0.30rem 0.4rem;
-        margin-bottom: 0.5rem;
-        width: 100%;
-        text-align: left;
-        border-radius: 0.375rem;
-        /* font-size: 0.95rem; */
-        transition: background-color 0.2s ease, text-decoration 0.2s ease;
+    background-color: #145a8b;
+    border: none;
+    color: white;
+    padding: 0.30rem 0.4rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    text-align: left;
+    border-radius: 0.375rem;
+    /* font-size: 0.95rem; */
+    transition: background-color 0.2s ease, text-decoration 0.2s ease;
     }
 
     .card-body button:hover {
-        background-color: #1c6fa8;
-        text-decoration: underline;
+    background-color: #1c6fa8;
+    text-decoration: underline;
     }
 
     .nav-link {
-        font-size: 12px !important;
-        padding: 0.5em !important;
+    font-size: 12px !important;
+    padding: 0.5em !important;
     }
 
     .list-group-item{
-        font-size: 11px !important;
+    font-size: 11px !important;
     }
 
     #linkBtn {
-        font-size: 12px !important;
-        width: 125px;
+    font-size: 12px !important;
+    width: 125px;
     }
 
     .offcanvas {
-        width: 250px !important;
+    width: 250px !important;
     }
 
     #userDropdown {
-        font-size: 12px !important;
+    font-size: 12px !important;
     }
 
 
@@ -110,6 +115,8 @@
                 </li>
             </ul> 
         </div>
+        @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+        {
         <div>
             <button id="linkBtn" class="btn btn-outline-light mb-1 mx-4" type="button" data-bs-toggle="collapse" data-bs-target="#downloadLinks" aria-expanded="false" aria-controls="downloadLinks">
                 Download Links <i class="bi bi-download"></i>
@@ -130,6 +137,8 @@
                 </div>
             </div>
         </div>
+        }
+
     </div>
 
     <!-- Offcanvas Sidebar: Only visible on small screens -->
@@ -142,7 +151,7 @@
                 </a>
             </div>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
-                
+
             </button>
         </div>
         <div class="offcanvas-body">
@@ -166,6 +175,8 @@
                     <a class="nav-link" href="@Url.Action("Index", "CustomGroup")">Custom Groups</a>
                 </li>
             </ul>
+            @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+            {
             <div>
                 <button id="linkBtn" class="btn btn-outline-light mb-1 mx-4" type="button" data-bs-toggle="collapse" data-bs-target="#downloadLinks" aria-expanded="false" aria-controls="downloadLinks">
                     Download Links <i class="bi bi-download"></i>
@@ -186,6 +197,7 @@
                     </div>
                 </div>
             </div>
+            }
         </div>
         
     </div>

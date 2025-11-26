@@ -1,10 +1,14 @@
 ﻿@model LKP_Frontend_MVC.Models.Response.Common.ResponsePayLoad;
+@using LKP_Frontend_MVC.Models.Response.User
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Client Dealer Mapping";
     var clientDealerList = Model.data as List<LKP_Frontend_MVC.Models.Response.ClientDealer.ClientDealerResponse>;
     var inputModel = Model.message as LKP_Frontend_MVC.Models.Request.ClientDealer.ClientDealerFilterModel;
+    var sessionUser = Context.Items["SessionUser"] as SessionUser;
+    var allowedUserIds = Configuration.GetSection("AllowedUserIds").Get<string[]>();
 }
 
 <head>
@@ -12,28 +16,29 @@
 </head>
 <style>
     @@media(min-width: 992px) {
-        .panel-button {
-            flex-direction: row-reverse
-        }
+    .panel-button {
+    flex-direction: row-reverse
+    }
 
     }    
 </style>
 <!-- Page Content Start-->
 <div class="container-fluid page-content">
-     <!-- Top Panel Start --> 
-     <div class="container"> 
-         <div class="row pt-4"> 
-             <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small --> 
-             <div class="col-12 col-lg-5 px-0 mb-2 align-middle d-flex align-items-center ">  
-                 <h2>Primary Dealer Mapping</h2>
-                <button 
-                        id="topBtn" 
-                        class="btn modal-btn btn-sm mx-3 py-2"
-                        data-bs-target="#pushClientInfoModal"
-                        data-bs-toggle="modal"
-                >
-                    Push Client Info
-                </button>
+    <!-- Top Panel Start --> 
+    <div class="container"> 
+        <div class="row pt-4"> 
+            <!-- 60% width on large screens (7.2 columns ≈ 7), full width on small --> 
+            <div class="col-12 col-lg-5 px-0 mb-2 align-middle d-flex align-items-center ">  
+                <h2>Primary Dealer Mapping</h2>
+                @if (sessionUser != null && allowedUserIds.Contains(sessionUser.user_id))
+                {
+                    <button id="topBtn"
+                            class="btn modal-btn btn-sm mx-3 py-2"
+                            data-bs-target="#pushClientInfoModal"
+                            data-bs-toggle="modal">
+                        Push Client Info
+                    </button>
+                }
              </div> 
 
              <!-- 20% width on large screens (2.4 columns ≈ 2), full width on small --> 
