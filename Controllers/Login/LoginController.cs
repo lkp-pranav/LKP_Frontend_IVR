@@ -214,6 +214,56 @@ namespace LKP_Frontend_MVC.Controllers.Login
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SSOLoginWP(SSOLoginModel inputModel)
+        {
+
+            var origin = Request.Headers["Origin"].ToString();
+            string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL, WebPortalURL };
+
+            if (string.IsNullOrEmpty(origin) ||
+                !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
+            )
+            {
+                return Unauthorized("Invalid origin.");
+            }
+
+            inputModel.User_id = inputModel.User_type.ToLower() switch
+            {
+                "client" => $"CLI-{inputModel.User_id}",
+                "employee" => $"EMP-{inputModel.User_id}",
+                _ => $"APN-{inputModel.User_id}"
+            };
+
+            var resultJson = JsonConvert.SerializeObject(inputModel);
+            string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
+            var requestData = new EncryptedDataInput { Data = encrypted2FAData };
+
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", inputModel.accessToken);
+
+            if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
+            {
+                TempData["ToastMessage"] = responsePayload?.errorMessages ?? "Error in creating Branch Mapping!!.";
+                TempData["ToastType"] = "danger";
+                return RedirectToAction("VerifyPan");
+            }
+
+            JObject jsonData = JObject.FromObject(responsePayload.data);
+            string username = jsonData?["name"]?.ToString();
+
+            var sessionUser = new SessionUser
+            {
+                user_id = jsonData?["user_id"]?.ToString(),
+                user_type = jsonData?["user_type"]?.ToString(),
+                accessToken = jsonData?["accessToken"]?.ToString()
+            };
+            string sessionUserJson = JsonConvert.SerializeObject(sessionUser);
+            HttpContext.Session.SetString("username", username);
+            HttpContext.Session.SetString("sessionUser", sessionUserJson);
+
+            return RedirectToAction("Index", "DealerMapping");
+        }
         #endregion
 
         #region Logout
