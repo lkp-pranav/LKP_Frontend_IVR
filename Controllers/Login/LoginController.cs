@@ -3,6 +3,7 @@ using LKP_Frontend_MVC.Models.Request.Login;
 using LKP_Frontend_MVC.Models.Response.Common;
 using LKP_Frontend_MVC.Models.Response.User;
 using LKP_Frontend_MVC.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.MSIdentity.Shared;
 using Newtonsoft.Json;
@@ -22,6 +23,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
         private readonly string baseURL = "";
         private readonly string lkpConnectURL = "";
         private readonly string uat_lkpConnectURL = "";
+        private readonly string WebPortalURL = "";
         #endregion
 
         #region Constructor
@@ -34,6 +36,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             baseURL = _Configuration["ApiSettings:BaseUrl"];
             lkpConnectURL = _Configuration["ApiSettings:LkpConnect"];
             uat_lkpConnectURL = _Configuration["ApiSettings:LkpConnectUAT"];
+            WebPortalURL = _Configuration["ApiSettings:WebPortal"];
         }
         #endregion
 
@@ -163,11 +166,13 @@ namespace LKP_Frontend_MVC.Controllers.Login
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> SSOLogin(SSOLoginModel inputModel)
         {
 
             var origin = Request.Headers["Origin"].ToString();
-            string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL };
+            string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL, WebPortalURL };
 
             if (string.IsNullOrEmpty(origin) ||
                 !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
