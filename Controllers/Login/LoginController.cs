@@ -166,8 +166,6 @@ namespace LKP_Frontend_MVC.Controllers.Login
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> SSOLogin(SSOLoginModel inputModel)
         {
 
