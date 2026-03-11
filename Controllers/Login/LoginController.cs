@@ -24,6 +24,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
         private readonly string lkpConnectURL = "";
         private readonly string uat_lkpConnectURL = "";
         private readonly string WebPortalURL = "";
+        private readonly string loginURL = "";
         #endregion
 
         #region Constructor
@@ -37,6 +38,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             lkpConnectURL = _Configuration["ApiSettings:LkpConnect"];
             uat_lkpConnectURL = _Configuration["ApiSettings:LkpConnectUAT"];
             WebPortalURL = _Configuration["ApiSettings:WebPortal"];
+            loginURL = _Configuration["ApiSettings:LoginURL"];//LoginURL
         }
         #endregion
 
@@ -59,9 +61,9 @@ namespace LKP_Frontend_MVC.Controllers.Login
             HttpContext.Session.SetString("encryptedData", encryptedData);
 
             string base64Credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"admin:admin"));
-            var requestData = new EncryptedDataInput { Data = encryptedData };
+            var requestData = inputModel;// new EncryptedDataInput { Data = encryptedData };
 
-            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/Login", requestData, "Basic", base64Credentials);
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{loginURL}/api/Login/Login", requestData, "Basic", base64Credentials);
 
             if (responsePayload == null || !responsePayload.isSuccess)
             {
@@ -70,9 +72,9 @@ namespace LKP_Frontend_MVC.Controllers.Login
                 return RedirectToAction("Index");
             }
 
-            JObject jsonData = JObject.FromObject(responsePayload.data);
-            string bearerKey = jsonData?["key"]?.ToString();
-            HttpContext.Session.SetString("bearerKey", bearerKey);
+            //JObject jsonData = JObject.FromObject(responsePayload.data);
+            //string bearerKey = jsonData?["key"]?.ToString();
+            //HttpContext.Session.SetString("bearerKey", bearerKey);
 
             return RedirectToAction("VerifyPan");
         }
@@ -96,14 +98,14 @@ namespace LKP_Frontend_MVC.Controllers.Login
         [HttpPost]
         public async Task<IActionResult> AuthenticatePAN(string pan)
         {
-            string bearerKey = HttpContext.Session.GetString("bearerKey");
+            //string bearerKey = HttpContext.Session.GetString("bearerKey");
             string encryptedData = HttpContext.Session.GetString("encryptedData");
 
             // Remove base64 token after storing
-            HttpContext.Session.Remove("bearerKey");
+            //HttpContext.Session.Remove("bearerKey");
             HttpContext.Session.Remove("encryptedData");
 
-            if (string.IsNullOrEmpty(bearerKey) || string.IsNullOrEmpty(encryptedData))
+            if (string.IsNullOrEmpty(encryptedData))
             {
                 return RedirectToAction("VerifyPan");
             }
@@ -122,6 +124,13 @@ namespace LKP_Frontend_MVC.Controllers.Login
             };
             user.Auth_value = pan;
 
+            var inpuModel = new TwoFactorAuthInputModel
+            {
+                User_id = user.User_id,
+                User_type = user.User_type,
+                Auth_type = user.Auth_type,
+                Auth_value = user.Auth_value
+            };
             var resultJson = JsonConvert.SerializeObject(new
             {
                 user.User_id,
@@ -131,9 +140,10 @@ namespace LKP_Frontend_MVC.Controllers.Login
             });
 
             string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
-            var requestData = new EncryptedDataInput { Data = encrypted2FAData };
-           
-            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", bearerKey);
+            var requestData = inpuModel;// new EncryptedDataInput { Data = encrypted2FAData };
+            string base64Credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"admin:admin"));
+
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{loginURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Basic", base64Credentials, true);
 
             if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
             {
@@ -141,15 +151,18 @@ namespace LKP_Frontend_MVC.Controllers.Login
                 TempData["ToastType"] = "danger";
                 return RedirectToAction("VerifyPan");
             }
-            
             JObject jsonData = JObject.FromObject(responsePayload.data);
-            string username = jsonData?["name"]?.ToString();
+
+            string username = jsonData["name"]?.ToString();
+            string userId = jsonData["user_id"]?.ToString();
+            string userType = jsonData["user_type"]?.ToString();
+            string token = jsonData["token"]?.ToString();
 
             var sessionUser = new SessionUser
             {
-                user_id = jsonData?["user_id"]?.ToString(),
-                user_type = jsonData?["user_type"]?.ToString(),
-                accessToken = jsonData?["accessToken"]?.ToString()
+                user_id = userId,
+                user_type = userType,
+                accessToken = token
             };
             string sessionUserJson = JsonConvert.SerializeObject(sessionUser);
             HttpContext.Session.SetString("username", username);

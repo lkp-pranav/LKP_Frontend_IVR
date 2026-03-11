@@ -25,7 +25,7 @@ namespace LKP_Frontend_MVC.Utils
         }
 
         // Handle All Post Requests (EXCEPT XLSX)
-        public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient httpClient, string url, T data, string authType, string authToken)
+        public static async Task<ResponsePayLoad?> SendHttpRequest<T>(HttpClient httpClient, string url, T data, string authType, string authToken, bool isRawResponse = false)
         {
             try
             {
@@ -67,6 +67,16 @@ namespace LKP_Frontend_MVC.Utils
                         isSuccess = false,
                         message = $"Error: {response.ReasonPhrase}",
                         errorMessages = responseJson,
+                        statusCode = response.StatusCode
+                    };
+                }
+
+                if (isRawResponse)
+                {
+                    return new ResponsePayLoad
+                    {
+                        isSuccess = true,
+                        data = JsonConvert.DeserializeObject<object>(responseJson),
                         statusCode = response.StatusCode
                     };
                 }
