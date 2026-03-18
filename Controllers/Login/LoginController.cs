@@ -143,7 +143,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             var requestData = inpuModel;// new EncryptedDataInput { Data = encrypted2FAData };
             string base64Credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"admin:admin"));
 
-            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{loginURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Basic", base64Credentials, true);
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{loginURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Basic", base64Credentials);
 
             if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
             {
