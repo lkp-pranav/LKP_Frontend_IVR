@@ -183,14 +183,14 @@ namespace LKP_Frontend_MVC.Controllers.Login
         {
 
             var origin = Request.Headers["Origin"].ToString();
-            string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL, WebPortalURL };
+            //string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL, WebPortalURL };
 
-            if (string.IsNullOrEmpty(origin) ||
-                !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
-            )
-            {
-                return Unauthorized("Invalid origin.");
-            }
+            //if (string.IsNullOrEmpty(origin) ||
+            //    !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
+            //)
+            //{
+            //    return Unauthorized("Invalid origin.");
+            //}
 
             inputModel.User_id = inputModel.User_type.ToLower() switch
             {
@@ -200,10 +200,11 @@ namespace LKP_Frontend_MVC.Controllers.Login
             };
 
             var resultJson = JsonConvert.SerializeObject(inputModel);
-            string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
-            var requestData = new EncryptedDataInput { Data = encrypted2FAData };
-
-            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{baseURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Bearer", inputModel.accessToken);
+            //string encrypted2FAData = CommonHelper.Encrypt(resultJson, true, _encKey);
+            //var requestData = new EncryptedDataInput { Data = encrypted2FAData };
+            var requestData = inputModel;// new EncryptedDataInput { Data = encrypted2FAData };
+            string base64Credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"admin:admin"));
+            var responsePayload = await RequestHelper.SendHttpRequest(_httpClient, $"{loginURL}/api/Login/ValidateTwoFactorAuthentication", requestData, "Basic", base64Credentials);
 
             if (responsePayload == null || !responsePayload.isSuccess || responsePayload.statusCode == HttpStatusCode.Unauthorized)
             {
@@ -219,7 +220,7 @@ namespace LKP_Frontend_MVC.Controllers.Login
             {
                 user_id = jsonData?["user_id"]?.ToString(),
                 user_type = jsonData?["user_type"]?.ToString(),
-                accessToken = jsonData?["accessToken"]?.ToString()
+                accessToken = jsonData?["token"]?.ToString()
             };
             string sessionUserJson = JsonConvert.SerializeObject(sessionUser);
             HttpContext.Session.SetString("username", username);
