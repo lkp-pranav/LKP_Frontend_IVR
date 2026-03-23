@@ -183,14 +183,14 @@ namespace LKP_Frontend_MVC.Controllers.Login
         {
 
             var origin = Request.Headers["Origin"].ToString();
-            //string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL, WebPortalURL };
+            string[] allowedOrigins = new[] { lkpConnectURL, uat_lkpConnectURL, WebPortalURL };
 
-            //if (string.IsNullOrEmpty(origin) ||
-            //    !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
-            //)
-            //{
-            //    return Unauthorized("Invalid origin.");
-            //}
+            if (string.IsNullOrEmpty(origin) ||
+                !allowedOrigins.Any(url => origin.StartsWith(url, StringComparison.OrdinalIgnoreCase))
+            )
+            {
+                return Unauthorized("Invalid origin.");
+            }
 
             inputModel.User_id = inputModel.User_type.ToLower() switch
             {
